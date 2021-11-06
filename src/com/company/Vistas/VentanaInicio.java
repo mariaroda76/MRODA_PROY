@@ -1,0 +1,188 @@
+package com.company.Vistas;
+
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+public class VentanaInicio {
+
+
+    private JLabel lbPieDeVentana;
+    private JPanel JPGeneral;
+    private JPanel JPVacio;
+    static private int db;
+
+
+    public VentanaInicio(JFrame frame) {
+
+        JMenuBar menuBar = new JMenuBar();
+
+        //Menus: Provveedores, Piezas, Piezas, Proyectos, Gestion Global, Ayuda, Base de Datos??...
+        JMenu MenuBdDatos = new JMenu("Base de Datos"); // esto pa que vale??
+        JMenu MenuProveedores = new JMenu("Proveedores");
+        JMenu MenuPiezas = new JMenu("Piezas");
+        JMenu MenuProyectos = new JMenu("Proyectos");
+        JMenu MenuGestionGlobal = new JMenu("Gestion Global");
+        JMenu MenuAyuda = new JMenu("Ayuda");
+
+
+        // Items a agregar a cada menu.
+        JMenuItem itemGestionProveedores = new JMenuItem("Gestión de Proveedores");
+        JMenu MenuConsultasProveedores = new JMenu("Consulta de Proveedores");
+
+        JMenuItem itemGestionPiezas= new JMenuItem("Gestión de Piezas");
+        JMenu MenuConsultasPiezas = new JMenu("Consulta de Piezas");
+
+        JMenuItem itemGestionProyectos= new JMenuItem("Gestión de Proyectos");
+        JMenu MenuConsultasProyectos = new JMenu("Consulta de Proyectos");
+
+        JMenuItem itemPiezasProveedoresProyectos= new JMenuItem("Piezas, Proveedores y Proyectos");
+        JMenuItem itemSuministrosProveedor= new JMenuItem("Suministros por Proveedor");
+        JMenuItem itemSuministrosPiezas= new JMenuItem("Suministros por Piezas");
+        JMenuItem itemEstadisticas= new JMenuItem("Estadisticas");
+
+
+        // Items comunes
+        JMenuItem itemPorCodigo = new JMenuItem("Por Código");
+        JMenuItem itemPorNombre = new JMenuItem("Por Nombre");
+        JMenuItem itemPorDireccion = new JMenuItem("Por Dirección");
+
+
+        // Aqui añadimos el item a cada menu.
+
+        //MenuBdDatos.add();
+
+        MenuProveedores.add(itemGestionProveedores);
+        MenuProveedores.add(MenuConsultasProveedores);
+
+        MenuPiezas.add(itemGestionPiezas);
+        MenuPiezas.add(MenuConsultasPiezas);
+
+        MenuProyectos.add(itemGestionProyectos);
+        MenuProyectos.add(MenuConsultasProyectos);
+
+        MenuGestionGlobal.add(itemPiezasProveedoresProyectos);
+        MenuGestionGlobal.add(itemSuministrosPiezas);
+        MenuGestionGlobal.add(itemSuministrosProveedor);
+        MenuGestionGlobal.add(itemEstadisticas);
+
+
+        // Añadir items a submenu
+        MenuConsultasProveedores.add(itemPorCodigo);
+        MenuConsultasProveedores.add(itemPorNombre);
+        MenuConsultasProveedores.add(itemPorDireccion);
+
+        MenuConsultasPiezas.add(itemPorCodigo);
+        MenuConsultasPiezas.add(itemPorNombre);
+        MenuConsultasPiezas.add(itemPorDireccion);
+
+        MenuConsultasProyectos.add(itemPorCodigo);
+        MenuConsultasProyectos.add(itemPorNombre);
+        MenuConsultasProyectos.add(itemPorDireccion);
+
+
+        //Formamos el menu bar
+        menuBar.add(MenuBdDatos);
+        menuBar.add(MenuProveedores);
+        menuBar.add(MenuPiezas);
+        menuBar.add(MenuProyectos);
+        menuBar.add(MenuGestionGlobal);
+        menuBar.add(MenuAyuda);
+
+
+        frame.add(menuBar); //Añadir el menu bar al frame. Se tiene que añadir al frame principal porque de este se arrastra a todos.
+        frame.setJMenuBar(menuBar);
+
+        //Añadir evento del cierre de ventana para controlar el cierre de la conexion de Base de datos.
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                //ArrancarPrograma.db.DesconectarDb();
+                System.out.println("Cerrando bases de datos");
+            }
+        });
+
+
+        /**Cada vez que pulsemos en un item nos abrirá el panel inferior nuevo con los campos correspondientes a la tabla*/
+        itemGestionProveedores.addActionListener(new ActionListener() {
+            //@Override
+            public void actionPerformed(ActionEvent e) {
+               /* DatosClientes nuevoCliente = new DatosClientes();
+
+                nuevoCliente.renombrarBtnGuardar("Guardar");
+                nuevoCliente.setCbBajaState(false); //
+                nuevoCliente.setLstEmpleadosState(false);
+                nuevoCliente.setBtnBajaState(false);
+
+                nuevoCliente.getCbHistorico().setEnabled(false);
+                nuevoCliente.getLstClientes().setEnabled(false);
+
+                cc = new ControladorCliente();
+                nuevoCliente.mostrarClientes(cc.selectByState(false));
+                mostrarPanel(nuevoCliente.getJPClientes());*/
+            }
+        });
+
+
+    }
+
+    public static void main(String[] args) {
+
+        /**
+         * Arrancamos la aplicacion desde este punto.
+         * */
+
+        JFrame frame = new JFrame("Gestion de Proyectos");
+
+        /*Añadimos un listener al frame principal para que cierre la conexion de
+         * la base de datos que esté siendo usada.
+         */
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (db != 0) {
+                    //db.DesconectarDb();
+                    System.out.println("Base de datos desconectada");
+                }
+            }
+        });
+
+        //desde el frame estoy arrancado el menu
+        frame.setContentPane(new VentanaInicio(frame).JPGeneral);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+
+
+    }
+
+
+    /**
+     * Esta funcion nos permite reutilizar el frame y solo cambiar la parte inferior donde aparecen las pantallas de cliente
+     * empleado, espectaculo....
+     */
+    public void mostrarPanel(JPanel panel) {
+
+        JPVacio.removeAll();
+        JPVacio.add(panel);
+        JPVacio.repaint();
+        JPVacio.revalidate();
+
+    }
+
+    public void setLbTituloParque(String lbTituloParque) {
+        this.lbPieDeVentana.setText(lbTituloParque);
+    }
+
+    public JPanel getJPGeneral() {
+        return JPGeneral;
+    }
+
+    public JPanel getJPVacio() {
+        return JPVacio;
+    }
+
+}
