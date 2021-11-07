@@ -9,7 +9,7 @@ public class Gestion{
 
     private JPanel JPGeneral;
     private JPanel JPVacio;
-    private int seleccion;
+
 
     private JTabbedPane TPanelGeneral;
     private JPanel JPGestion;
@@ -91,17 +91,10 @@ public class Gestion{
         return JPGeneral;
     }
 
-    public int getSeleccion() {
-        return seleccion;
-    }
 
     public JPanel getJPVacio() {
         return JPVacio;
     }
-
-
-
-
 
     public void gestionProveedor(){
 
@@ -137,13 +130,6 @@ public class Gestion{
         this.lbListadoData1.setText("CIUDAD");
         this.JPListadoDireccion.setVisible(false);
 
-    }
-
-
-
-
-    public void renombrarData1(String nombre) {
-        this.lbGestionData1.setText(nombre);
     }
 
 

@@ -34,16 +34,16 @@ public class VentanaInicio {
         JMenuItem itemGestionProveedores = new JMenuItem("Gestión de Proveedores");
         JMenu MenuConsultasProveedores = new JMenu("Consulta de Proveedores");
 
-        JMenuItem itemGestionPiezas= new JMenuItem("Gestión de Piezas");
+        JMenuItem itemGestionPiezas = new JMenuItem("Gestión de Piezas");
         JMenu MenuConsultasPiezas = new JMenu("Consulta de Piezas");
 
-        JMenuItem itemGestionProyectos= new JMenuItem("Gestión de Proyectos");
+        JMenuItem itemGestionProyectos = new JMenuItem("Gestión de Proyectos");
         JMenu MenuConsultasProyectos = new JMenu("Consulta de Proyectos");
 
-        JMenuItem itemPiezasProveedoresProyectos= new JMenuItem("Piezas, Proveedores y Proyectos");
-        JMenuItem itemSuministrosProveedor= new JMenuItem("Suministros por Proveedor");
-        JMenuItem itemSuministrosPiezas= new JMenuItem("Suministros por Piezas");
-        JMenuItem itemEstadisticas= new JMenuItem("Estadisticas");
+        JMenuItem itemPiezasProveedoresProyectos = new JMenuItem("Piezas, Proveedores y Proyectos");
+        JMenuItem itemSuministrosProveedor = new JMenuItem("Suministros por Proveedor");
+        JMenuItem itemSuministrosPiezas = new JMenuItem("Suministros por Piezas");
+        JMenuItem itemEstadisticas = new JMenuItem("Estadisticas");
 
 
         // Items comunes
@@ -58,8 +58,6 @@ public class VentanaInicio {
         JMenuItem itemProyectoPorCodigo = new JMenuItem("Por Código");
         JMenuItem itemProyectoPorNombre = new JMenuItem("Por Nombre");
         JMenuItem itemProyectoPorCiudad = new JMenuItem("Por Ciudad");
-
-
 
 
         // Aqui añadimos el item a cada menu.
@@ -123,38 +121,20 @@ public class VentanaInicio {
             public void actionPerformed(ActionEvent e) {
 
 
-
                 JFrame frameGestionProveedor = new JFrame("Gestion de Proveedores");
                 Gestion nuevaGestionProveedor = new Gestion();
                 nuevaGestionProveedor.gestionProveedor();
 
-                frameGestionProveedor .setContentPane(nuevaGestionProveedor.getJPGeneral());
+                frameGestionProveedor.setContentPane(nuevaGestionProveedor.getJPGeneral());
 
                 //frameGestionProveedor .setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frameGestionProveedor .setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frameGestionProveedor.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-                frameGestionProveedor .pack();
-                frameGestionProveedor .setVisible(true);
+                frameGestionProveedor.pack();
+                frameGestionProveedor.setVisible(true);
 
-
-
-
-               /* DatosClientes nuevoCliente = new DatosClientes();
-
-                nuevoCliente.renombrarBtnGuardar("Guardar");
-                nuevoCliente.setCbBajaState(false); //
-                nuevoCliente.setLstEmpleadosState(false);
-                nuevoCliente.setBtnBajaState(false);
-
-                nuevoCliente.getCbHistorico().setEnabled(false);
-                nuevoCliente.getLstClientes().setEnabled(false);
-
-                cc = new ControladorCliente();
-                nuevoCliente.mostrarClientes(cc.selectByState(false));
-                mostrarPanel(nuevoCliente.getJPClientes());*/
             }
         });
-
         itemGestionPiezas.addActionListener(new ActionListener() {
             //@Override
             public void actionPerformed(ActionEvent e) {
@@ -163,15 +143,14 @@ public class VentanaInicio {
                 Gestion nuevaGestionPieza = new Gestion();
                 nuevaGestionPieza.gestionPieza();
 
-                frameGestionPieza .setContentPane(nuevaGestionPieza.getJPGeneral());
+                frameGestionPieza.setContentPane(nuevaGestionPieza.getJPGeneral());
 
-                frameGestionPieza .setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                frameGestionPieza .pack();
-                frameGestionPieza .setVisible(true);
+                frameGestionPieza.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frameGestionPieza.pack();
+                frameGestionPieza.setVisible(true);
 
             }
         });
-
         itemGestionProyectos.addActionListener(new ActionListener() {
             //@Override
             public void actionPerformed(ActionEvent e) {
@@ -190,8 +169,73 @@ public class VentanaInicio {
         });
 
 
+        itemProveedorPorCodigo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                consultas("Proveedor", "Codigo");
+
+            }
+        });
+        itemProveedorPorNombre.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                consultas("Proveedor", "Nombre");
+
+            }
+        });
+        itemProveedorPorDireccion.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                consultas("Proveedor", "Direccion");
+
+            }
+        });
 
 
+        itemPiezaPorCodigo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                consultas("Pieza", "Codigo");
+
+            }
+        });
+        itemPiezaPorNombre.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                consultas("Pieza", "Nombre");
+
+            }
+        });
+
+        itemProyectoPorCodigo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                consultas("Proyecto", "Codigo");
+
+            }
+        });
+        itemProyectoPorNombre.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                consultas("Proyecto", "Nombre");
+
+            }
+        });
+        itemProyectoPorCiudad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                consultas("Proyecto", "Ciudad");
+
+            }
+        });
 
 
     }
@@ -203,9 +247,6 @@ public class VentanaInicio {
          * */
 
         JFrame frame = new JFrame("Gestion de Proyectos");
-        Dialog d1 = new JDialog(frame, Dialog.ModalityType.DOCUMENT_MODAL);
-
- 
 
         /*Añadimos un listener al frame principal para que cierre la conexion de
          * la base de datos que esté siendo usada.
@@ -214,13 +255,12 @@ public class VentanaInicio {
             @Override
             public void windowClosing(WindowEvent e) {
 
-                    System.out.println("Base de datos desconectada");
+                System.out.println("Base de datos desconectada");
 
             }
         });
 
         //desde el frame estoy arrancado el menu
-
         frame.setContentPane(new VentanaInicio(frame).JPGeneral);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -254,5 +294,71 @@ public class VentanaInicio {
     public JPanel getJPVacio() {
         return JPVacio;
     }
+
+
+    void showRequest(JFrame frame) {
+
+        frame.setVisible(false);
+        frame = frame;
+        frame.setVisible(true);
+    }
+
+
+    public void consultas(String que, String como) {
+        JFrame frameConsulta = new JFrame("Consulta de " + que + " Por " + como);
+        Consultas nuevaConsulta = new Consultas();
+
+        switch (que) {
+            case "Proveedor":
+                switch (como) {
+
+                    case "Codigo":
+                        nuevaConsulta.ProveedorPorCodigo();
+                        break;
+                    case "Nombre":
+                        nuevaConsulta.ProveedorPorNombre();
+                        break;
+                    default:
+                        nuevaConsulta.ProveedorPorDireccion();
+                }
+                break;
+            case "Pieza":
+
+                switch (como) {
+                    case "Codigo":
+                        nuevaConsulta.PiezaPorCodigo();
+                        break;
+                    default:
+                        nuevaConsulta.PiezaPorNombre();
+                }
+
+                break;
+            default:
+                switch (como) {
+
+                    case "Codigo":
+                        nuevaConsulta.ProyectoPorCodigo();
+                        break;
+                    case "Nombre":
+                        nuevaConsulta.ProyectoPorNombre();
+                        break;
+                    default:
+                        nuevaConsulta.ProyectoPorCiudad();
+                }
+
+                break;
+
+        }
+
+
+        frameConsulta.setContentPane(nuevaConsulta.getJPGeneral());
+
+        frameConsulta.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        frameConsulta.pack();
+        frameConsulta.setVisible(true);
+
+    }
+
 
 }

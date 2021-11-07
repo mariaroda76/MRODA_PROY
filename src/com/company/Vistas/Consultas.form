@@ -85,9 +85,9 @@
                   <component id="e34c7" class="javax.swing.JLabel" binding="lbConsultaFixCodigo">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                        <minimum-size width="10" height="-1"/>
-                        <preferred-size width="10" height="-1"/>
-                        <maximum-size width="10" height="-1"/>
+                        <minimum-size width="100" height="-1"/>
+                        <preferred-size width="100" height="-1"/>
+                        <maximum-size width="100" height="-1"/>
                       </grid>
                     </constraints>
                     <properties>
@@ -96,9 +96,15 @@
                   </component>
                   <component id="c9e0c" class="javax.swing.JLabel" binding="lbConsultaResultCodigo">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="400" height="-1"/>
+                        <preferred-size width="400" height="-1"/>
+                        <maximum-size width="400" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties>
+                      <horizontalAlignment value="2"/>
+                      <horizontalTextPosition value="2"/>
                       <text value="codigo..."/>
                     </properties>
                   </component>
@@ -115,9 +121,9 @@
                   <component id="4ed66" class="javax.swing.JLabel" binding="lbConsultaFixNombre">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                        <minimum-size width="10" height="-1"/>
-                        <preferred-size width="10" height="-1"/>
-                        <maximum-size width="10" height="-1"/>
+                        <minimum-size width="100" height="-1"/>
+                        <preferred-size width="100" height="-1"/>
+                        <maximum-size width="100" height="-1"/>
                       </grid>
                     </constraints>
                     <properties>
@@ -126,9 +132,15 @@
                   </component>
                   <component id="e6495" class="javax.swing.JLabel" binding="lbConsultaResultNombre">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="400" height="-1"/>
+                        <preferred-size width="400" height="-1"/>
+                        <maximum-size width="400" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties>
+                      <horizontalAlignment value="2"/>
+                      <horizontalTextPosition value="2"/>
                       <text value="nombre..."/>
                     </properties>
                   </component>
@@ -145,9 +157,9 @@
                   <component id="29950" class="javax.swing.JLabel" binding="lbConsultaFixData1">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                        <minimum-size width="10" height="-1"/>
-                        <preferred-size width="10" height="-1"/>
-                        <maximum-size width="10" height="-1"/>
+                        <minimum-size width="100" height="-1"/>
+                        <preferred-size width="100" height="-1"/>
+                        <maximum-size width="100" height="-1"/>
                       </grid>
                     </constraints>
                     <properties>
@@ -156,9 +168,15 @@
                   </component>
                   <component id="23a5b" class="javax.swing.JLabel" binding="lbConsultaResultData1">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="400" height="-1"/>
+                        <preferred-size width="400" height="-1"/>
+                        <maximum-size width="400" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties>
+                      <horizontalAlignment value="2"/>
+                      <horizontalTextPosition value="2"/>
                       <text value="data1..."/>
                     </properties>
                   </component>
@@ -175,9 +193,9 @@
                   <component id="665c5" class="javax.swing.JLabel" binding="lbConsultaFixDireccion">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                        <minimum-size width="10" height="-1"/>
-                        <preferred-size width="10" height="-1"/>
-                        <maximum-size width="10" height="-1"/>
+                        <minimum-size width="100" height="-1"/>
+                        <preferred-size width="100" height="-1"/>
+                        <maximum-size width="100" height="-1"/>
                       </grid>
                     </constraints>
                     <properties>
@@ -186,9 +204,15 @@
                   </component>
                   <component id="af87b" class="javax.swing.JLabel" binding="lbConsultaResultDireccion">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="400" height="-1"/>
+                        <preferred-size width="400" height="-1"/>
+                        <maximum-size width="400" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties>
+                      <horizontalAlignment value="2"/>
+                      <horizontalTextPosition value="2"/>
                       <text value="direccion..."/>
                     </properties>
                   </component>
