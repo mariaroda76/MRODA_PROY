@@ -2,6 +2,7 @@ package com.company.Vistas;
 
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -94,9 +95,6 @@ public class VentanaInicio {
         MenuConsultasPiezas.add(itemPiezaPorNombre);
 
 
-
-
-
         //Formamos el menu bar
         //menuBar.add(MenuBdDatos);
         menuBar.add(MenuProveedores);
@@ -124,13 +122,20 @@ public class VentanaInicio {
             //@Override
             public void actionPerformed(ActionEvent e) {
 
-                JFrame frameGestion = new JFrame("Gestion de XXX");
-                Gestion nuevaGestion = new Gestion(0);
-                frameGestion.setContentPane(nuevaGestion.getJPGeneral());
 
-                frameGestion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frameGestion.pack();
-                frameGestion.setVisible(true);
+
+                JFrame frameGestionProveedor = new JFrame("Gestion de Proveedores");
+                Gestion nuevaGestionProveedor = new Gestion();
+                nuevaGestionProveedor.gestionProveedor();
+
+                frameGestionProveedor .setContentPane(nuevaGestionProveedor.getJPGeneral());
+
+                //frameGestionProveedor .setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frameGestionProveedor .setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                frameGestionProveedor .pack();
+                frameGestionProveedor .setVisible(true);
+
 
 
 
@@ -150,6 +155,44 @@ public class VentanaInicio {
             }
         });
 
+        itemGestionPiezas.addActionListener(new ActionListener() {
+            //@Override
+            public void actionPerformed(ActionEvent e) {
+
+                JFrame frameGestionPieza = new JFrame("Gestion de Piezas");
+                Gestion nuevaGestionPieza = new Gestion();
+                nuevaGestionPieza.gestionPieza();
+
+                frameGestionPieza .setContentPane(nuevaGestionPieza.getJPGeneral());
+
+                frameGestionPieza .setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frameGestionPieza .pack();
+                frameGestionPieza .setVisible(true);
+
+            }
+        });
+
+        itemGestionProyectos.addActionListener(new ActionListener() {
+            //@Override
+            public void actionPerformed(ActionEvent e) {
+
+                JFrame frameGestionProyecto = new JFrame("Gestion de Proyectos");
+                Gestion nuevaGestionProyecto = new Gestion();
+                nuevaGestionProyecto.gestionProyectos();
+
+                frameGestionProyecto.setContentPane(nuevaGestionProyecto.getJPGeneral());
+
+                frameGestionProyecto.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frameGestionProyecto.pack();
+                frameGestionProyecto.setVisible(true);
+
+            }
+        });
+
+
+
+
+
 
     }
 
@@ -160,6 +203,9 @@ public class VentanaInicio {
          * */
 
         JFrame frame = new JFrame("Gestion de Proyectos");
+        Dialog d1 = new JDialog(frame, Dialog.ModalityType.DOCUMENT_MODAL);
+
+ 
 
         /*Añadimos un listener al frame principal para que cierre la conexion de
          * la base de datos que esté siendo usada.

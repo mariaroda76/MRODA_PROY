@@ -67,13 +67,10 @@ public class Gestion{
 
 
 
-    public Gestion(int seleccion) {
-
+    public Gestion() {
 
 
     }
-
-
 
 
 
@@ -101,6 +98,55 @@ public class Gestion{
     public JPanel getJPVacio() {
         return JPVacio;
     }
+
+
+
+
+
+    public void gestionProveedor(){
+
+        //SET GESTION
+        this.lbGestionData1.setText("APELLIDO");
+
+        //SET LISTADO
+        this.lbListado.setText("LISTADO PROVEEDORES: UTILIZA BOTONES PARA IR DE UN REGISTRO A OTRO");
+        this.lbListadoData1.setText("APELLIDO");
+
+    }
+
+    public void gestionPieza(){
+        //SET GESTION
+        this.lbGestionData1.setText("PRECIO");
+        this.JPGestionDireccion.setVisible(false);
+
+        //SET LISTADO
+        this.lbListado.setText("LISTADO PIEZAS: UTILIZA BOTONES PARA IR DE UN REGISTRO A OTRO");
+        this.lbListadoData1.setText("PRECIO");
+        this.JPListadoDireccion.setVisible(false);
+
+    }
+
+    public void gestionProyectos(){
+        //SET GESTION
+        this.lbGestionData1.setText("CIUDAD");
+        this.JPGestionDireccion.setVisible(false);
+
+
+        //SET LISTADO
+        this.lbListado.setText("LISTADO PROYECTOS: UTILIZA BOTONES PARA IR DE UN REGISTRO A OTRO");
+        this.lbListadoData1.setText("CIUDAD");
+        this.JPListadoDireccion.setVisible(false);
+
+    }
+
+
+
+
+    public void renombrarData1(String nombre) {
+        this.lbGestionData1.setText(nombre);
+    }
+
+
 
 
 }
