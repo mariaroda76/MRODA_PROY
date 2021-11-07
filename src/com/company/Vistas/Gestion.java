@@ -1,10 +1,16 @@
 package com.company.Vistas;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-public class Gestion {
+public class Gestion{
+
     private JPanel JPGeneral;
     private JPanel JPVacio;
+    private int seleccion;
+
     private JTabbedPane TPanelGeneral;
     private JPanel JPGestion;
     private JPanel JPListado;
@@ -58,4 +64,43 @@ public class Gestion {
     private JPanel JPListadoBtnsIzq;
     private JPanel JPListadoBtnsIzqArriba;
     private JPanel JPListadoBtnsIzqAbajo;
+
+
+
+    public Gestion(int seleccion) {
+
+
+
+    }
+
+
+
+
+
+    /**
+     * Esta funcion nos permite reutilizar el frame ycambiar la parte inferior donde aparecen las pantallas degestion
+     * empleado, espectaculo....
+     */
+    public void mostrarPanel(JPanel panel) {
+
+        JPVacio.removeAll();
+        JPVacio.add(panel);
+        JPVacio.repaint();
+        JPVacio.revalidate();
+
+    }
+
+    public JPanel getJPGeneral() {
+        return JPGeneral;
+    }
+
+    public int getSeleccion() {
+        return seleccion;
+    }
+
+    public JPanel getJPVacio() {
+        return JPVacio;
+    }
+
+
 }

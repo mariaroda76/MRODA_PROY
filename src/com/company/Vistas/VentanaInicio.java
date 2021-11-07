@@ -21,7 +21,7 @@ public class VentanaInicio {
         JMenuBar menuBar = new JMenuBar();
 
         //Menus: Provveedores, Piezas, Piezas, Proyectos, Gestion Global, Ayuda, Base de Datos??...
-        JMenu MenuBdDatos = new JMenu("Base de Datos"); // esto pa que vale??
+        //JMenu MenuBdDatos = new JMenu("Base de Datos"); // esto pa que vale??
         JMenu MenuProveedores = new JMenu("Proveedores");
         JMenu MenuPiezas = new JMenu("Piezas");
         JMenu MenuProyectos = new JMenu("Proyectos");
@@ -46,9 +46,19 @@ public class VentanaInicio {
 
 
         // Items comunes
-        JMenuItem itemPorCodigo = new JMenuItem("Por Código");
-        JMenuItem itemPorNombre = new JMenuItem("Por Nombre");
-        JMenuItem itemPorDireccion = new JMenuItem("Por Dirección");
+        JMenuItem itemPiezaPorCodigo = new JMenuItem("Por Código");
+        JMenuItem itemPiezaPorNombre = new JMenuItem("Por Nombre");
+
+
+        JMenuItem itemProveedorPorCodigo = new JMenuItem("Por Código");
+        JMenuItem itemProveedorPorNombre = new JMenuItem("Por Nombre");
+        JMenuItem itemProveedorPorDireccion = new JMenuItem("Por Dirección");
+
+        JMenuItem itemProyectoPorCodigo = new JMenuItem("Por Código");
+        JMenuItem itemProyectoPorNombre = new JMenuItem("Por Nombre");
+        JMenuItem itemProyectoPorCiudad = new JMenuItem("Por Ciudad");
+
+
 
 
         // Aqui añadimos el item a cada menu.
@@ -71,21 +81,24 @@ public class VentanaInicio {
 
 
         // Añadir items a submenu
-        MenuConsultasProveedores.add(itemPorCodigo);
-        MenuConsultasProveedores.add(itemPorNombre);
-        MenuConsultasProveedores.add(itemPorDireccion);
 
-        MenuConsultasPiezas.add(itemPorCodigo);
-        MenuConsultasPiezas.add(itemPorNombre);
-        MenuConsultasPiezas.add(itemPorDireccion);
+        MenuConsultasProyectos.add(itemProyectoPorCodigo);
+        MenuConsultasProyectos.add(itemProyectoPorNombre);
+        MenuConsultasProyectos.add(itemProyectoPorCiudad);
 
-        MenuConsultasProyectos.add(itemPorCodigo);
-        MenuConsultasProyectos.add(itemPorNombre);
-        MenuConsultasProyectos.add(itemPorDireccion);
+        MenuConsultasProveedores.add(itemProveedorPorCodigo);
+        MenuConsultasProveedores.add(itemProveedorPorNombre);
+        MenuConsultasProveedores.add(itemProveedorPorDireccion);
+
+        MenuConsultasPiezas.add(itemPiezaPorCodigo);
+        MenuConsultasPiezas.add(itemPiezaPorNombre);
+
+
+
 
 
         //Formamos el menu bar
-        menuBar.add(MenuBdDatos);
+        //menuBar.add(MenuBdDatos);
         menuBar.add(MenuProveedores);
         menuBar.add(MenuPiezas);
         menuBar.add(MenuProyectos);
@@ -110,6 +123,17 @@ public class VentanaInicio {
         itemGestionProveedores.addActionListener(new ActionListener() {
             //@Override
             public void actionPerformed(ActionEvent e) {
+
+                JFrame frameGestion = new JFrame("Gestion de XXX");
+                Gestion nuevaGestion = new Gestion(0);
+                frameGestion.setContentPane(nuevaGestion.getJPGeneral());
+
+                frameGestion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frameGestion.pack();
+                frameGestion.setVisible(true);
+
+
+
                /* DatosClientes nuevoCliente = new DatosClientes();
 
                 nuevoCliente.renombrarBtnGuardar("Guardar");
@@ -143,14 +167,14 @@ public class VentanaInicio {
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if (db != 0) {
-                    //db.DesconectarDb();
+
                     System.out.println("Base de datos desconectada");
-                }
+
             }
         });
 
         //desde el frame estoy arrancado el menu
+
         frame.setContentPane(new VentanaInicio(frame).JPGeneral);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
