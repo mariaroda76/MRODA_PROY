@@ -1,12 +1,16 @@
 package com.company.Vistas;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class VentanaInicio {
 
@@ -14,10 +18,12 @@ public class VentanaInicio {
     private JLabel lbPieDeVentana;
     private JPanel JPGeneral;
     private JPanel JPVacio;
+    private JPanel JPImagen;
     static private int db;
 
 
-    public VentanaInicio(JFrame frame) {
+    public VentanaInicio(JFrame frame) throws IOException {
+
 
         JMenuBar menuBar = new JMenuBar();
 
@@ -102,8 +108,21 @@ public class VentanaInicio {
         menuBar.add(MenuAyuda);
 
 
+
+/*        String path = "doc_proy/logo.png";
+        File file = new File(path);
+        BufferedImage image = ImageIO.read(file);
+        JLabel label = new JLabel(new ImageIcon(image));
+
+        frame.add(label);
+        frame.setLayout(new GridLayout (50,50));*/
+
+
+
+
         frame.add(menuBar); //Añadir el menu bar al frame. Se tiene que añadir al frame principal porque de este se arrastra a todos.
         frame.setJMenuBar(menuBar);
+
 
         //Añadir evento del cierre de ventana para controlar el cierre de la conexion de Base de datos.
         frame.addWindowListener(new WindowAdapter() {
@@ -240,13 +259,14 @@ public class VentanaInicio {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         /**
          * Arrancamos la aplicacion desde este punto.
          * */
 
         JFrame frame = new JFrame("Gestion de Proyectos");
+
 
         /*Añadimos un listener al frame principal para que cierre la conexion de
          * la base de datos que esté siendo usada.
@@ -261,7 +281,11 @@ public class VentanaInicio {
         });
 
         //desde el frame estoy arrancado el menu
+
+
+
         frame.setContentPane(new VentanaInicio(frame).JPGeneral);
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -281,6 +305,7 @@ public class VentanaInicio {
         JPVacio.repaint();
         JPVacio.revalidate();
 
+
     }
 
     public void setLbTituloParque(String lbTituloParque) {
@@ -292,7 +317,9 @@ public class VentanaInicio {
     }
 
     public JPanel getJPVacio() {
+
         return JPVacio;
+
     }
 
 
@@ -302,7 +329,6 @@ public class VentanaInicio {
         frame = frame;
         frame.setVisible(true);
     }
-
 
     public void consultas(String que, String como) {
         JFrame frameConsulta = new JFrame("Consulta de " + que + " Por " + como);
