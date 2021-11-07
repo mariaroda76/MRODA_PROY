@@ -1,6 +1,8 @@
 package com.company.Vistas;
 
 
+import com.company.Utils.SimpleBackground;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -108,16 +110,20 @@ public class VentanaInicio {
         menuBar.add(MenuAyuda);
 
 
+/*        SimpleBackground.BackgroundPane background = new SimpleBackground.BackgroundPane();
+        background.setBackground(ImageIO.read(new File("C:\\Users\\Fran\\Desktop\\maria\\curso3\\AD\\PROYECTO-2-AD_ADRIAN\\MRODA_PROY_GIT\\MRODA_PROY\\doc_proy\\logo.png")));
+        frame.setContentPane(background);
+        frame.setLayout(new GridBagLayout());*/
 
-/*        String path = "doc_proy/logo.png";
+
+    /*   String path = "C:\\Users\\Fran\\Desktop\\maria\\curso3\\AD\\PROYECTO-2-AD_ADRIAN\\MRODA_PROY_GIT\\MRODA_PROY\\doc_proy\\logo.png";
         File file = new File(path);
         BufferedImage image = ImageIO.read(file);
         JLabel label = new JLabel(new ImageIcon(image));
 
         frame.add(label);
-        frame.setLayout(new GridLayout (50,50));*/
-
-
+        frame.setLayout(new GridLayout(50, 50));
+        frame.repaint();*/
 
 
         frame.add(menuBar); //Añadir el menu bar al frame. Se tiene que añadir al frame principal porque de este se arrastra a todos.
@@ -256,6 +262,23 @@ public class VentanaInicio {
             }
         });
 
+        itemPiezasProveedoresProyectos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                JFrame frameGestionGlobalPPP = new JFrame("Gestion Global: Proveedores - Piezas - Proyectos");
+                GestionGlobal nuevaGestionGlobalPPP = new GestionGlobal();
+
+                frameGestionGlobalPPP.setContentPane(nuevaGestionGlobalPPP .getJPGeneral());
+
+                frameGestionGlobalPPP.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                frameGestionGlobalPPP.pack();
+                frameGestionGlobalPPP.setVisible(true);
+
+            }
+        });
+
 
     }
 
@@ -266,7 +289,6 @@ public class VentanaInicio {
          * */
 
         JFrame frame = new JFrame("Gestion de Proyectos");
-
 
         /*Añadimos un listener al frame principal para que cierre la conexion de
          * la base de datos que esté siendo usada.
@@ -321,7 +343,6 @@ public class VentanaInicio {
         return JPVacio;
 
     }
-
 
     void showRequest(JFrame frame) {
 
