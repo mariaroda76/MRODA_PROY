@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.company.GestionEntity" table="gestion" schema="bdgestionproyectos">
+        <composite-id mapped="true" class="com.company.GestionEntityPK">
+            <key-property name="codproveedor">
+                <column name="CODPROVEEDOR" sql-type="int"/>
+            </key-property>
+            <key-property name="codpieza">
+                <column name="CODPIEZA" sql-type="int"/>
+            </key-property>
+            <key-property name="codproyecto">
+                <column name="CODPROYECTO" sql-type="int"/>
+            </key-property>
+        </composite-id>
+        <property name="cantidad">
+            <column name="CANTIDAD" sql-type="float" precision="-1" not-null="true"/>
+        </property>
+        <many-to-one name="proveedoresByCodproveedor" class="com.company.ProveedoresEntity">
+            <column name="CODPROVEEDOR"/>
+        </many-to-one>
+        <many-to-one name="piezasByCodpieza" class="com.company.PiezasEntity">
+            <column name="CODPIEZA"/>
+        </many-to-one>
+        <many-to-one name="proyectosByCodproyecto" class="com.company.ProyectosEntity">
+            <column name="CODPROYECTO"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

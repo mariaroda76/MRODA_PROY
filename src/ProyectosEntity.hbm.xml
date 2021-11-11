@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.company.ProyectosEntity" table="proyectos" schema="bdgestionproyectos">
+        <id name="id">
+            <column name="ID" sql-type="int"/>
+        </id>
+        <property name="codigo">
+            <column name="CODIGO" sql-type="varchar(6)" length="6"/>
+        </property>
+        <property name="nombre">
+            <column name="NOMBRE" sql-type="varchar(40)" length="40"/>
+        </property>
+        <property name="ciudad">
+            <column name="CIUDAD" sql-type="varchar(40)" length="40" not-null="true"/>
+        </property>
+        <set name="gestionsById" inverse="true">
+            <key>
+                <column name="CODPROYECTO"/>
+            </key>
+            <one-to-many not-found="ignore" class="com.company.GestionEntity"/>
+        </set>
+    </class>
+</hibernate-mapping>
