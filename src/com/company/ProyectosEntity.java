@@ -1,17 +1,36 @@
 package com.company;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "proyectos", schema = "bdgestionproyectos", catalog = "")
-public class ProyectosEntity {
+@Table(name = "proyectos", schema = "bdgestionproyectos")
+//@Table(name = "proyectos", schema = "bdgestionproyectos", catalog = "")
+
+
+public class ProyectosEntity implements Serializable {
     private int id;
     private String codigo;
     private String nombre;
     private String ciudad;
     private Collection<GestionEntity> gestionsById;
+
+    public ProyectosEntity() {
+    }
+
+    public ProyectosEntity(int id) {
+        this.id = id;
+    }
+
+    public ProyectosEntity(int id, String codigo, String nombre, String ciudad, Collection<GestionEntity> gestionsById) {
+        this.id = id;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.ciudad = ciudad;
+        this.gestionsById = gestionsById;
+    }
 
     @Id
     @Column(name = "ID", nullable = false)

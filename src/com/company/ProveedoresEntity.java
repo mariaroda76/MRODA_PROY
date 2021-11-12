@@ -1,13 +1,15 @@
 package com.company;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "proveedores", schema = "bdgestionproyectos", catalog = "")
+@Table(name = "proveedores", schema = "bdgestionproyectos")
+//@Table(name = "proveedores", schema = "bdgestionproyectos", catalog = "")
 
-public class ProveedoresEntity {
+public class ProveedoresEntity implements Serializable {
 
  /*   @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -19,6 +21,23 @@ public class ProveedoresEntity {
     private String apellidos;
     private String direccion;
     private Collection<GestionEntity> gestionsById;
+
+
+    public ProveedoresEntity() {
+    }
+
+    public ProveedoresEntity(int id) {
+        this.id = id;
+    }
+
+    public ProveedoresEntity(int id, String codigo, String nombre, String apellidos, String direccion, Collection<GestionEntity> gestionsById) {
+        this.id = id;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.direccion = direccion;
+        this.gestionsById = gestionsById;
+    }
 
 
     @Id

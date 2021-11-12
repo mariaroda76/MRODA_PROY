@@ -1,12 +1,16 @@
 package com.company;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "gestion", schema = "bdgestionproyectos", catalog = "")
+@Table(name = "gestion", schema = "bdgestionproyectos")
+//@Table(name = "gestion", schema = "bdgestionproyectos", catalog = "")
+
+
 @IdClass(GestionEntityPK.class)
-public class GestionEntity {
+public class GestionEntity implements Serializable {
     private int codproveedor;
     private int codpieza;
     private int codproyecto;
@@ -14,6 +18,23 @@ public class GestionEntity {
     private ProveedoresEntity proveedoresByCodproveedor;
     private PiezasEntity piezasByCodpieza;
     private ProyectosEntity proyectosByCodproyecto;
+
+    public GestionEntity() {
+    }
+
+    public GestionEntity(int codproveedor) {
+        this.codproveedor = codproveedor;
+    }
+
+    public GestionEntity(int codproveedor, int codpieza, int codproyecto, Double cantidad, ProveedoresEntity proveedoresByCodproveedor, PiezasEntity piezasByCodpieza, ProyectosEntity proyectosByCodproyecto) {
+        this.codproveedor = codproveedor;
+        this.codpieza = codpieza;
+        this.codproyecto = codproyecto;
+        this.cantidad = cantidad;
+        this.proveedoresByCodproveedor = proveedoresByCodproveedor;
+        this.piezasByCodpieza = piezasByCodpieza;
+        this.proyectosByCodproyecto = proyectosByCodproyecto;
+    }
 
     @Id
     @Column(name = "CODPROVEEDOR", nullable = false)

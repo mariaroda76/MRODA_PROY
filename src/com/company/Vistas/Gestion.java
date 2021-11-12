@@ -1,9 +1,6 @@
 package com.company.Vistas;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class Gestion{
 
@@ -68,7 +65,6 @@ public class Gestion{
 
 
     public Gestion() {
-
 
     }
 
