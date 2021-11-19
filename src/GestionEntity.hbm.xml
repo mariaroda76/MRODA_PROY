@@ -19,13 +19,13 @@
         <property name="cantidad">
             <column name="CANTIDAD" sql-type="float" precision="-1" not-null="true"/>
         </property>
-        <many-to-one name="proveedoresByCodproveedor" class="com.company.ProveedoresEntity">
+        <many-to-one name="proveedoresByCodproveedor" class="com.company.ProveedoresEntity" insert="false" update="false">
             <column name="CODPROVEEDOR"/>
         </many-to-one>
-        <many-to-one name="piezasByCodpieza" class="com.company.PiezasEntity">
+        <many-to-one name="piezasByCodpieza" class="com.company.PiezasEntity" insert="false" update="false">
             <column name="CODPIEZA"/>
         </many-to-one>
-        <many-to-one name="proyectosByCodproyecto" class="com.company.ProyectosEntity">
+        <many-to-one name="proyectosByCodproyecto" class="com.company.ProyectosEntity" insert="false" update="false">
             <column name="CODPROYECTO"/>
         </many-to-one>
     </class>

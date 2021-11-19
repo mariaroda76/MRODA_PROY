@@ -30,7 +30,7 @@ public class SessionUtils {
     }
 
     /**
-     * Builds a SessionFactory, if it hasn't been already.
+     * Crea una SessionFactoy, si no ha sido creada.
      */
     public static SessionFactory get() {
         return sessionFactory;

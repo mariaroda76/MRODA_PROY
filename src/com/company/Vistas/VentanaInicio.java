@@ -1,18 +1,15 @@
 package com.company.Vistas;
 
 
-import com.company.Utils.SimpleBackground;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class VentanaInicio {
 
@@ -287,6 +284,10 @@ public class VentanaInicio {
         /**
          * Arrancamos la aplicacion desde este punto.
          * */
+
+        LogManager.getLogManager().reset();
+        Logger globalLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+        globalLogger.setLevel(Level.OFF);
 
         JFrame frame = new JFrame("Gestion de Proyectos");
 

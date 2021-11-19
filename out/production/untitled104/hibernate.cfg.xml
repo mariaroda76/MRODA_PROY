@@ -24,6 +24,7 @@
         <property name="current_session_context_class">thread</property>
         <!-- agregado de apuntes -->
 
+        <property name="hibernate.ejb.metamodel.population">disabled</property>
 
         <mapping class="com.company.GestionEntity"/>
         <mapping resource="GestionEntity.hbm.xml"/>

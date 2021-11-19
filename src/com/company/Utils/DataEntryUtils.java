@@ -5,19 +5,19 @@ import javax.swing.*;
 
 class DataEntryUtils {
     public static boolean confirmDBSave() {
-        return confirm("Are you sure to save");
+        return confirm("Seguro que quieres salvar?");
     }
 
     public static boolean confirmDBUpdate() {
-        return confirm("Are you sure to modify");
+        return confirm("Seguro que quieres modificar?");
     }
 
     public static boolean confirmDBDelete() {
-        return confirm("Are you sure to delete");
+        return confirm("Seguro que quieres eliminar?");
     }
 
     private static boolean confirm(String msg) {
-        int answer = JOptionPane.showConfirmDialog(null, msg, "Are you Sure ?", JOptionPane.YES_NO_OPTION);
+        int answer = JOptionPane.showConfirmDialog(null, msg, "Estas seguro ?", JOptionPane.YES_NO_OPTION);
         if (answer == JOptionPane.OK_OPTION) {
             return true;
         }

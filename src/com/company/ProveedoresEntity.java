@@ -26,6 +26,14 @@ public class ProveedoresEntity implements Serializable {
     public ProveedoresEntity() {
     }
 
+    public ProveedoresEntity(String codigo, String nombre, String apellidos, String direccion, Collection<GestionEntity> gestionsById) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.direccion = direccion;
+        this.gestionsById = gestionsById;
+    }
+
     public ProveedoresEntity(int id) {
         this.id = id;
     }

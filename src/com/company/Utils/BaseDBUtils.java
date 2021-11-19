@@ -1,7 +1,6 @@
 package com.company.Utils;
 
 import org.hibernate.Query;
-
 import java.util.List;
 
 /**
