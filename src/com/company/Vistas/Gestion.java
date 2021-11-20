@@ -140,15 +140,21 @@ public class Gestion {
                 switch (lbGestionData1.getText()) {
 
                     case "APELLIDO":
-                        //recojo la info del panel e instancio un proveedor
-                        ProveedoresEntity prov = getProveedorFromForm();
+                        //recojo la info del panel e instancio un proveedor temporal
+                        ProveedoresEntity provTemp = getProveedorFromForm();
 
-                        //compruebo los datos del proveedor  antes de intentar modificarlos a la BDD
-                        if (ProveedorController.validaciones(prov, false) == null) {
+                        //compruebo los datos del proveedor temporal  antes de intentar modificar en la BDD
+                        if (ProveedorController.validaciones(provTemp, false) == null) {
+
+                            ProveedoresEntity provBD = ProveedorController.selectProveedorByCode(provTemp.getCodigo());
+
+                            provBD.setNombre(provTemp.getNombre());
+                            provBD.setApellidos(provTemp.getApellidos());
+                            provBD.setDireccion(provTemp.getDireccion());
 
                             //pido confirmacion antes de MODIFICAR
-                            if (DataEntryUtils.confirmDBUpdate(prov.toString())) {
-                                session.update(prov);
+                            if (DataEntryUtils.confirmDBUpdate(provBD.toString())) {
+                                session.update(provBD);
                                 JOptionPane.showMessageDialog(null, "Se ha MODIFICADO correctamente el Proveedor", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
                                 );
                                 limpiarJTextFields(JPGestionData);
@@ -165,7 +171,7 @@ public class Gestion {
                             }
                         } else {
                             //En este string guardamos todos los errores, y lo mostramos.
-                            String texto = ProveedorController.validaciones(prov, false);
+                            String texto = ProveedorController.validaciones(provTemp, false);
                             JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
                             );
                         }
@@ -286,7 +292,6 @@ public class Gestion {
         prov.setDireccion(TFGestionDireccion.getText().toUpperCase().trim());
         return prov;
     }
-
 
 
 }

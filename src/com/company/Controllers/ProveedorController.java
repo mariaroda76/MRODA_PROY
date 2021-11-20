@@ -15,7 +15,7 @@ public class ProveedorController {
 
     public static List<ProveedoresEntity> listaProveedores() {
 
-        List listaProvedores = new ArrayList();
+        List<ProveedoresEntity> listaProvedores = new ArrayList();
 
         SessionFactory sesion = HibernateUtil.getSessionFactory();
         Session session = sesion.openSession();
@@ -30,7 +30,7 @@ public class ProveedorController {
         while (iter.hasNext()) {
             //extraer el objeto
             ProveedoresEntity prov = (ProveedoresEntity) iter.next();
-            System.out.println("proveedor: " + prov.getCodigo());
+            System.out.println("proveedor: " + prov.toString());
             listaProvedores.add(prov);
         }
         session.close();
@@ -128,30 +128,28 @@ public class ProveedorController {
         }
     }
 
-
-    private ProveedoresEntity selectProveedorByCode(String codigo) {
+    public static ProveedoresEntity selectProveedorByCode(String codigo) {
 
         List listaCodigos = listaCodigosProvedores();
         List listaProveedores = listaProveedores();
 
-
-
+        // si la lista de codigos contiene el codigo que le paso...
         if (ChecksUtils.existeCodigo(listaCodigos, codigo)) {
-
+            //recorro los porveedores y me quedo con el que tiene el codigo que le he pasado
             for (int i = 0; i < listaProveedores.size(); i++) {
-
-                if (listaProveedores[i].getCodigo().equals(codigo)) {
-                    return prov;
+                if (((ProveedoresEntity)listaProveedores.get(i)).getCodigo().equals(codigo)) {
+                    return ((ProveedoresEntity)listaProveedores.get(i));
                 }
             }
-
-
             }
-
             return null;
         }
+
+
+
+
     }
 
 
 
-}
+
