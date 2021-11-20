@@ -1,26 +1,28 @@
 package com.company.Utils;
 
-
 import javax.swing.*;
 
-class DataEntryUtils {
-    public static boolean confirmDBSave() {
-        return confirm("Seguro que quieres salvar?");
+public class DataEntryUtils {
+    public static boolean confirmDBSave(String datos) {
+        return confirm("estas a punto de GUARDAR: " + datos);
     }
 
-    public static boolean confirmDBUpdate() {
-        return confirm("Seguro que quieres modificar?");
+    public static boolean confirmDBUpdate(String datos) {
+        return confirm("estas a punto de MOODIFICAR: " + datos);
     }
 
-    public static boolean confirmDBDelete() {
-        return confirm("Seguro que quieres eliminar?");
+    public static boolean confirmDBDelete(String datos) {
+        return confirm("estas a punto de ELIMINAR: " + datos);
     }
 
     private static boolean confirm(String msg) {
-        int answer = JOptionPane.showConfirmDialog(null, msg, "Estas seguro ?", JOptionPane.YES_NO_OPTION);
+        int answer = JOptionPane.showConfirmDialog(null, msg, "Confirmacion", JOptionPane.YES_NO_OPTION);
         if (answer == JOptionPane.OK_OPTION) {
             return true;
         }
         return false;
     }
+
+
+
 }

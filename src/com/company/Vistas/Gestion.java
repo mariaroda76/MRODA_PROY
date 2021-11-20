@@ -1,17 +1,17 @@
 package com.company.Vistas;
 
+import com.company.Controllers.ProveedorController;
 import com.company.ProveedoresEntity;
+import com.company.Utils.DataEntryUtils;
 import com.company.Utils.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.exception.ConstraintViolationException;
-import org.hibernate.query.Query;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
 
 public class Gestion {
 
@@ -77,52 +77,132 @@ public class Gestion {
 
     public Gestion() {
 
+        //tab gestion
         JButtonInsertar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                //Inicio sesion
                 SessionFactory sesion = HibernateUtil.getSessionFactory();
                 Session session = sesion.openSession();
                 Transaction tx = session.beginTransaction();
 
-                if (lbGestionData1.getText() == "APELLIDO") {
+                switch (lbGestionData1.getText()) {
 
-                    ProveedoresEntity prov = new ProveedoresEntity();
-                    prov = getProveedorFromForm();
+                    case "APELLIDO":
+                        //recojo la info del panel e instancio un proveedor
+                        ProveedoresEntity prov = getProveedorFromForm();
 
-                    session.save(prov);
-                    try {
-                        tx.commit();
-                    } catch (ConstraintViolationException err) {
-                        System.out.println("PROVEEDOR DUPLICADO");
-                        System.out.printf("MENSAJE:%s%n", err.getMessage());
-                        System.out.printf("COD ERROR:%d%n", err.getErrorCode());
-                        System.out.printf("ERROR SQL:%s%n", err.getSQLException().getMessage());
-                    }
+                        //compruebo los datos del proveedor  antes de intentar subirlos a la BDD
+                        if (ProveedorController.validaciones(prov, true) == null) {
 
-                    session.close();
+                            //pido confirmacion antes de guardar
+                            if (DataEntryUtils.confirmDBSave(prov.toString())) {
+                                session.save(prov);
+                                JOptionPane.showMessageDialog(null, "Se ha INSERTADO correctamente el nuevo Proveedor", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                );
+                                limpiarJTextFields(JPGestionData);
+                                try {
+                                    tx.commit();
+                                } catch (Exception e1) {
+                                    System.out.println("ERROR NO CONTROLADO");
+                                    System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                                }
+                                session.close();
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Has declinado insertar un nuevo Proveedor", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                );
+                            }
+                        } else {
+                            //En este string guardamos todos los errores, y lo mostramos.
+                            String texto = ProveedorController.validaciones(prov, true);
+                            JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
+                            );
+                        }
+                        break;
+
+                    default:
+                        System.out.println("case no implementado aun");
 
                 }
+            }
+        });
 
+        JButtonModificar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
+                //Inicio sesion
+                SessionFactory sesion = HibernateUtil.getSessionFactory();
+                Session session = sesion.openSession();
+                Transaction tx = session.beginTransaction();
+
+                switch (lbGestionData1.getText()) {
+
+                    case "APELLIDO":
+                        //recojo la info del panel e instancio un proveedor
+                        ProveedoresEntity prov = getProveedorFromForm();
+
+                        //compruebo los datos del proveedor  antes de intentar modificarlos a la BDD
+                        if (ProveedorController.validaciones(prov, false) == null) {
+
+                            //pido confirmacion antes de MODIFICAR
+                            if (DataEntryUtils.confirmDBUpdate(prov.toString())) {
+                                session.update(prov);
+                                JOptionPane.showMessageDialog(null, "Se ha MODIFICADO correctamente el Proveedor", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                );
+                                limpiarJTextFields(JPGestionData);
+                                try {
+                                    tx.commit();
+                                } catch (Exception e1) {
+                                    System.out.println("ERROR NO CONTROLADO");
+                                    System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                                }
+                                session.close();
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Has declinado MODIFICAR el Proveedor", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                );
+                            }
+                        } else {
+                            //En este string guardamos todos los errores, y lo mostramos.
+                            String texto = ProveedorController.validaciones(prov, false);
+                            JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
+                            );
+                        }
+                        break;
+
+                    default:
+                        System.out.println("case no implementado aun");
+
+                }
             }
         });
 
 
+        JButtonLimpiar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                limpiarJTextFields(JPGestionData);
+
+            }
+        });
+
+        //tab listado
         JButtonConsulta.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 if (lbGestionData1.getText() == "APELLIDO") {
 
-                    listaProveedores();
+                    ProveedorController.listaProveedores();
                 }
             }
         });
 
-
     }
 
+    //METODOS DE VISTAS
     public void mostrarPanel(JPanel panel) {
 
         JPVacio.removeAll();
@@ -176,119 +256,42 @@ public class Gestion {
 
     }
 
+    private static void limpiarJTextFields(Container container) {
 
+        Component[] mycomponents = container.getComponents();
+
+        for (Component component : mycomponents) {
+            if (component instanceof JTextField) {
+                ((JTextField) component).setText("");
+            } else if (component instanceof JPanel) {
+                Container mypanel = (Container) component;
+                limpiarJTextFields(mypanel);
+            }
+        }
+/*
+        // New-style with Stream
+        Stream.of(container.getComponents())
+                .filter(c -> c instanceof JTextField)
+                .map(c -> ((JTextField) c).getText())
+                .forEach(System.out::println);*/
+    }
+
+
+    //METODOS DE ENTITIES
     private ProveedoresEntity getProveedorFromForm() {
         ProveedoresEntity prov = new ProveedoresEntity();
-
-        prov.setCodigo(TFGestionCodigo.getText().trim());
-        prov.setNombre(TFGestionNombre.getText().trim());
-        prov.setApellidos(TFGestionData1.getText().trim());
-        prov.setDireccion(TFGestionDireccion.getText().trim());
+        prov.setCodigo(TFGestionCodigo.getText().toUpperCase().trim());
+        prov.setNombre(TFGestionNombre.getText().toUpperCase().trim());
+        prov.setApellidos(TFGestionData1.getText().toUpperCase().trim());
+        prov.setDireccion(TFGestionDireccion.getText().toUpperCase().trim());
         return prov;
     }
 
-    private List<ProveedoresEntity> listaProveedores() {
-
-        List listaProvedores = new ArrayList();
-
-        SessionFactory sesion = HibernateUtil.getSessionFactory();
-        Session session = sesion.openSession();
-        Transaction tx = session.beginTransaction();
-
-        Query q = session.createQuery("from ProveedoresEntity ");
-        List<ProveedoresEntity> lista = q.list();
-
-        // Obtenemos un Iterador y recorremos la lista
-        Iterator<ProveedoresEntity> iter = lista.iterator();
-
-        while (iter.hasNext()) {
-            //extraer el objeto
-            ProveedoresEntity prov = (ProveedoresEntity) iter.next();
-            System.out.println("proveedor: " + prov.getCodigo());
-            listaProvedores.add(prov);
-        }
-        session.close();
 
 
-        return listaProvedores;
-    }
-
-    private List<String> listaCodigosProvedores() {
-
-        List listaCodigos = new ArrayList();
-
-        SessionFactory sesion = HibernateUtil.getSessionFactory();
-        Session session = sesion.openSession();
-        Transaction tx = session.beginTransaction();
-
-        Query q = session.createQuery("from ProveedoresEntity ");
-        List<ProveedoresEntity> lista = q.list();
-
-        // Obtenemos un Iterador y recorremos la lista
-        Iterator<ProveedoresEntity> iter = lista.iterator();
-
-        while (iter.hasNext()) {
-            //extraer el objeto
-            ProveedoresEntity prov = (ProveedoresEntity) iter.next();
-            listaCodigos.add(prov.getCodigo());
-        }
-        session.close();
+}
 
 
-        return listaCodigos;
-    }
-
-    private Boolean existeCodigo(List lista, String codigo) {
-        if (lista.contains(codigo)) {
-            return true;
-        }
-        return false;
-    }
-
-
-    public String validaciones(ProveedoresEntity proveedor) {
-
-        HashMap<String, String> errores = new HashMap<>();
-        List listaCodigos = listaCodigosProvedores();
-
-        if (listaCodigos.contains(proveedor.getCodigo())) {
-            errores.put("CODIGO", "YA EXISTE UN PROVEEDOR CON EL CODIGO INSERTADO");
-        } else {
-            if (proveedor.getCodigo().length() > 6 || proveedor.getCodigo().equals("")) {
-                if (proveedor.getCodigo().length() > 6) {
-                    errores.put("CODIGO", "EL CODIGO EXCEDE LA LONGITUD MAXIMA DE 6 CARACTERES");
-                } else {
-                    errores.put("CODIGO", "EL CODIGO NO PUEDE ESTAR VACIO");
-                }
-            }
-        }
-
-            if (proveedor.getNombre().length() > 20 || proveedor.getNombre().equals("")) {
-                if (proveedor.getNombre().length() > 20) {
-                    errores.put("NOMBRE", "EL NOMBRE EXCEDE LA LONGITUD MAXIMA DE 20 CARACTERES");
-                } else {
-                    errores.put("NOMBRE", "EL NOMBRE NO PUEDE ESTAR VACIO");
-                }
-            }
-
-
-            //Utilizamos esta variable para guardar el mensaje de error.
-            StringBuilder texto = new StringBuilder();
-
-            if (errores.size() > 0) {
-                for (Map.Entry<String, String> entry : errores.entrySet()) {
-                    String k = entry.getKey();
-                    String v = entry.getValue();
-                    texto.append(v + "\n");
-                }
-                return texto.toString();
-            } else {
-                return null;
-            }
-        }
-
-
-    }
 
 
 

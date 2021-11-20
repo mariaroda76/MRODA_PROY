@@ -119,4 +119,14 @@ public class ProveedoresEntity implements Serializable {
     public void setGestionsById(Collection<GestionEntity> gestionsById) {
         this.gestionsById = gestionsById;
     }
+
+    @Override
+    public String toString() {
+        return "PROVEEDOR: \n" +
+                "\tCODIGO=" + codigo + "\n" +
+                "\tNOMBRE=" + nombre + "\n" +
+                "\tAPELLIDO=" + apellidos + "\n" +
+                "\tDIRECCION=" + direccion
+                ;
+    }
 }

@@ -1,4 +1,4 @@
 package com.company.Controllers;
 
-public class PiezasController {
+public class PiezaController {
 }
