@@ -20,22 +20,47 @@ public class ProveedoresEntity implements Serializable {
     private String nombre;
     private String apellidos;
     private String direccion;
+    private boolean baja;
+    private String fechabaja;
     private Collection<GestionEntity> gestionsById;
 
 
     public ProveedoresEntity() {
     }
 
+    public ProveedoresEntity(int id) {
+        this.id = id;
+    }
+
+    //CON BAJAS Y FECHAS
+    public ProveedoresEntity(String codigo, String nombre, String apellidos, String direccion, boolean baja, String fechabaja, Collection<GestionEntity> gestionsById) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.direccion = direccion;
+        this.baja = baja;
+        this.fechabaja = fechabaja;
+        this.gestionsById = gestionsById;
+    }
+
+    public ProveedoresEntity(int id, String codigo, String nombre, String apellidos, String direccion, boolean baja, String fechabaja, Collection<GestionEntity> gestionsById) {
+        this.id = id;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.direccion = direccion;
+        this.baja = baja;
+        this.fechabaja = fechabaja;
+        this.gestionsById = gestionsById;
+    }
+
+    //SIN BAJAS Y FECHAS
     public ProveedoresEntity(String codigo, String nombre, String apellidos, String direccion, Collection<GestionEntity> gestionsById) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.direccion = direccion;
         this.gestionsById = gestionsById;
-    }
-
-    public ProveedoresEntity(int id) {
-        this.id = id;
     }
 
     public ProveedoresEntity(int id, String codigo, String nombre, String apellidos, String direccion, Collection<GestionEntity> gestionsById) {
@@ -98,6 +123,29 @@ public class ProveedoresEntity implements Serializable {
         this.direccion = direccion;
     }
 
+
+    @Basic
+    @Column(name = "BAJA", nullable = true)
+    public boolean getBaja() {
+        return baja;
+    }
+
+    public void setBaja(Boolean baja) {
+        this.baja = baja;
+    }
+
+
+    @Basic
+    @Column(name = "FECHABAJA", nullable = true, length = 10)
+    public String getFechabaja() {
+        return fechabaja;
+    }
+
+    public void setFechabaja(String fechabaja) {
+        this.fechabaja = fechabaja;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -129,4 +177,19 @@ public class ProveedoresEntity implements Serializable {
                 "\tDIRECCION=" + direccion
                 ;
     }
+
+
+    public String toStringBaja() {
+        return "PROVEEDOR: "+ "\n" +
+                "\tCODIGO=" + codigo + "\n" +
+                "\tNOMBRE=" + nombre + "\n" +
+                "\tAPELLIDO=" + apellidos + "\n" +
+                "\tFECHA DE LA BAJA=" + fechabaja + "\n" +
+                "ESTE PROVEEDOR PERMANECERÁ ASOCIADO A LOS PEDIDOS YA REALIZADOS"+ "\n" +
+                "PERO SU BAJA ES UNA ACCION IRREVERSIBLE, NO PODRÁS EDITAR SUS DATOS A FUTURO"
+                ;
+    }
+
+
+
 }

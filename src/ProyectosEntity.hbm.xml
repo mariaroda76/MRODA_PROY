@@ -17,6 +17,15 @@
         <property name="ciudad">
             <column name="CIUDAD" sql-type="varchar(40)" length="40" not-null="true"/>
         </property>
+
+        <property name="baja">
+            <column name="BAJA" sql-type="boolean"/>
+        </property>
+
+        <property name="fechabaja">
+            <column name="FECHABAJA" sql-type="varchar(10)" length="10"/>
+        </property>
+
         <set name="gestionsById" inverse="true">
             <key>
                 <column name="CODPROYECTO"/>

@@ -64,51 +64,55 @@ public class ProveedorController {
         return listaCodigos;
     }
 
-    public static String validaciones(ProveedoresEntity proveedor, Boolean esInsert) {
+    public static String validaciones(ProveedoresEntity proveedor, int tipoAccion) {
 
         HashMap<String, String> errores = new HashMap<>();
         List listaCodigos = listaCodigosProvedores();
 
-        if (esInsert) {
+        if (tipoAccion==0) { //si es insert=0
             if (ChecksUtils.existeCodigo(listaCodigos, proveedor.getCodigo())) {
                 errores.put("CODIGO", "YA EXISTE UN PROVEEDOR CON EL CODIGO INSERTADO");
             }
-        } else {
+        } else { //si es modificar= 1 o baja= 2
             if (!ChecksUtils.existeCodigo(listaCodigos, proveedor.getCodigo())) {
                 errores.put("CODIGO", "EL CODIGO DE PROVEEDOR NO EXISTE");
             }
         }
 
-        if (proveedor.getCodigo().length() > 6 || proveedor.getCodigo().equals("")) {
-            if (proveedor.getCodigo().length() > 6) {
-                errores.put("CODIGO", "EL CODIGO EXCEDE LA LONGITUD MAXIMA DE 6 CARACTERES");
-            } else {
-                errores.put("CODIGO", "EL CODIGO NO PUEDE ESTAR VACIO");
+
+        if (tipoAccion!=2) { // si no es eliminar necesito todos los datos en el form
+
+            if (proveedor.getCodigo().length() > 6 || proveedor.getCodigo().equals("")) {
+                if (proveedor.getCodigo().length() > 6) {
+                    errores.put("CODIGO", "EL CODIGO EXCEDE LA LONGITUD MAXIMA DE 6 CARACTERES");
+                } else {
+                    errores.put("CODIGO", "EL CODIGO NO PUEDE ESTAR VACIO");
+                }
             }
-        }
 
 
-        if (proveedor.getNombre().length() > 20 || proveedor.getNombre().equals("")) {
-            if (proveedor.getNombre().length() > 20) {
-                errores.put("NOMBRE", "EL NOMBRE EXCEDE LA LONGITUD MAXIMA DE 20 CARACTERES");
-            } else {
-                errores.put("NOMBRE", "EL NOMBRE NO PUEDE ESTAR VACIO");
+            if (proveedor.getNombre().length() > 20 || proveedor.getNombre().equals("")) {
+                if (proveedor.getNombre().length() > 20) {
+                    errores.put("NOMBRE", "EL NOMBRE EXCEDE LA LONGITUD MAXIMA DE 20 CARACTERES");
+                } else {
+                    errores.put("NOMBRE", "EL NOMBRE NO PUEDE ESTAR VACIO");
+                }
             }
-        }
 
-        if (proveedor.getApellidos().length() > 30 || proveedor.getApellidos().equals("")) {
-            if (proveedor.getApellidos().length() > 30) {
-                errores.put("APELLIDOS", "LOS APELLIDOS EXCEDEN LA LONGITUD MAXIMA DE 30 CARACTERES");
-            } else {
-                errores.put("APELLIDOS", "LOS APELLIDOS NO PUEDEN ESTAR VACIOS");
+            if (proveedor.getApellidos().length() > 30 || proveedor.getApellidos().equals("")) {
+                if (proveedor.getApellidos().length() > 30) {
+                    errores.put("APELLIDOS", "LOS APELLIDOS EXCEDEN LA LONGITUD MAXIMA DE 30 CARACTERES");
+                } else {
+                    errores.put("APELLIDOS", "LOS APELLIDOS NO PUEDEN ESTAR VACIOS");
+                }
             }
-        }
 
-        if (proveedor.getDireccion().length() > 40 || proveedor.getDireccion().equals("")) {
-            if (proveedor.getDireccion().length() > 40) {
-                errores.put("DIRECCION", "LA DIRECCION EXCEDE LA LONGITUD MAXIMA DE 40 CARACTERES");
-            } else {
-                errores.put("DIRECCION", "LA DIRECCION NO PUEDE ESTAR VACIA");
+            if (proveedor.getDireccion().length() > 40 || proveedor.getDireccion().equals("")) {
+                if (proveedor.getDireccion().length() > 40) {
+                    errores.put("DIRECCION", "LA DIRECCION EXCEDE LA LONGITUD MAXIMA DE 40 CARACTERES");
+                } else {
+                    errores.put("DIRECCION", "LA DIRECCION NO PUEDE ESTAR VACIA");
+                }
             }
         }
 

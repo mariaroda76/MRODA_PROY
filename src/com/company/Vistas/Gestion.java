@@ -12,6 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class Gestion {
 
@@ -94,7 +96,7 @@ public class Gestion {
                         ProveedoresEntity prov = getProveedorFromForm();
 
                         //compruebo los datos del proveedor  antes de intentar subirlos a la BDD
-                        if (ProveedorController.validaciones(prov, true) == null) {
+                        if (ProveedorController.validaciones(prov, 0) == null) {
 
                             //pido confirmacion antes de guardar
                             if (DataEntryUtils.confirmDBSave(prov.toString())) {
@@ -115,7 +117,7 @@ public class Gestion {
                             }
                         } else {
                             //En este string guardamos todos los errores, y lo mostramos.
-                            String texto = ProveedorController.validaciones(prov, true);
+                            String texto = ProveedorController.validaciones(prov, 0);
                             JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
                             );
                         }
@@ -144,13 +146,15 @@ public class Gestion {
                         ProveedoresEntity provTemp = getProveedorFromForm();
 
                         //compruebo los datos del proveedor temporal  antes de intentar modificar en la BDD
-                        if (ProveedorController.validaciones(provTemp, false) == null) {
+                        if (ProveedorController.validaciones(provTemp, 1) == null) {
 
                             ProveedoresEntity provBD = ProveedorController.selectProveedorByCode(provTemp.getCodigo());
 
                             provBD.setNombre(provTemp.getNombre());
                             provBD.setApellidos(provTemp.getApellidos());
                             provBD.setDireccion(provTemp.getDireccion());
+                            //provBD.setBaja(provTemp.getBaja());
+                            //provBD.setFechabaja(provTemp.getFechabaja());
 
                             //pido confirmacion antes de MODIFICAR
                             if (DataEntryUtils.confirmDBUpdate(provBD.toString())) {
@@ -171,7 +175,7 @@ public class Gestion {
                             }
                         } else {
                             //En este string guardamos todos los errores, y lo mostramos.
-                            String texto = ProveedorController.validaciones(provTemp, false);
+                            String texto = ProveedorController.validaciones(provTemp, 1);
                             JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
                             );
                         }
@@ -184,6 +188,85 @@ public class Gestion {
             }
         });
 
+        JButtonEliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                //Inicio sesion
+                SessionFactory sesion = HibernateUtil.getSessionFactory();
+                Session session = sesion.openSession();
+                Transaction tx = session.beginTransaction();
+
+                switch (lbGestionData1.getText()) {
+
+                    case "APELLIDO":
+                        //recojo la info del panel e instancio un proveedor temporal
+                        ProveedoresEntity provTemp = getProveedorFromForm();
+
+                        //compruebo los datos del proveedor temporal  antes de intentar DARLE DE BAJA en la BDD
+                        if (ProveedorController.validaciones(provTemp, 2) == null) {
+
+                            ProveedoresEntity provBD = ProveedorController.selectProveedorByCode(provTemp.getCodigo());
+
+                            //solo me interesa el codigo que han puesto en el field, el resto de datos no serian validos para hacer una baja
+                            //por eso los seteo todos segun el objeto de la BD
+
+                            TFGestionNombre.setEnabled(false);
+                            TFGestionNombre.setText(provBD.getNombre());
+
+                            TFGestionData1.setEnabled(false);
+                            TFGestionData1.setText(provBD.getApellidos());
+
+                            TFGestionDireccion.setEnabled(false);
+                            TFGestionDireccion.setText(provBD.getDireccion());
+
+                            //le doy de baja
+                            provBD.setBaja(true);
+
+                            //guardo la fecha de hoy como fecha de la baja: la guardo como string
+                            java.util.Date date = new java.util.Date();
+                            DateFormat fechaHora = new SimpleDateFormat("dd/MM/yyyy");
+                            String ahora = fechaHora.format(date);
+
+                            provBD.setFechabaja(ahora.toUpperCase());
+
+
+                            //pido confirmacion antes de dar de baja
+                            if (DataEntryUtils.confirmDBBaja(provBD.toStringBaja())) {
+                                session.update(provBD);
+                                JOptionPane.showMessageDialog(null, "Se ha DADO DE BAJA correctamente al Proveedor", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                );
+                                limpiarJTextFields(JPGestionData);
+                                try {
+                                    tx.commit();
+                                } catch (Exception e1) {
+                                    System.out.println("ERROR NO CONTROLADO");
+                                    System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                                }
+                                limpiarJTextFields(getJPGeneral());
+                                session.close();
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Has declinado DAR DE BAJA al Proveedor", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                );
+                                limpiarJTextFields(JPGestionData);
+                            }
+                        } else {
+                            //En este string guardamos todos los errores, y lo mostramos.
+                            String texto = ProveedorController.validaciones(provTemp, 2);
+                            JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
+                            );
+                        }
+                        break;
+
+                    default:
+                        System.out.println("case no implementado aun");
+
+                }
+
+
+            }
+        });
+        
 
         JButtonLimpiar.addActionListener(new ActionListener() {
             @Override
@@ -269,27 +352,25 @@ public class Gestion {
         for (Component component : mycomponents) {
             if (component instanceof JTextField) {
                 ((JTextField) component).setText("");
+                component.setEnabled(true);
             } else if (component instanceof JPanel) {
                 Container mypanel = (Container) component;
                 limpiarJTextFields(mypanel);
             }
         }
-/*
-        // New-style with Stream
-        Stream.of(container.getComponents())
-                .filter(c -> c instanceof JTextField)
-                .map(c -> ((JTextField) c).getText())
-                .forEach(System.out::println);*/
+
     }
 
 
     //METODOS DE ENTITIES
     private ProveedoresEntity getProveedorFromForm() {
+
         ProveedoresEntity prov = new ProveedoresEntity();
         prov.setCodigo(TFGestionCodigo.getText().toUpperCase().trim());
         prov.setNombre(TFGestionNombre.getText().toUpperCase().trim());
         prov.setApellidos(TFGestionData1.getText().toUpperCase().trim());
         prov.setDireccion(TFGestionDireccion.getText().toUpperCase().trim());
+
         return prov;
     }
 

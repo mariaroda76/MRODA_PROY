@@ -15,6 +15,8 @@ public class ProyectosEntity implements Serializable {
     private String codigo;
     private String nombre;
     private String ciudad;
+    private boolean baja;
+    private String fechabaja;
     private Collection<GestionEntity> gestionsById;
 
     public ProyectosEntity() {
@@ -24,8 +26,37 @@ public class ProyectosEntity implements Serializable {
         this.id = id;
     }
 
+    //CON BAJAS Y FECHAS
+    public ProyectosEntity(int id, String codigo, String nombre, String ciudad, boolean baja, String fechabaja, Collection<GestionEntity> gestionsById) {
+        this.id = id;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.ciudad = ciudad;
+        this.baja = baja;
+        this.fechabaja = fechabaja;
+        this.gestionsById = gestionsById;
+    }
+
+    public ProyectosEntity(String codigo, String nombre, String ciudad, boolean baja, String fechabaja, Collection<GestionEntity> gestionsById) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.ciudad = ciudad;
+        this.baja = baja;
+        this.fechabaja = fechabaja;
+        this.gestionsById = gestionsById;
+    }
+
+    //SIN BAJAS Y FECHAS
+
     public ProyectosEntity(int id, String codigo, String nombre, String ciudad, Collection<GestionEntity> gestionsById) {
         this.id = id;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.ciudad = ciudad;
+        this.gestionsById = gestionsById;
+    }
+
+    public ProyectosEntity(String codigo, String nombre, String ciudad, Collection<GestionEntity> gestionsById) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.ciudad = ciudad;
@@ -70,6 +101,27 @@ public class ProyectosEntity implements Serializable {
 
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
+    }
+
+    @Basic
+    @Column(name = "BAJA", nullable = true)
+    public boolean getBaja() {
+        return baja;
+    }
+
+    public void setBaja(Boolean baja) {
+        this.baja = baja;
+    }
+
+
+    @Basic
+    @Column(name = "FECHABAJA", nullable = true, length = 10)
+    public String getFechabaja() {
+        return fechabaja;
+    }
+
+    public void setFechabaja(String fechabaja) {
+        this.fechabaja = fechabaja;
     }
 
     @Override

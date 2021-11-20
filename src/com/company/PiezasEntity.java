@@ -15,6 +15,8 @@ public class PiezasEntity implements Serializable {
     private String nombre;
     private double precio;
     private String descripcion;
+    private boolean baja;
+    private String fechabaja;
     private Collection<GestionEntity> gestionsById;
 
 
@@ -25,6 +27,29 @@ public class PiezasEntity implements Serializable {
         this.id = id;
     }
 
+    //CON BAJAS Y FECHAS
+    public PiezasEntity(int id, String codigo, String nombre, double precio, String descripcion, boolean baja, String fechabaja, Collection<GestionEntity> gestionsById) {
+        this.id = id;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.descripcion = descripcion;
+        this.baja = baja;
+        this.fechabaja = fechabaja;
+        this.gestionsById = gestionsById;
+    }
+
+    public PiezasEntity(String codigo, String nombre, double precio, String descripcion, boolean baja, String fechabaja, Collection<GestionEntity> gestionsById) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.descripcion = descripcion;
+        this.baja = baja;
+        this.fechabaja = fechabaja;
+        this.gestionsById = gestionsById;
+    }
+
+    //SIN BAJAS Y FECHAS
     public PiezasEntity(int id, String codigo, String nombre, double precio, String descripcion, Collection<GestionEntity> gestionsById) {
         this.id = id;
         this.codigo = codigo;
@@ -34,7 +59,13 @@ public class PiezasEntity implements Serializable {
         this.gestionsById = gestionsById;
     }
 
-
+    public PiezasEntity(String codigo, String nombre, double precio, String descripcion, Collection<GestionEntity> gestionsById) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.descripcion = descripcion;
+        this.gestionsById = gestionsById;
+    }
 
     @Id
     @Column(name = "ID", nullable = false)
@@ -85,6 +116,28 @@ public class PiezasEntity implements Serializable {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    @Basic
+    @Column(name = "BAJA", nullable = true)
+    public boolean getBaja() {
+        return baja;
+    }
+
+    public void setBaja(Boolean baja) {
+        this.baja = baja;
+    }
+
+
+    @Basic
+    @Column(name = "FECHABAJA", nullable = true, length = 10)
+    public String getFechabaja() {
+        return fechabaja;
+    }
+
+    public void setFechabaja(String fechabaja) {
+        this.fechabaja = fechabaja;
+    }
+
 
     @Override
     public boolean equals(Object o) {

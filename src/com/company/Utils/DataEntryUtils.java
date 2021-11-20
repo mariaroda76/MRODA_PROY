@@ -4,11 +4,15 @@ import javax.swing.*;
 
 public class DataEntryUtils {
     public static boolean confirmDBSave(String datos) {
-        return confirm("estas a punto de GUARDAR: " + datos);
+        return confirm("estas a punto de GUARDAR " + datos);
     }
 
     public static boolean confirmDBUpdate(String datos) {
-        return confirm("estas a punto de MOODIFICAR: " + datos);
+        return confirm("estas a punto de MODIFICAR " + datos);
+    }
+
+    public static boolean confirmDBBaja(String datos) {
+        return confirm("estas a punto de DAR DE BAJA " + datos);
     }
 
     public static boolean confirmDBDelete(String datos) {

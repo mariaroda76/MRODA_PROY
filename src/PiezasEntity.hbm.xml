@@ -20,6 +20,15 @@
         <property name="descripcion">
             <column name="DESCRIPCION" sql-type="text" not-null="true"/>
         </property>
+
+        <property name="baja">
+            <column name="BAJA" sql-type="boolean"/>
+        </property>
+
+        <property name="fechabaja">
+            <column name="FECHABAJA" sql-type="varchar(10)" length="10"/>
+        </property>
+
         <set name="gestionsById" inverse="true">
             <key>
                 <column name="CODPIEZA"/>

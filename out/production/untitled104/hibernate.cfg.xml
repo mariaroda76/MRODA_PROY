@@ -25,6 +25,7 @@
         <!-- agregado de apuntes -->
 
         <property name="hibernate.ejb.metamodel.population">disabled</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
 
         <mapping class="com.company.GestionEntity"/>
         <mapping resource="GestionEntity.hbm.xml"/>
@@ -35,11 +36,5 @@
         <mapping resource="ProyectosEntity.hbm.xml"/>
         <mapping class="com.company.ProyectosEntity"/>
 
-
-        <!-- <property name="connection.username"/> -->
-        <!-- <property name="connection.password"/> -->
-
-        <!-- DB schema will be updated if needed -->
-        <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
     </session-factory>
 </hibernate-configuration>
