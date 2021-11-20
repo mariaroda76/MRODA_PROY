@@ -1,5 +1,6 @@
 package com.company.Vistas;
 
+import com.company.Controllers.GestionController;
 import com.company.Controllers.ProveedorController;
 import com.company.ProveedoresEntity;
 import com.company.Utils.DataEntryUtils;
@@ -14,9 +15,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Gestion {
 
+    static List<ProveedoresEntity> listaProvedores = new ArrayList();
+    static int posicionActual = 0;
 
     private JPanel JPGeneral;
     private JPanel JPVacio;
@@ -206,49 +211,49 @@ public class Gestion {
                         //compruebo los datos del proveedor temporal  antes de intentar DARLE DE BAJA en la BDD
                         if (ProveedorController.validaciones(provTemp, 2) == null) {
 
+                            //obtengo el proveedor real de la bD
                             ProveedoresEntity provBD = ProveedorController.selectProveedorByCode(provTemp.getCodigo());
 
-                            //solo me interesa el codigo que han puesto en el field, el resto de datos no serian validos para hacer una baja
-                            //por eso los seteo todos segun el objeto de la BD
-
-                            TFGestionNombre.setEnabled(false);
-                            TFGestionNombre.setText(provBD.getNombre());
-
-                            TFGestionData1.setEnabled(false);
-                            TFGestionData1.setText(provBD.getApellidos());
-
-                            TFGestionDireccion.setEnabled(false);
-                            TFGestionDireccion.setText(provBD.getDireccion());
-
-                            //le doy de baja
-                            provBD.setBaja(true);
-
-                            //guardo la fecha de hoy como fecha de la baja: la guardo como string
-                            java.util.Date date = new java.util.Date();
-                            DateFormat fechaHora = new SimpleDateFormat("dd/MM/yyyy");
-                            String ahora = fechaHora.format(date);
-
-                            provBD.setFechabaja(ahora.toUpperCase());
+                            //antes de eliminarlo debo comprobar que no tiene gestiones abiertas
+                            int cantidadGestionesProveedor = GestionController.selectGestionesByProvId(provBD.getId()).size();
+                            if (cantidadGestionesProveedor == 0) {
 
 
-                            //pido confirmacion antes de dar de baja
-                            if (DataEntryUtils.confirmDBBaja(provBD.toStringBaja())) {
-                                session.update(provBD);
-                                JOptionPane.showMessageDialog(null, "Se ha DADO DE BAJA correctamente al Proveedor", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
-                                );
-                                limpiarJTextFields(JPGestionData);
-                                try {
-                                    tx.commit();
-                                } catch (Exception e1) {
-                                    System.out.println("ERROR NO CONTROLADO");
-                                    System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                                TFGestionNombre.setEnabled(false);
+                                TFGestionNombre.setText(provBD.getNombre());
+
+                                TFGestionData1.setEnabled(false);
+                                TFGestionData1.setText(provBD.getApellidos());
+
+                                TFGestionDireccion.setEnabled(false);
+                                TFGestionDireccion.setText(provBD.getDireccion());
+
+
+
+                                //pido confirmacion antes de dar de baja
+                                if (DataEntryUtils.confirmDBDelete(provBD.toStringEliminar())) {
+                                    session.delete(provBD);
+                                    JOptionPane.showMessageDialog(null, "Se ha ELIMINADO correctamente el Proveedor", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                    );
+                                    limpiarJTextFields(JPGestionData);
+                                    try {
+                                        tx.commit();
+                                    } catch (Exception e1) {
+                                        System.out.println("ERROR NO CONTROLADO");
+                                        System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                                    }
+                                    limpiarJTextFields(getJPGeneral());
+                                    session.close();
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Has declinado ELIMINAR al Proveedor", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                    );
+                                    limpiarJTextFields(JPGestionData);
                                 }
-                                limpiarJTextFields(getJPGeneral());
-                                session.close();
+
                             } else {
-                                JOptionPane.showMessageDialog(null, "Has declinado DAR DE BAJA al Proveedor", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                String texto1 = "EL PROVEEDOR TIENE GESTIONES ABIERTAS!! NO SE PUEDE ELIMINAR. \n PRUEBA DARLO DE BAJA O ELIMINA SUS GESTIONES PREVIAMENTE";
+                                JOptionPane.showMessageDialog(null, texto1, "Resultado", JOptionPane.ERROR_MESSAGE
                                 );
-                                limpiarJTextFields(JPGestionData);
                             }
                         } else {
                             //En este string guardamos todos los errores, y lo mostramos.
@@ -266,7 +271,6 @@ public class Gestion {
 
             }
         });
-        
 
         JButtonLimpiar.addActionListener(new ActionListener() {
             @Override
@@ -284,8 +288,190 @@ public class Gestion {
 
                 if (lbGestionData1.getText() == "APELLIDO") {
 
-                    ProveedorController.listaProveedores();
+                    listaProvedores = ProveedorController.listaProveedoresState(false);
+                    int ultimo = listaProvedores.size();
+
+                    if (listaProvedores.size() > 0) {
+
+                        ProveedoresEntity provTemPrimeraVisualizacion = listaProvedores.get(posicionActual);
+
+                        TFListadoCodigo.setText(provTemPrimeraVisualizacion.getCodigo());
+                        TFListadoNombre.setText(provTemPrimeraVisualizacion.getNombre());
+                        TFListadoData1.setText(provTemPrimeraVisualizacion.getApellidos());
+                        TFListadoDireccion.setText(provTemPrimeraVisualizacion.getDireccion());
+                        TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                        TFListadoRegSiguiente.setText(String.valueOf(ultimo));
+
+                        habilitarFlechas();
+                    }
+
                 }
+            }
+        });
+
+        JButtonIrAPrimera.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+                if (lbGestionData1.getText() == "APELLIDO") {
+
+                    listaProvedores = ProveedorController.listaProveedoresState(false);
+                    posicionActual = 0;
+                    int ultimo = listaProvedores.size();
+                    ProveedoresEntity provTemPrimeroLista = listaProvedores.get(0);
+
+                    TFListadoCodigo.setText(provTemPrimeroLista.getCodigo());
+                    TFListadoNombre.setText(provTemPrimeroLista.getNombre());
+                    TFListadoData1.setText(provTemPrimeroLista.getApellidos());
+                    TFListadoDireccion.setText(provTemPrimeroLista.getDireccion());
+                    TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                    TFListadoRegSiguiente.setText(String.valueOf(ultimo));
+
+                }
+
+            }
+        });
+
+        JButtonIrAUltima.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if (lbGestionData1.getText() == "APELLIDO") {
+
+                    listaProvedores = ProveedorController.listaProveedoresState(false);
+                    int ultimo = listaProvedores.size();
+                    posicionActual = ultimo - 1;
+                    ProveedoresEntity provTemUltimo = listaProvedores.get(ultimo - 1);
+
+                    TFListadoCodigo.setText(provTemUltimo.getCodigo());
+                    TFListadoNombre.setText(provTemUltimo.getNombre());
+                    TFListadoData1.setText(provTemUltimo.getApellidos());
+                    TFListadoDireccion.setText(provTemUltimo.getDireccion());
+                    TFListadoRegAnterior.setText(String.valueOf(ultimo));
+                    TFListadoRegSiguiente.setText(String.valueOf(ultimo));
+
+                }
+            }
+
+        });
+
+        JButtonIrAAnterior.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if (lbGestionData1.getText() == "APELLIDO") {
+
+                    listaProvedores = ProveedorController.listaProveedoresState(false);
+                    int ultimo = listaProvedores.size();
+
+                    if (posicionActual > 0) {
+
+                        posicionActual = posicionActual - 1;
+
+                        ProveedoresEntity provTemActual = listaProvedores.get(posicionActual);
+
+                        TFListadoCodigo.setText(provTemActual.getCodigo());
+                        TFListadoNombre.setText(provTemActual.getNombre());
+                        TFListadoData1.setText(provTemActual.getApellidos());
+                        TFListadoDireccion.setText(provTemActual.getDireccion());
+                        TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                        TFListadoRegSiguiente.setText(String.valueOf(ultimo));
+                    }
+
+                }
+
+
+            }
+        });
+
+        JButtonIrASiguiente.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if (lbGestionData1.getText() == "APELLIDO") {
+
+                    listaProvedores = ProveedorController.listaProveedoresState(false);
+                    int ultimo = listaProvedores.size();
+
+                    if (posicionActual < ultimo - 1) {
+
+                        posicionActual = posicionActual + 1;
+
+                        ProveedoresEntity provTemActual = listaProvedores.get(posicionActual);
+
+                        TFListadoCodigo.setText(provTemActual.getCodigo());
+                        TFListadoNombre.setText(provTemActual.getNombre());
+                        TFListadoData1.setText(provTemActual.getApellidos());
+                        TFListadoDireccion.setText(provTemActual.getDireccion());
+                        TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                        TFListadoRegSiguiente.setText(String.valueOf(ultimo));
+                    }
+
+                }
+
+
+            }
+        });
+
+        JButtonBaja.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                //Inicio sesion
+                SessionFactory sesion = HibernateUtil.getSessionFactory();
+                Session session = sesion.openSession();
+                Transaction tx = session.beginTransaction();
+
+                switch (lbGestionData1.getText()) {
+
+                    case "APELLIDO":
+
+                        //selecciono el prov de la bdd
+                        ProveedoresEntity provBD = ProveedorController.selectProveedorByCode(TFListadoCodigo.getText());
+
+                        //le doy de baja
+                        provBD.setBaja(true);
+
+                        //guardo la fecha de hoy como fecha de la baja: la guardo como string
+                        java.util.Date date = new java.util.Date();
+                        DateFormat fechaHora = new SimpleDateFormat("dd/MM/yyyy");
+                        String ahora = fechaHora.format(date);
+
+                        provBD.setFechabaja(ahora.toUpperCase());
+
+                        //pido confirmacion antes de dar de baja
+                        if (DataEntryUtils.confirmDBBaja(provBD.toStringBaja())) {
+                            session.update(provBD);
+                            JOptionPane.showMessageDialog(null, "Se ha DADO DE BAJA correctamente al Proveedor", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                            );
+                            posicionActual = 0;
+                            limpiarJTextFields(JPListado);
+                            bloquerFlechas();
+                            try {
+                                tx.commit();
+                            } catch (Exception e1) {
+                                System.out.println("ERROR NO CONTROLADO");
+                                System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                            }
+                            limpiarJTextFields(getJPGeneral());
+                            session.close();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Has declinado DAR DE BAJA al Proveedor", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                            );
+                            posicionActual = 0;
+                            limpiarJTextFields(JPListado);
+                            bloquerFlechas();
+                        }
+
+                        break;
+
+                    default:
+                        System.out.println("case no implementado aun");
+
+                }
+
+
             }
         });
 
@@ -317,6 +503,8 @@ public class Gestion {
         //SET LISTADO
         this.lbListado.setText("LISTADO PROVEEDORES: UTILIZA BOTONES PARA IR DE UN REGISTRO A OTRO");
         this.lbListadoData1.setText("APELLIDO");
+        bloquerFlechas();
+
 
     }
 
@@ -329,7 +517,7 @@ public class Gestion {
         this.lbListado.setText("LISTADO PIEZAS: UTILIZA BOTONES PARA IR DE UN REGISTRO A OTRO");
         this.lbListadoData1.setText("PRECIO");
         this.JPListadoDireccion.setVisible(false);
-
+        bloquerFlechas();
     }
 
     public void gestionProyectos() {
@@ -342,6 +530,7 @@ public class Gestion {
         this.lbListado.setText("LISTADO PROYECTOS: UTILIZA BOTONES PARA IR DE UN REGISTRO A OTRO");
         this.lbListadoData1.setText("CIUDAD");
         this.JPListadoDireccion.setVisible(false);
+        bloquerFlechas();
 
     }
 
@@ -361,6 +550,21 @@ public class Gestion {
 
     }
 
+    private void bloquerFlechas() {
+        this.JButtonIrASiguiente.setEnabled(false);
+        this.JButtonIrAAnterior.setEnabled(false);
+        this.JButtonIrAPrimera.setEnabled(false);
+        this.JButtonIrAUltima.setEnabled(false);
+        this.JButtonBaja.setEnabled(false);
+    }
+
+    private void habilitarFlechas() {
+        this.JButtonIrASiguiente.setEnabled(true);
+        this.JButtonIrAAnterior.setEnabled(true);
+        this.JButtonIrAPrimera.setEnabled(true);
+        this.JButtonIrAUltima.setEnabled(true);
+        this.JButtonBaja.setEnabled(true);
+    }
 
     //METODOS DE ENTITIES
     private ProveedoresEntity getProveedorFromForm() {
@@ -370,6 +574,17 @@ public class Gestion {
         prov.setNombre(TFGestionNombre.getText().toUpperCase().trim());
         prov.setApellidos(TFGestionData1.getText().toUpperCase().trim());
         prov.setDireccion(TFGestionDireccion.getText().toUpperCase().trim());
+
+        return prov;
+    }
+
+    private ProveedoresEntity getProveedorFromList() {
+
+        ProveedoresEntity prov = new ProveedoresEntity();
+        prov.setCodigo(TFListadoCodigo.getText().toUpperCase().trim());
+        prov.setNombre(TFListadoNombre.getText().toUpperCase().trim());
+        prov.setApellidos(TFListadoData1.getText().toUpperCase().trim());
+        prov.setDireccion(TFListadoDireccion.getText().toUpperCase().trim());
 
         return prov;
     }

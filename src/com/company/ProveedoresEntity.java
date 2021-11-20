@@ -190,6 +190,16 @@ public class ProveedoresEntity implements Serializable {
                 ;
     }
 
+    public String toStringEliminar() {
+        return "PROVEEDOR: "+ "\n" +
+                "\tCODIGO=" + codigo + "\n" +
+                "\tNOMBRE=" + nombre + "\n" +
+                "\tAPELLIDO=" + apellidos + "\n" +
+                "ESTE PROVEEDOR SE ELIMINARÁ COMPLETAMENTE DE LA BASE DE DATOS"+ "\n" +
+                "ES UNA ACCION IRREVERSIBLE"
+                ;
+    }
+
 
 
 }
