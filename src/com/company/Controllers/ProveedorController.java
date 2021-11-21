@@ -15,7 +15,7 @@ public class ProveedorController {
 
     public static List<ProveedoresEntity> listaProveedoresAll() {
 
-        List<ProveedoresEntity> listaProvedores = new ArrayList();
+
 
         SessionFactory sesion = HibernateUtil.getSessionFactory();
         Session session = sesion.openSession();
@@ -24,19 +24,11 @@ public class ProveedorController {
         Query q = session.createQuery("from ProveedoresEntity ");
         List<ProveedoresEntity> lista = q.list();
 
-        // Obtenemos un Iterador y recorremos la lista
-        Iterator<ProveedoresEntity> iter = lista.iterator();
 
-        while (iter.hasNext()) {
-            //extraer el objeto
-            ProveedoresEntity prov = (ProveedoresEntity) iter.next();
-            System.out.println("proveedor: " + prov.toString());
-            listaProvedores.add(prov);
-        }
         session.close();
 
 
-        return listaProvedores;
+        return lista;
     }
 
     public static List<ProveedoresEntity> listaProveedoresState(boolean baja) {
@@ -186,6 +178,34 @@ public class ProveedorController {
         }
         return null;
     }
+
+
+    public static List<ProveedoresEntity> listaProveedoresAll_OLD() {
+
+        List<ProveedoresEntity> listaProvedores = new ArrayList();
+
+        SessionFactory sesion = HibernateUtil.getSessionFactory();
+        Session session = sesion.openSession();
+        Transaction tx = session.beginTransaction();
+
+        Query q = session.createQuery("from ProveedoresEntity ");
+        List<ProveedoresEntity> lista = q.list();
+
+        // Obtenemos un Iterador y recorremos la lista
+        Iterator<ProveedoresEntity> iter = lista.iterator();
+
+        while (iter.hasNext()) {
+            //extraer el objeto
+            ProveedoresEntity prov = (ProveedoresEntity) iter.next();
+            System.out.println("proveedor: " + prov.toString());
+            listaProvedores.add(prov);
+        }
+        session.close();
+
+
+        return listaProvedores;
+    }
+
 
 
 }
