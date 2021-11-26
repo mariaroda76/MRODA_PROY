@@ -12,4 +12,13 @@ public class ChecksUtils {
         return false;
     }
 
+    public static Boolean existeId(List lista, int id) {
+
+        if (lista.contains(id)) {
+            return true;
+        }
+        return false;
+    }
+
+
 }

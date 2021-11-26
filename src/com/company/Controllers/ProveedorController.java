@@ -83,6 +83,30 @@ public class ProveedorController {
 
         return listaCodigos;
     }
+    public static List<String> listaIdProvedores() {
+
+        List listaIds = new ArrayList();
+
+        SessionFactory sesion = HibernateUtil.getSessionFactory();
+        Session session = sesion.openSession();
+        Transaction tx = session.beginTransaction();
+
+        Query q = session.createQuery("from ProveedoresEntity ");
+        List<ProveedoresEntity> lista = q.list();
+
+        // Obtenemos un Iterador y recorremos la lista
+        Iterator<ProveedoresEntity> iter = lista.iterator();
+
+        while (iter.hasNext()) {
+            //extraer el objeto
+            ProveedoresEntity prov = (ProveedoresEntity) iter.next();
+            listaIds.add(prov.getId());
+        }
+        session.close();
+
+
+        return listaIds;
+    }
 
     public static String validaciones(ProveedoresEntity proveedor, int tipoAccion) {
 
@@ -179,6 +203,22 @@ public class ProveedorController {
         return null;
     }
 
+    public static ProveedoresEntity selectProveedorById(int id) {
+
+        List listaIds = listaIdProvedores();
+        List listaProveedores = listaProveedoresAll();
+
+        // si la lista de codigos contiene el codigo que le paso...
+        if (ChecksUtils.existeId(listaIds, id)) {
+            //recorro los porveedores y me quedo con el que tiene el id que le he pasado
+            for (int i = 0; i < listaProveedores.size(); i++) {
+                if (((ProveedoresEntity) listaProveedores.get(i)).getId()== id) {
+                    return ((ProveedoresEntity) listaProveedores.get(i));
+                }
+            }
+        }
+        return null;
+    }
 
     public static List<ProveedoresEntity> listaProveedoresAll_OLD() {
 

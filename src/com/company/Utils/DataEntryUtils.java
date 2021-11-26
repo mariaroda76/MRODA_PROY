@@ -27,6 +27,16 @@ public class DataEntryUtils {
         return false;
     }
 
+    public static void handleDBError(Exception e) {
+        System.out.println("db error " + e.toString());
+        e.printStackTrace();
+        String expln = e.toString();
+
+        String[] exp = expln.split("Exception:");
+        System.err.println("Reason - " + exp[exp.length - 1]);
+        JOptionPane.showMessageDialog(null, "DB Error" + e.getMessage(), "Error ! ", JOptionPane.ERROR_MESSAGE);
+    }
+
 
 
 }

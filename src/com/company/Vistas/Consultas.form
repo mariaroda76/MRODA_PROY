@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="JPGeneral" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="20" y="20" width="672" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -58,7 +58,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="79024" class="javax.swing.JComboBox" binding="JComboConsultaResultado">
+              <component id="79024" class="com.company.Utils.DataComboBox" binding="JComboConsultaResultado">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -105,7 +105,7 @@
                     <properties>
                       <horizontalAlignment value="2"/>
                       <horizontalTextPosition value="2"/>
-                      <text value="codigo..."/>
+                      <text value=""/>
                     </properties>
                   </component>
                 </children>
@@ -141,7 +141,7 @@
                     <properties>
                       <horizontalAlignment value="2"/>
                       <horizontalTextPosition value="2"/>
-                      <text value="nombre..."/>
+                      <text value=""/>
                     </properties>
                   </component>
                 </children>
@@ -177,7 +177,7 @@
                     <properties>
                       <horizontalAlignment value="2"/>
                       <horizontalTextPosition value="2"/>
-                      <text value="data1..."/>
+                      <text value=""/>
                     </properties>
                   </component>
                 </children>
@@ -213,7 +213,7 @@
                     <properties>
                       <horizontalAlignment value="2"/>
                       <horizontalTextPosition value="2"/>
-                      <text value="direccion..."/>
+                      <text value=""/>
                     </properties>
                   </component>
                 </children>

@@ -40,7 +40,6 @@ public class GestionController {
         return listaGestiones;
     }
 
-
     public static List<GestionEntity> selectGestionesByProvId(int id) {
 
         List<GestionEntity> listaPorProv = new ArrayList<>();

@@ -2,7 +2,7 @@ package com.company.Utils;
 
 import java.util.List;
 
-class DBUtils {
+public class DBUtils {
 
     private static synchronized BaseDBUtils getUtils() throws Exception {
         return new BaseDBUtils();
