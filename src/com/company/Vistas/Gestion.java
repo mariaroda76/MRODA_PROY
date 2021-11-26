@@ -2,7 +2,9 @@ package com.company.Vistas;
 
 import com.company.Controllers.GestionController;
 import com.company.Controllers.ProveedorController;
+import com.company.Controllers.ProyectoController;
 import com.company.ProveedoresEntity;
+import com.company.ProyectosEntity;
 import com.company.Utils.DataEntryUtils;
 import com.company.Utils.HibernateUtil;
 import org.hibernate.Session;
@@ -21,6 +23,7 @@ import java.util.List;
 public class Gestion {
 
     static List<ProveedoresEntity> listaProvedores = new ArrayList();
+    static List<ProyectosEntity> listaProyectos = new ArrayList();
     static int posicionActual = 0;
 
     private JPanel JPGeneral;
@@ -128,6 +131,39 @@ public class Gestion {
                         }
                         break;
 
+                    case "CIUDAD":
+                        //recojo la info del panel e instancio un proyecto
+                        ProyectosEntity proy = getProyectoFromForm();
+
+                        //compruebo los datos del proyecto antes de intentar subirlos a la BDD
+                        if (ProyectoController.validaciones(proy, 0) == null) {
+
+                            //pido confirmacion antes de guardar
+                            if (DataEntryUtils.confirmDBSave(proy.toString())) {
+                                session.save(proy);
+                                JOptionPane.showMessageDialog(null, "Se ha INSERTADO correctamente el nuevo Proyecto", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                );
+                                limpiarJTextFields(JPGestionData);
+                                try {
+                                    tx.commit();
+                                } catch (Exception e1) {
+                                    System.out.println("ERROR NO CONTROLADO");
+                                    System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                                }
+                                session.close();
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Has declinado insertar un nuevo Proyecto", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                );
+                            }
+                        } else {
+                            //En este string guardamos todos los errores, y lo mostramos.
+                            String texto = ProyectoController.validaciones(proy, 0);
+                            JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
+                            );
+                        }
+                        break;
+
+
                     default:
                         System.out.println("case no implementado aun");
 
@@ -186,6 +222,44 @@ public class Gestion {
                         }
                         break;
 
+                    case "CIUDAD":
+                        //recojo la info del panel e instancio un proyecto TEMPORAL
+                        ProyectosEntity proyTemp = getProyectoFromForm();
+
+                        if (ProyectoController.validaciones(proyTemp, 1) == null) {
+
+                            ProyectosEntity proyBD = ProyectoController.selectproyectoByCode(proyTemp.getCodigo());
+
+                            proyBD.setNombre(proyTemp.getNombre());
+                            proyBD.setCiudad(proyTemp.getCiudad());
+
+
+                            //pido confirmacion antes de MODIFICAR
+                            if (DataEntryUtils.confirmDBUpdate(proyBD.toString())) {
+                                session.update(proyBD);
+                                JOptionPane.showMessageDialog(null, "Se ha MODIFICADO correctamente el Proyecto", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                );
+                                limpiarJTextFields(JPGestionData);
+                                try {
+                                    tx.commit();
+                                } catch (Exception e1) {
+                                    System.out.println("ERROR NO CONTROLADO");
+                                    System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                                }
+                                session.close();
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Has declinado MODIFICAR el Proyecto", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                );
+                            }
+                        } else {
+                            //En este string guardamos todos los errores, y lo mostramos.
+                            String texto = ProyectoController.validaciones(proyTemp, 1);
+                            JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
+                            );
+                        }
+
+                        break;
+
                     default:
                         System.out.println("case no implementado aun");
 
@@ -229,7 +303,6 @@ public class Gestion {
                                 TFGestionDireccion.setText(provBD.getDireccion());
 
 
-
                                 //pido confirmacion antes de dar de baja
                                 if (DataEntryUtils.confirmDBDelete(provBD.toStringEliminar())) {
                                     session.delete(provBD);
@@ -263,6 +336,60 @@ public class Gestion {
                         }
                         break;
 
+                    case "CIUDAD":
+                        //recojo la info del panel e instancio un proyecto TEMPORAL
+                        ProyectosEntity proyTemp = getProyectoFromForm();
+                        //compruebo los datos del proyecto temporal  antes de intentar DARLE DE BAJA en la BDD
+                        if (ProyectoController.validaciones(proyTemp, 2) == null) {
+
+                            //obtengo el proveedor real de la bD
+                            ProyectosEntity proyBD = ProyectoController.selectproyectoByCode(proyTemp.getCodigo());
+
+                            //antes de eliminarlo debo comprobar que no tiene gestiones abiertas
+                            int cantidadGestionesProyecto = GestionController.selectGestionesByProyId(proyBD.getId()).size();
+                            if (cantidadGestionesProyecto == 0) {
+
+
+                                TFGestionNombre.setEnabled(false);
+                                TFGestionNombre.setText(proyBD.getNombre());
+
+                                TFGestionData1.setEnabled(false);
+                                TFGestionData1.setText(proyBD.getCiudad());
+
+
+                                //pido confirmacion antes de dar de baja
+                                if (DataEntryUtils.confirmDBDelete(proyBD.toStringEliminar())) {
+                                    session.delete(proyBD);
+                                    JOptionPane.showMessageDialog(null, "Se ha ELIMINADO correctamente el Proyecto", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                    );
+                                    limpiarJTextFields(JPGestionData);
+                                    try {
+                                        tx.commit();
+                                    } catch (Exception e1) {
+                                        System.out.println("ERROR NO CONTROLADO");
+                                        System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                                    }
+                                    limpiarJTextFields(getJPGeneral());
+                                    session.close();
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Has declinado ELIMINAR al Proyecto", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                    );
+                                    limpiarJTextFields(JPGestionData);
+                                }
+
+                            } else {
+                                String texto1 = "EL PROYECTO TIENE GESTIONES ABIERTAS!! NO SE PUEDE ELIMINAR. \n PRUEBA DARLO DE BAJA O ELIMINA SUS GESTIONES PREVIAMENTE";
+                                JOptionPane.showMessageDialog(null, texto1, "Resultado", JOptionPane.ERROR_MESSAGE
+                                );
+                            }
+                        } else {
+                            //En este string guardamos todos los errores, y lo mostramos.
+                            String texto = ProyectoController.validaciones(proyTemp, 2);
+                            JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
+                            );
+                        }
+                        break;
+
                     default:
                         System.out.println("case no implementado aun");
 
@@ -286,24 +413,52 @@ public class Gestion {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if (lbGestionData1.getText() == "APELLIDO") {
+                switch (lbGestionData1.getText()) {
+                    case "APELLIDO":
 
-                    listaProvedores = ProveedorController.listaProveedoresState(false);
-                    int ultimo = listaProvedores.size();
+                        listaProvedores = ProveedorController.listaProveedoresState(false);
+                        int ultimo = listaProvedores.size();
 
-                    if (listaProvedores.size() > 0) {
+                        if (listaProvedores.size() > 0) {
 
-                        ProveedoresEntity provTemPrimeraVisualizacion = listaProvedores.get(posicionActual);
+                            ProveedoresEntity provTemPrimeraVisualizacion = listaProvedores.get(posicionActual);
 
-                        TFListadoCodigo.setText(provTemPrimeraVisualizacion.getCodigo());
-                        TFListadoNombre.setText(provTemPrimeraVisualizacion.getNombre());
-                        TFListadoData1.setText(provTemPrimeraVisualizacion.getApellidos());
-                        TFListadoDireccion.setText(provTemPrimeraVisualizacion.getDireccion());
-                        TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
-                        TFListadoRegSiguiente.setText(String.valueOf(ultimo));
+                            TFListadoCodigo.setText(provTemPrimeraVisualizacion.getCodigo());
+                            TFListadoNombre.setText(provTemPrimeraVisualizacion.getNombre());
+                            TFListadoData1.setText(provTemPrimeraVisualizacion.getApellidos());
+                            TFListadoDireccion.setText(provTemPrimeraVisualizacion.getDireccion());
+                            TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                            TFListadoRegSiguiente.setText(String.valueOf(ultimo));
 
-                        habilitarFlechas();
-                    }
+                            habilitarFlechas();
+                            autorellenarGestionProveedor(provTemPrimeraVisualizacion);
+                        }
+                        break;
+                    case "CIUDAD":
+
+                        listaProyectos = ProyectoController.listaProyectosState(false);
+                        int ultimopr = listaProyectos.size();
+
+                        if (listaProyectos.size() > 0) {
+
+                            ProyectosEntity proyTemPrimeraVisualizacion = listaProyectos.get(posicionActual);
+
+                            TFListadoCodigo.setText(proyTemPrimeraVisualizacion.getCodigo());
+                            TFListadoNombre.setText(proyTemPrimeraVisualizacion.getNombre());
+                            TFListadoData1.setText(proyTemPrimeraVisualizacion.getCiudad());
+
+                            TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                            TFListadoRegSiguiente.setText(String.valueOf(ultimopr));
+
+                            habilitarFlechas();
+                            autorellenarGestionProyecto(proyTemPrimeraVisualizacion);
+                        }
+                        break;
+
+
+                    default:
+                        System.out.println("case no implementado aun");
+
 
                 }
             }
@@ -313,22 +468,46 @@ public class Gestion {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                switch (lbGestionData1.getText()) {
+                    case "APELLIDO":
 
-                if (lbGestionData1.getText() == "APELLIDO") {
+                        listaProvedores = ProveedorController.listaProveedoresState(false);
+                        posicionActual = 0;
+                        int ultimo = listaProvedores.size();
+                        ProveedoresEntity provTemPrimeroLista = listaProvedores.get(0);
 
-                    listaProvedores = ProveedorController.listaProveedoresState(false);
-                    posicionActual = 0;
-                    int ultimo = listaProvedores.size();
-                    ProveedoresEntity provTemPrimeroLista = listaProvedores.get(0);
+                        TFListadoCodigo.setText(provTemPrimeroLista.getCodigo());
+                        TFListadoNombre.setText(provTemPrimeroLista.getNombre());
+                        TFListadoData1.setText(provTemPrimeroLista.getApellidos());
+                        TFListadoDireccion.setText(provTemPrimeroLista.getDireccion());
+                        TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                        TFListadoRegSiguiente.setText(String.valueOf(ultimo));
 
-                    TFListadoCodigo.setText(provTemPrimeroLista.getCodigo());
-                    TFListadoNombre.setText(provTemPrimeroLista.getNombre());
-                    TFListadoData1.setText(provTemPrimeroLista.getApellidos());
-                    TFListadoDireccion.setText(provTemPrimeroLista.getDireccion());
-                    TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
-                    TFListadoRegSiguiente.setText(String.valueOf(ultimo));
+                        autorellenarGestionProveedor(provTemPrimeroLista);
+                        break;
 
+                    case "CIUDAD":
+
+                        listaProyectos = ProyectoController.listaProyectosState(false);
+                        posicionActual = 0;
+                        int ultimopr = listaProyectos.size();
+                        ProyectosEntity proyTempPrimeroLista = listaProyectos.get(0);
+
+                        TFListadoCodigo.setText(proyTempPrimeroLista.getCodigo());
+                        TFListadoNombre.setText(proyTempPrimeroLista.getNombre());
+                        TFListadoData1.setText(proyTempPrimeroLista.getCiudad());
+
+                        TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                        TFListadoRegSiguiente.setText(String.valueOf(ultimopr));
+
+
+                        autorellenarGestionProyecto(proyTempPrimeroLista);
+                        break;
+
+                    default:
+                        System.out.println("case no implementado aun");
                 }
+
 
             }
         });
@@ -337,21 +516,41 @@ public class Gestion {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if (lbGestionData1.getText() == "APELLIDO") {
+                switch (lbGestionData1.getText()) {
+                    case "APELLIDO":
+                        listaProvedores = ProveedorController.listaProveedoresState(false);
+                        int ultimo = listaProvedores.size();
+                        posicionActual = ultimo - 1;
+                        ProveedoresEntity provTemUltimo = listaProvedores.get(ultimo - 1);
 
-                    listaProvedores = ProveedorController.listaProveedoresState(false);
-                    int ultimo = listaProvedores.size();
-                    posicionActual = ultimo - 1;
-                    ProveedoresEntity provTemUltimo = listaProvedores.get(ultimo - 1);
+                        TFListadoCodigo.setText(provTemUltimo.getCodigo());
+                        TFListadoNombre.setText(provTemUltimo.getNombre());
+                        TFListadoData1.setText(provTemUltimo.getApellidos());
+                        TFListadoDireccion.setText(provTemUltimo.getDireccion());
+                        TFListadoRegAnterior.setText(String.valueOf(ultimo));
+                        TFListadoRegSiguiente.setText(String.valueOf(ultimo));
 
-                    TFListadoCodigo.setText(provTemUltimo.getCodigo());
-                    TFListadoNombre.setText(provTemUltimo.getNombre());
-                    TFListadoData1.setText(provTemUltimo.getApellidos());
-                    TFListadoDireccion.setText(provTemUltimo.getDireccion());
-                    TFListadoRegAnterior.setText(String.valueOf(ultimo));
-                    TFListadoRegSiguiente.setText(String.valueOf(ultimo));
+                        autorellenarGestionProveedor(provTemUltimo);
+                        break;
 
+                    case "CIUDAD":
+                        listaProyectos = ProyectoController.listaProyectosState(false);
+                        int ultimopr = listaProyectos.size();
+                        posicionActual = ultimopr - 1;
+                        ProyectosEntity proyTempUltimo = listaProyectos.get(ultimopr - 1);
+
+                        TFListadoCodigo.setText(proyTempUltimo.getCodigo());
+                        TFListadoNombre.setText(proyTempUltimo.getNombre());
+                        TFListadoData1.setText(proyTempUltimo.getCiudad());
+
+
+                        autorellenarGestionProyecto(proyTempUltimo);
+                        break;
+
+                    default:
+                        System.out.println("case no implementado aun");
                 }
+
             }
 
         });
@@ -360,25 +559,52 @@ public class Gestion {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if (lbGestionData1.getText() == "APELLIDO") {
+                switch (lbGestionData1.getText()) {
+                    case "APELLIDO":
 
-                    listaProvedores = ProveedorController.listaProveedoresState(false);
-                    int ultimo = listaProvedores.size();
+                        listaProvedores = ProveedorController.listaProveedoresState(false);
+                        int ultimo = listaProvedores.size();
 
-                    if (posicionActual > 0) {
+                        if (posicionActual > 0) {
 
-                        posicionActual = posicionActual - 1;
+                            posicionActual = posicionActual - 1;
 
-                        ProveedoresEntity provTemActual = listaProvedores.get(posicionActual);
+                            ProveedoresEntity provTemActual = listaProvedores.get(posicionActual);
 
-                        TFListadoCodigo.setText(provTemActual.getCodigo());
-                        TFListadoNombre.setText(provTemActual.getNombre());
-                        TFListadoData1.setText(provTemActual.getApellidos());
-                        TFListadoDireccion.setText(provTemActual.getDireccion());
-                        TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
-                        TFListadoRegSiguiente.setText(String.valueOf(ultimo));
-                    }
+                            TFListadoCodigo.setText(provTemActual.getCodigo());
+                            TFListadoNombre.setText(provTemActual.getNombre());
+                            TFListadoData1.setText(provTemActual.getApellidos());
+                            TFListadoDireccion.setText(provTemActual.getDireccion());
+                            TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                            TFListadoRegSiguiente.setText(String.valueOf(ultimo));
 
+                            autorellenarGestionProveedor(provTemActual);
+
+                        }
+                        break;
+                    case "CIUDAD":
+                        listaProyectos = ProyectoController.listaProyectosState(false);
+                        int ultimopr = listaProyectos.size();
+
+                        if (posicionActual > 0) {
+
+                            posicionActual = posicionActual - 1;
+
+                            ProyectosEntity proyTemActual = listaProyectos.get(posicionActual);
+
+                            TFListadoCodigo.setText(proyTemActual.getCodigo());
+                            TFListadoNombre.setText(proyTemActual.getNombre());
+                            TFListadoData1.setText(proyTemActual.getCiudad());
+
+                            TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                            TFListadoRegSiguiente.setText(String.valueOf(ultimopr));
+
+                            autorellenarGestionProyecto(proyTemActual);
+                        }
+                        break;
+
+                    default:
+                        System.out.println("case no implementado aun");
                 }
 
 
@@ -389,25 +615,55 @@ public class Gestion {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if (lbGestionData1.getText() == "APELLIDO") {
 
-                    listaProvedores = ProveedorController.listaProveedoresState(false);
-                    int ultimo = listaProvedores.size();
+                switch (lbGestionData1.getText()) {
+                    case "APELLIDO":
 
-                    if (posicionActual < ultimo - 1) {
+                        listaProvedores = ProveedorController.listaProveedoresState(false);
+                        int ultimo = listaProvedores.size();
 
-                        posicionActual = posicionActual + 1;
+                        if (posicionActual < ultimo - 1) {
 
-                        ProveedoresEntity provTemActual = listaProvedores.get(posicionActual);
+                            posicionActual = posicionActual + 1;
 
-                        TFListadoCodigo.setText(provTemActual.getCodigo());
-                        TFListadoNombre.setText(provTemActual.getNombre());
-                        TFListadoData1.setText(provTemActual.getApellidos());
-                        TFListadoDireccion.setText(provTemActual.getDireccion());
-                        TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
-                        TFListadoRegSiguiente.setText(String.valueOf(ultimo));
-                    }
+                            ProveedoresEntity provTemActual = listaProvedores.get(posicionActual);
 
+                            TFListadoCodigo.setText(provTemActual.getCodigo());
+                            TFListadoNombre.setText(provTemActual.getNombre());
+                            TFListadoData1.setText(provTemActual.getApellidos());
+                            TFListadoDireccion.setText(provTemActual.getDireccion());
+                            TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                            TFListadoRegSiguiente.setText(String.valueOf(ultimo));
+
+                            autorellenarGestionProveedor(provTemActual);
+
+                        }
+
+                        break;
+
+                    case "CIUDAD":
+                        listaProyectos = ProyectoController.listaProyectosState(false);
+                        int ultimopr = listaProyectos.size();
+
+                        if (posicionActual < ultimopr - 1) {
+
+                            posicionActual = posicionActual + 1;
+
+                            ProyectosEntity proyTemActual = listaProyectos.get(posicionActual);
+
+                            TFListadoCodigo.setText(proyTemActual.getCodigo());
+                            TFListadoNombre.setText(proyTemActual.getNombre());
+                            TFListadoData1.setText(proyTemActual.getCiudad());
+
+                            TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                            TFListadoRegSiguiente.setText(String.valueOf(ultimopr));
+
+                            autorellenarGestionProyecto(proyTemActual);
+                        }
+                        break;
+
+                    default:
+                        System.out.println("case no implementado aun");
                 }
 
 
@@ -433,12 +689,8 @@ public class Gestion {
                         //le doy de baja
                         provBD.setBaja(true);
 
-                        //guardo la fecha de hoy como fecha de la baja: la guardo como string
-                        java.util.Date date = new java.util.Date();
-                        DateFormat fechaHora = new SimpleDateFormat("dd/MM/yyyy");
-                        String ahora = fechaHora.format(date);
 
-                        provBD.setFechabaja(ahora.toUpperCase());
+                        provBD.setFechabaja(ahoradevolverAhora());
 
                         //pido confirmacion antes de dar de baja
                         if (DataEntryUtils.confirmDBBaja(provBD.toStringBaja())) {
@@ -465,6 +717,43 @@ public class Gestion {
                         }
 
                         break;
+
+                    case "CIUDAD":
+
+                        //selecciono el prov de la bdd
+                        ProyectosEntity proyBD = ProyectoController.selectproyectoByCode(TFListadoCodigo.getText());
+
+                        //le doy de baja
+                        proyBD.setBaja(true);
+
+
+                        proyBD.setFechabaja(ahoradevolverAhora());
+
+                        //pido confirmacion antes de dar de baja
+                        if (DataEntryUtils.confirmDBBaja(proyBD.toStringBaja())) {
+                            session.update(proyBD);
+                            JOptionPane.showMessageDialog(null, "Se ha DADO DE BAJA correctamente al Proyecto", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                            );
+                            posicionActual = 0;
+                            limpiarJTextFields(JPListado);
+                            bloquerFlechas();
+                            try {
+                                tx.commit();
+                            } catch (Exception e1) {
+                                System.out.println("ERROR NO CONTROLADO");
+                                System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                            }
+                            limpiarJTextFields(getJPGeneral());
+                            session.close();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Has declinado DAR DE BAJA al Proyecto", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                            );
+                            posicionActual = 0;
+                            limpiarJTextFields(JPListado);
+                            bloquerFlechas();
+                        }
+                        break;
+
 
                     default:
                         System.out.println("case no implementado aun");
@@ -566,6 +855,33 @@ public class Gestion {
         this.JButtonBaja.setEnabled(true);
     }
 
+    private void autorellenarGestionProveedor(ProveedoresEntity prov) {
+
+        TFGestionCodigo.setText(prov.getCodigo());
+        TFGestionNombre.setText(prov.getNombre());
+        TFGestionData1.setText(prov.getApellidos());
+        TFGestionDireccion.setText(prov.getDireccion());
+
+    }
+
+    private void autorellenarGestionProyecto(ProyectosEntity proy) {
+
+        TFGestionCodigo.setText(proy.getCodigo());
+        TFGestionNombre.setText(proy.getNombre());
+        TFGestionData1.setText(proy.getCiudad());
+
+
+    }
+
+    private String ahoradevolverAhora (){
+        //guardo la fecha de hoy como fecha de la baja: la guardo como string
+        java.util.Date date = new java.util.Date();
+        DateFormat fechaHora = new SimpleDateFormat("dd/MM/yyyy");
+        String ahora = fechaHora.format(date).toUpperCase();
+        return ahora;
+    }
+
+
     //METODOS DE ENTITIES
     private ProveedoresEntity getProveedorFromForm() {
 
@@ -577,6 +893,17 @@ public class Gestion {
 
         return prov;
     }
+
+    private ProyectosEntity getProyectoFromForm() {
+
+        ProyectosEntity proy = new ProyectosEntity();
+        proy.setCodigo(TFGestionCodigo.getText().toUpperCase().trim());
+        proy.setNombre(TFGestionNombre.getText().toUpperCase().trim());
+        proy.setCiudad(TFGestionData1.getText().toUpperCase().trim());
+
+        return proy;
+    }
+
 
     private ProveedoresEntity getProveedorFromList() {
 

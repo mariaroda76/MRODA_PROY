@@ -12,9 +12,7 @@ import java.util.*;
 
 public class ProveedorController {
 
-
     public static List<ProveedoresEntity> listaProveedoresAll() {
-
 
 
         SessionFactory sesion = HibernateUtil.getSessionFactory();
@@ -83,6 +81,7 @@ public class ProveedorController {
 
         return listaCodigos;
     }
+
     public static List<String> listaIdProvedores() {
 
         List listaIds = new ArrayList();
@@ -125,24 +124,18 @@ public class ProveedorController {
         } else if (tipoAccion == 2) {//si es baja= 2 DEBE EXISTIR CODIGO y que el codigo no pertenezca a un proveedor de baja
             if (!ChecksUtils.existeCodigo(listaCodigos, proveedor.getCodigo())) {
                 errores.put("CODIGO", "EL CODIGO DE PROVEEDOR NO EXISTE");
-            } /*else {
-                if (proveedor.getBaja()) {
-                    errores.put("BAJA", "EL CODIGO INTRODUCIDO PERTENECE A UN PROVEEDOR QUE YA HA SIDO DADO DE BAJA");
-                }
-            }*/
+            }
         }
 
-
-        if (tipoAccion != 2 ) { // si no es eliminar necesito todos los datos en el form
-
-            if (proveedor.getCodigo().length() > 6 || proveedor.getCodigo().equals("")) {
-                if (proveedor.getCodigo().length() > 6) {
-                    errores.put("CODIGO", "EL CODIGO EXCEDE LA LONGITUD MAXIMA DE 6 CARACTERES");
-                } else {
-                    errores.put("CODIGO", "EL CODIGO NO PUEDE ESTAR VACIO");
-                }
+        if (proveedor.getCodigo().length() > 6 || proveedor.getCodigo().equals("")) {
+            if (proveedor.getCodigo().length() > 6) {
+                errores.put("CODIGO", "EL CODIGO EXCEDE LA LONGITUD MAXIMA DE 6 CARACTERES");
+            } else {
+                errores.put("CODIGO", "EL CODIGO NO PUEDE ESTAR VACIO");
             }
+        }
 
+        if (tipoAccion != 2) { // si no es eliminar necesito todos los datos en el form
 
             if (proveedor.getNombre().length() > 20 || proveedor.getNombre().equals("")) {
                 if (proveedor.getNombre().length() > 20) {
@@ -212,7 +205,7 @@ public class ProveedorController {
         if (ChecksUtils.existeId(listaIds, id)) {
             //recorro los porveedores y me quedo con el que tiene el id que le he pasado
             for (int i = 0; i < listaProveedores.size(); i++) {
-                if (((ProveedoresEntity) listaProveedores.get(i)).getId()== id) {
+                if (((ProveedoresEntity) listaProveedores.get(i)).getId() == id) {
                     return ((ProveedoresEntity) listaProveedores.get(i));
                 }
             }
@@ -245,7 +238,6 @@ public class ProveedorController {
 
         return listaProvedores;
     }
-
 
 
 }

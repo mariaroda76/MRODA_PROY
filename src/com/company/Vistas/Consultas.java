@@ -1,7 +1,9 @@
 package com.company.Vistas;
 
 import com.company.Controllers.ProveedorController;
+import com.company.Controllers.ProyectoController;
 import com.company.ProveedoresEntity;
+import com.company.ProyectosEntity;
 import com.company.Utils.DataComboBox;
 import com.company.Utils.DataEntryUtils;
 import com.company.Utils.HibernateUtil;
@@ -109,15 +111,68 @@ public class Consultas {
                                 break;
 
 
+                            default:
+                                System.out.println("case no implementado aun");
 
+                        }
+                        break;
+
+                    case "CIUDAD":
+
+                        List<ProyectosEntity> listaProy = ProyectoController.listaProyectosAll();
+                        // Obtenemos un Iterador y recorremos la lista en los cases
+                        Iterator<ProyectosEntity> iter2 = listaProy.iterator();
+
+                        List listaPor2 = new ArrayList();
+
+                        switch (lbConsultaBusqueda.getText()) {
+
+                            case "Escribe CODIGO o parte del mismo":
+                                //recorro el iterator
+                                while (iter2.hasNext()) {
+                                    //extraer el objeto de coincidencias con busqueda
+                                    ProyectosEntity proy = (ProyectosEntity) iter2.next();
+                                    if (proy.getCodigo().toUpperCase().contains(buscado)) {
+                                        listaPor2.add(proy);
+                                    }
+                                }
+                                //ahora tengo que pasarle la lista de coincidencias al combo
+
+                                intComboProyecto(listaPor2);
+                                break;
+
+                            case "Escribe NOMBRE o parte del mismo":
+                                //recorro el iterator
+                                while (iter2.hasNext()) {
+                                    //extraer el objeto de coincidencias con busqueda
+                                    ProyectosEntity proy = (ProyectosEntity) iter2.next();
+                                    if (proy.getNombre().toUpperCase().contains(buscado)) {
+                                        listaPor2.add(proy);
+                                    }
+                                }
+                                //ahora tengo que pasarle la lista de coincidencias al combo
+                                intComboProyecto(listaPor2);
+                                break;
+
+                            case "Escribe CIUDAD o parte de la misma":
+                                //recorro el iterator
+                                while (iter2.hasNext()) {
+                                    //extraer el objeto de coincidencias con busqueda
+                                    ProyectosEntity proy = (ProyectosEntity) iter2.next();
+                                    if (proy.getCiudad().toUpperCase().contains(buscado)) {
+                                        listaPor2.add(proy);
+                                    }
+                                }
+                                //ahora tengo que pasarle la lista de coincidencias al combo
+                                intComboProyecto(listaPor2);
+                                break;
 
                             default:
                                 System.out.println("case no implementado aun");
 
                         }
-
-
                         break;
+
                     default:
                         System.out.println("case no implementado aun");
 
@@ -231,7 +286,7 @@ public class Consultas {
     public void ProyectoPorCiudad() {
 
         //SET LABEL
-        this.lbConsultaBusqueda.setText("Escribe DIRECCION o parte de la misma");
+        this.lbConsultaBusqueda.setText("Escribe CIUDAD o parte de la misma");
         this.lbConsultaFixData1.setText("CIUDAD");
 
         //SET VISIBLE
@@ -282,12 +337,54 @@ public class Consultas {
         JPVacio.repaint();
     }
 
+    private void intComboProyecto(List<ProyectosEntity> listaBuscados) {
+        if (listaBuscados.size()==0){
+            JOptionPane.showMessageDialog(null, "No se encuentran resultados para la búsqueda", "Avisos", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        try {
+            /* Category Combo */
+            JComboConsultaResultado.init();
+            //List<ProveedoresEntity> cl = DBUtils.readAll(ProveedoresEntity.class); para todos los prov
+            for (ProyectosEntity c : listaBuscados) {
+                JComboConsultaResultado.addRow(new Object[]{c.getId(), c.getCodigo()+ " " + c.getNombre()});
+            }
+            JComboConsultaResultado.repaint();
+
+
+        } catch (Exception e) {
+            DataEntryUtils.handleDBError(e);
+        }
+
+        /* Item listener en el combo */
+        JComboConsultaResultado.addItemListener(e -> {
+
+            if (JComboConsultaResultado.getSelectedId() > 0) {
+
+                int id = JComboConsultaResultado.getSelectedId();
+
+                ProyectosEntity proy = ProyectoController.selectproyectoById(id);
+
+                lbConsultaResultCodigo.setText(proy.getCodigo());
+                lbConsultaResultNombre.setText(proy.getNombre());
+                lbConsultaResultData1.setText(proy.getCiudad());
+
+            } else {
+                limpiarConsultaLabel();
+            }
+
+        });
+
+        JPVacio.repaint();
+    }
+
+
+
     private void limpiarConsultaLabel(){
         lbConsultaResultCodigo.setText("");
         lbConsultaResultNombre.setText("");
         lbConsultaResultData1.setText("");
         lbConsultaResultDireccion.setText("");
     }
-
 
 }

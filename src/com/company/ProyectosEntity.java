@@ -145,4 +145,37 @@ public class ProyectosEntity implements Serializable {
     public void setGestionsById(Collection<GestionEntity> gestionsById) {
         this.gestionsById = gestionsById;
     }
+
+@Override
+public String toString() {
+    return "PROYECTO: \n" +
+            "\tCODIGO=" + codigo + "\n" +
+            "\tNOMBRE=" + nombre + "\n" +
+            "\tCIUDAD=" + ciudad+ "\n"
+
+            ;
+}
+
+
+    public String toStringBaja() {
+        return "PROYECTO: "+ "\n" +
+                "\tCODIGO=" + codigo + "\n" +
+                "\tNOMBRE=" + nombre + "\n" +
+                "\tCIUDAD=" + ciudad+ "\n"  +
+                "\tFECHA DE LA BAJA=" + fechabaja + "\n" +
+                "ESTE PROYECTO PERMANECERÁ ASOCIADO A LOS PEDIDOS YA REALIZADOS"+ "\n" +
+                "PERO SU BAJA ES UNA ACCION IRREVERSIBLE, NO PODRÁS EDITAR SUS DATOS A FUTURO"
+                ;
+    }
+
+    public String toStringEliminar() {
+        return "PROYECTO: "+ "\n" +
+                "\tCODIGO=" + codigo + "\n" +
+                "\tNOMBRE=" + nombre + "\n" +
+                "\tCIUDAD=" + ciudad+ "\n"  +
+                "ESTE PROYECTO SE ELIMINARÁ COMPLETAMENTE DE LA BASE DE DATOS"+ "\n" +
+                "ES UNA ACCION IRREVERSIBLE"
+                ;
+    }
+
 }
