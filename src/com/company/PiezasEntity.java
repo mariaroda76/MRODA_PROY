@@ -160,4 +160,39 @@ public class PiezasEntity implements Serializable {
     public void setGestionsById(Collection<GestionEntity> gestionsById) {
         this.gestionsById = gestionsById;
     }
+
+    @Override
+    public String toString() {
+        return "PIEZA: \n" +
+                "\tCODIGO=" + codigo + "\n" +
+                "\tNOMBRE=" + nombre + "\n" +
+                "\tPRECIO=" + precio+ "€\n" +
+                "\tDESCRIPCION=" + descripcion + "\n"
+                ;
+    }
+
+
+    public String toStringBaja() {
+        return "PIEZA: "+ "\n" +
+                "\tCODIGO=" + codigo + "\n" +
+                "\tNOMBRE=" + nombre + "\n" +
+                "\tPRECIO=" + precio+ "€\n" +
+                "\tFECHA DE LA BAJA=" + fechabaja + "\n" +
+                "ESTA PIEZA PERMANECERÁ ASOCIADA A LOS PEDIDOS YA REALIZADOS"+ "\n" +
+                "PERO SU BAJA ES UNA ACCION IRREVERSIBLE, NO PODRÁS EDITAR SUS DATOS A FUTURO"
+                ;
+    }
+
+    public String toStringEliminar() {
+        return "PIEZA: "+ "\n" +
+                "\tCODIGO=" + codigo + "\n" +
+                "\tNOMBRE=" + nombre + "\n" +
+                "\tPRECIO=" + precio+ "€\n" +
+                "ESTA PIEZA SE ELIMINARÁ COMPLETAMENTE DE LA BASE DE DATOS"+ "\n" +
+                "ES UNA ACCION IRREVERSIBLE"
+                ;
+    }
+
+
+
 }

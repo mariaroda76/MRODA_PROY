@@ -1,8 +1,10 @@
 package com.company.Vistas;
 
 import com.company.Controllers.GestionController;
+import com.company.Controllers.PiezaController;
 import com.company.Controllers.ProveedorController;
 import com.company.Controllers.ProyectoController;
+import com.company.PiezasEntity;
 import com.company.ProveedoresEntity;
 import com.company.ProyectosEntity;
 import com.company.Utils.DataEntryUtils;
@@ -40,7 +42,7 @@ public class Gestion {
     private JTextField TFGestionCodigo;
     private JTextField TFGestionNombre;
     private JTextField TFGestionData1;
-    private JTextField TFGestionDireccion;
+    private JTextPane TFGestionDireccion;
     private JPanel JPGestionButtons;
     private JPanel JPGestion_Informacion;
     private JPanel JPGestionData;
@@ -102,7 +104,6 @@ public class Gestion {
                     case "APELLIDO":
                         //recojo la info del panel e instancio un proveedor
                         ProveedoresEntity prov = getProveedorFromForm();
-
                         //compruebo los datos del proveedor  antes de intentar subirlos a la BDD
                         if (ProveedorController.validaciones(prov, 0) == null) {
 
@@ -134,7 +135,6 @@ public class Gestion {
                     case "CIUDAD":
                         //recojo la info del panel e instancio un proyecto
                         ProyectosEntity proy = getProyectoFromForm();
-
                         //compruebo los datos del proyecto antes de intentar subirlos a la BDD
                         if (ProyectoController.validaciones(proy, 0) == null) {
 
@@ -163,6 +163,45 @@ public class Gestion {
                         }
                         break;
 
+                    case "PRECIO":
+                        String valor = (TFGestionData1.getText().trim());
+                        if (esDouble(valor)) {
+                            //recojo la info del panel e instancio un proyecto
+                            PiezasEntity pieza = getPiezaFromForm();
+                            //compruebo los datos del proyecto antes de intentar subirlos a la BDD
+                            if (PiezaController.validaciones(pieza, 0) == null) {
+
+                                //pido confirmacion antes de guardar
+                                if (DataEntryUtils.confirmDBSave(pieza.toString())) {
+                                    session.save(pieza);
+                                    JOptionPane.showMessageDialog(null, "Se ha INSERTADO correctamente una nueca Pieza", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                    );
+                                    limpiarJTextFields(JPGestionData);
+                                    try {
+                                        tx.commit();
+                                    } catch (Exception e1) {
+                                        System.out.println("ERROR NO CONTROLADO");
+                                        System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                                    }
+                                    session.close();
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Has declinado insertar una nueva Pieza", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                    );
+                                }
+                            } else {
+                                //En este string guardamos todos los errores, y lo mostramos.
+                                String texto = PiezaController.validaciones(pieza, 0);
+                                JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
+                                );
+                            }
+
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "El precio no puede quedar vacío y debe ser un valor numérico", "Error en tipo de dato", JOptionPane.ERROR_MESSAGE
+                            );
+                        }
+
+                        break;
 
                     default:
                         System.out.println("case no implementado aun");
@@ -185,7 +224,6 @@ public class Gestion {
                     case "APELLIDO":
                         //recojo la info del panel e instancio un proveedor temporal
                         ProveedoresEntity provTemp = getProveedorFromForm();
-
                         //compruebo los datos del proveedor temporal  antes de intentar modificar en la BDD
                         if (ProveedorController.validaciones(provTemp, 1) == null) {
 
@@ -225,7 +263,6 @@ public class Gestion {
                     case "CIUDAD":
                         //recojo la info del panel e instancio un proyecto TEMPORAL
                         ProyectosEntity proyTemp = getProyectoFromForm();
-
                         if (ProyectoController.validaciones(proyTemp, 1) == null) {
 
                             ProyectosEntity proyBD = ProyectoController.selectproyectoByCode(proyTemp.getCodigo());
@@ -257,6 +294,52 @@ public class Gestion {
                             JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
                             );
                         }
+                        break;
+
+                    case "PRECIO":
+                        String valor = (TFGestionData1.getText().trim());
+                        if (esDouble(valor)) {
+
+                            //recojo la info del panel e instancio una pieza TEMPORAL
+                            PiezasEntity piezaTemp = getPiezaFromForm();
+                            if (PiezaController.validaciones(piezaTemp, 1) == null) {
+
+                                PiezasEntity piezaBD = PiezaController.selectPiezaByCode(piezaTemp.getCodigo());
+
+                                piezaBD.setNombre(piezaTemp.getNombre());
+                                piezaBD.setPrecio(piezaTemp.getPrecio());
+                                piezaBD.setDescripcion(piezaTemp.getDescripcion());
+
+                                //pido confirmacion antes de MODIFICAR
+                                if (DataEntryUtils.confirmDBUpdate(piezaBD.toString())) {
+                                    session.update(piezaBD);
+                                    JOptionPane.showMessageDialog(null, "Se ha MODIFICADO correctamente la Pieza", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                    );
+                                    limpiarJTextFields(JPGestionData);
+                                    try {
+                                        tx.commit();
+                                    } catch (Exception e1) {
+                                        System.out.println("ERROR NO CONTROLADO");
+                                        System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                                    }
+                                    session.close();
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Has declinado MODIFICAR la Pieza", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                    );
+                                }
+                            } else {
+                                //En este string guardamos todos los errores, y lo mostramos.
+                                String texto = PiezaController.validaciones(piezaTemp, 1);
+                                JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
+                                );
+                            }
+
+
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "El precio no puede quedar vacío y debe ser un valor numérico", "Error en tipo de dato", JOptionPane.ERROR_MESSAGE
+                            );
+                        }
 
                         break;
 
@@ -281,7 +364,6 @@ public class Gestion {
                     case "APELLIDO":
                         //recojo la info del panel e instancio un proveedor temporal
                         ProveedoresEntity provTemp = getProveedorFromForm();
-
                         //compruebo los datos del proveedor temporal  antes de intentar DARLE DE BAJA en la BDD
                         if (ProveedorController.validaciones(provTemp, 2) == null) {
 
@@ -390,6 +472,75 @@ public class Gestion {
                         }
                         break;
 
+                    case "PRECIO":
+                        //revisar metodo no es necesario qu precio ok para eliminar pero si para llevarolo a temp
+                        String valor = (TFGestionData1.getText().trim());
+                        if (esDouble(valor)) {
+
+                            //recojo la info del panel e instancio una pieza TEMPORAL
+                            PiezasEntity piezaTemp = getPiezaFromForm();
+                            //compruebo los datos del pieza temporal  antes de intentar DARLE DE BAJA en la BDD
+                            if (PiezaController.validaciones(piezaTemp, 2) == null) {
+
+                                //obtengo el proveedor real de la bD
+                                PiezasEntity piezaBD = PiezaController.selectPiezaByCode(piezaTemp.getCodigo());
+
+                                //antes de eliminarlo debo comprobar que no tiene gestiones abiertas
+                                int cantidadGestionesPieza = GestionController.selectGestionesByPiezaId(piezaBD.getId()).size();
+                                if (cantidadGestionesPieza == 0) {
+
+
+                                    TFGestionNombre.setEnabled(false);
+                                    TFGestionNombre.setText(piezaBD.getNombre());
+
+                                    TFGestionData1.setEnabled(false);
+                                    TFGestionData1.setText(String.valueOf(piezaBD.getPrecio()));
+
+                                    TFGestionDireccion.setEnabled(false);
+                                    TFGestionDireccion.setText(piezaBD.getDescripcion());
+
+
+                                    //pido confirmacion antes de dar de baja
+                                    if (DataEntryUtils.confirmDBDelete(piezaBD.toStringEliminar())) {
+                                        session.delete(piezaBD);
+                                        JOptionPane.showMessageDialog(null, "Se ha ELIMINADO correctamente el Pieza", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                        );
+                                        limpiarJTextFields(JPGestionData);
+                                        try {
+                                            tx.commit();
+                                        } catch (Exception e1) {
+                                            System.out.println("ERROR NO CONTROLADO");
+                                            System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                                        }
+                                        limpiarJTextFields(getJPGeneral());
+                                        session.close();
+                                    } else {
+                                        JOptionPane.showMessageDialog(null, "Has declinado ELIMINAR la Pieza", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                        );
+                                        limpiarJTextFields(JPGestionData);
+                                    }
+
+                                } else {
+                                    String texto1 = "EL PIEZA TIENE GESTIONES ABIERTAS!! NO SE PUEDE ELIMINAR. \n PRUEBA DARLO DE BAJA O ELIMINA SUS GESTIONES PREVIAMENTE";
+                                    JOptionPane.showMessageDialog(null, texto1, "Resultado", JOptionPane.ERROR_MESSAGE
+                                    );
+                                }
+                            } else {
+                                //En este string guardamos todos los errores, y lo mostramos.
+                                String texto = PiezaController.validaciones(piezaTemp, 2);
+                                JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
+                                );
+                            }
+
+                            
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "El precio no puede quedar vacío y debe ser un valor numérico", "Error en tipo de dato", JOptionPane.ERROR_MESSAGE
+                            );
+                        }
+
+                        break;
+
                     default:
                         System.out.println("case no implementado aun");
 
@@ -455,6 +606,9 @@ public class Gestion {
                         }
                         break;
 
+                    case "PRECIO":
+                        break;
+
 
                     default:
                         System.out.println("case no implementado aun");
@@ -504,6 +658,9 @@ public class Gestion {
                         autorellenarGestionProyecto(proyTempPrimeroLista);
                         break;
 
+                    case "PRECIO":
+                        break;
+
                     default:
                         System.out.println("case no implementado aun");
                 }
@@ -545,6 +702,9 @@ public class Gestion {
 
 
                         autorellenarGestionProyecto(proyTempUltimo);
+                        break;
+
+                    case "PRECIO":
                         break;
 
                     default:
@@ -601,6 +761,9 @@ public class Gestion {
 
                             autorellenarGestionProyecto(proyTemActual);
                         }
+                        break;
+
+                    case "PRECIO":
                         break;
 
                     default:
@@ -660,6 +823,9 @@ public class Gestion {
 
                             autorellenarGestionProyecto(proyTemActual);
                         }
+                        break;
+
+                    case "PRECIO":
                         break;
 
                     default:
@@ -754,6 +920,9 @@ public class Gestion {
                         }
                         break;
 
+                    case "PRECIO":
+                        break;
+
 
                     default:
                         System.out.println("case no implementado aun");
@@ -800,12 +969,15 @@ public class Gestion {
     public void gestionPieza() {
         //SET GESTION
         this.lbGestionData1.setText("PRECIO");
-        this.JPGestionDireccion.setVisible(false);
+        this.JPGestionDireccion.setVisible(true);
+        this.lbGestionDireccion.setText("DESCRIPCION");
 
         //SET LISTADO
         this.lbListado.setText("LISTADO PIEZAS: UTILIZA BOTONES PARA IR DE UN REGISTRO A OTRO");
         this.lbListadoData1.setText("PRECIO");
-        this.JPListadoDireccion.setVisible(false);
+        this.JPListadoDireccion.setVisible(true);
+        this.lbListadoDireccion.setText("DESCRIPCION");
+
         bloquerFlechas();
     }
 
@@ -823,20 +995,25 @@ public class Gestion {
 
     }
 
-    private static void limpiarJTextFields(Container container) {
+    private void limpiarJTextFields(Container container) {
+
+        this.TFGestionDireccion.setText("");
+        this.TFGestionDireccion.setEnabled(true);
 
         Component[] mycomponents = container.getComponents();
 
         for (Component component : mycomponents) {
             if (component instanceof JTextField) {
-                ((JTextField) component).setText("");
                 component.setEnabled(true);
+                ((JTextField) component).setText("");
+
             } else if (component instanceof JPanel) {
                 Container mypanel = (Container) component;
                 limpiarJTextFields(mypanel);
-            }
-        }
 
+            }
+
+        }
     }
 
     private void bloquerFlechas() {
@@ -873,7 +1050,7 @@ public class Gestion {
 
     }
 
-    private String ahoradevolverAhora (){
+    private String ahoradevolverAhora() {
         //guardo la fecha de hoy como fecha de la baja: la guardo como string
         java.util.Date date = new java.util.Date();
         DateFormat fechaHora = new SimpleDateFormat("dd/MM/yyyy");
@@ -881,6 +1058,23 @@ public class Gestion {
         return ahora;
     }
 
+    private boolean esDouble(String precio) {
+
+        boolean numeric = true;
+
+        try {
+            Double num = Double.parseDouble(precio);
+        } catch (NumberFormatException e) {
+            numeric = false;
+        }
+
+        if (numeric) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 
     //METODOS DE ENTITIES
     private ProveedoresEntity getProveedorFromForm() {
@@ -904,6 +1098,16 @@ public class Gestion {
         return proy;
     }
 
+    private PiezasEntity getPiezaFromForm() {
+
+        PiezasEntity pieza = new PiezasEntity();
+        pieza.setCodigo(TFGestionCodigo.getText().toUpperCase().trim());
+        pieza.setNombre(TFGestionNombre.getText().toUpperCase().trim());
+        pieza.setPrecio(Double.parseDouble(TFGestionData1.getText()));
+        pieza.setDescripcion(TFGestionDireccion.getText().toUpperCase().trim());
+
+        return pieza;
+    }
 
     private ProveedoresEntity getProveedorFromList() {
 

@@ -74,6 +74,23 @@ public class GestionController {
         return listaPorProy;
     }
 
+    public static List<GestionEntity> selectGestionesByPiezaId(int id) {
+
+        List<GestionEntity> listaPorPieza = new ArrayList<>();
+        List listaGestiones = listaGestionesAll();
+
+        // si la lista de codigos contiene el id que le paso...
+        //recorro las piezasy me quedo con el que tiene el id que le he pasado
+        for (int i = 0; i < listaGestiones.size(); i++) {
+            int idTemp = ((GestionEntity) listaGestiones.get(i)).getCodpieza();
+
+            if (idTemp == id) {
+                listaPorPieza.add((GestionEntity) listaGestiones.get(i));
+            }
+        }
+        return listaPorPieza;
+    }
+
 }
 
 
