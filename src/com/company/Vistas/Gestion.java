@@ -175,7 +175,7 @@ public class Gestion {
                                 //pido confirmacion antes de guardar
                                 if (DataEntryUtils.confirmDBSave(pieza.toString())) {
                                     session.save(pieza);
-                                    JOptionPane.showMessageDialog(null, "Se ha INSERTADO correctamente una nueca Pieza", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                                    JOptionPane.showMessageDialog(null, "Se ha INSERTADO correctamente una nueva Pieza", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
                                     );
                                     limpiarJTextFields(JPGestionData);
                                     try {

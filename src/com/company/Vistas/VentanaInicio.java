@@ -1,8 +1,12 @@
 package com.company.Vistas;
 
 
+import com.company.Controllers.PiezaController;
 import com.company.Controllers.ProveedorController;
+import com.company.Controllers.ProyectoController;
+import com.company.PiezasEntity;
 import com.company.ProveedoresEntity;
+import com.company.ProyectosEntity;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -277,9 +281,13 @@ public class VentanaInicio {
                 frameGestionGlobalPPP.pack();
                 frameGestionGlobalPPP.setVisible(true);
 
+                //para estos combos listo solo activos
                 List<ProveedoresEntity> listaProv = ProveedorController.listaProveedoresState(false);
                 nuevaGestionGlobalPPP.intComboProveedor(listaProv);
-
+                List<ProyectosEntity> listaProy = ProyectoController.listaProyectosState(false);
+                nuevaGestionGlobalPPP.intComboProyecto(listaProy);
+                List<PiezasEntity> listaPieza = PiezaController.listaPiezasState(false);
+                nuevaGestionGlobalPPP.intComboPieza(listaPieza);
 
             }
         });

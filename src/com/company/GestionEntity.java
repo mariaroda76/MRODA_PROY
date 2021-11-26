@@ -1,5 +1,9 @@
 package com.company;
 
+import com.company.Controllers.PiezaController;
+import com.company.Controllers.ProveedorController;
+import com.company.Controllers.ProyectoController;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -118,4 +122,53 @@ public class GestionEntity implements Serializable {
     public void setProyectosByCodproyecto(ProyectosEntity proyectosByCodproyecto) {
         this.proyectosByCodproyecto = proyectosByCodproyecto;
     }
+
+
+
+    @Override
+    public String toString() {
+
+        ProveedoresEntity proveedor = ProveedorController.selectProveedorById(codproveedor);
+        ProyectosEntity proy = ProyectoController.selectproyectoById(codproyecto);
+        PiezasEntity pieza = PiezaController.selectPiezaById(codpieza);
+
+        return "PEDIDO: \n" +
+                "\tCOD PROVEEDOR=" + proveedor.getCodigo() + "\n" +
+                "\tCOD PIEZA=" + pieza.getCodigo()+ "\n" +
+                "\tCOD PROYECTO=" + proy.getCodigo()+ "\n" +
+                "\tCANTIDAD=" + cantidad+ "\n"
+                ;
+    }
+
+
+    public String toStringBaja() {
+        ProveedoresEntity proveedor = ProveedorController.selectProveedorById(codproveedor);
+        ProyectosEntity proy = ProyectoController.selectproyectoById(codproyecto);
+        PiezasEntity pieza = PiezaController.selectPiezaById(codpieza);
+
+        return "PEDIDO: \n" +
+                "\tCOD PROVEEDOR=" + proveedor.getCodigo() + "\n" +
+                "\tCOD PIEZA=" + pieza.getCodigo()+ "\n" +
+                "\tCOD PROYECTO=" + proy.getCodigo()+ "\n" +
+                "\tCANTIDAD=" + cantidad+ "\n"+
+                "SE ELIMINARÁ EL PEDIDO"
+
+                ;
+    }
+
+    public String toStringEliminar() {
+        ProveedoresEntity proveedor = ProveedorController.selectProveedorById(codproveedor);
+        ProyectosEntity proy = ProyectoController.selectproyectoById(codproyecto);
+        PiezasEntity pieza = PiezaController.selectPiezaById(codpieza);
+
+        return "PEDIDO: \n" +
+                "\tCOD PROVEEDOR=" + proveedor.getCodigo() + "\n" +
+                "\tCOD PIEZA=" + pieza.getCodigo()+ "\n" +
+                "\tCOD PROYECTO=" + proy.getCodigo()+ "\n" +
+                "\tCANTIDAD=" + cantidad+ "\n"+
+                "SE ELIMINARÁ EL PEDIDO"
+                ;
+    }
+
+
 }

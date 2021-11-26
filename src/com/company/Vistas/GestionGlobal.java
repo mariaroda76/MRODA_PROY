@@ -1,15 +1,24 @@
 package com.company.Vistas;
 
+import com.company.Controllers.GestionController;
 import com.company.Controllers.PiezaController;
 import com.company.Controllers.ProveedorController;
 import com.company.Controllers.ProyectoController;
+import com.company.GestionEntity;
 import com.company.PiezasEntity;
 import com.company.ProveedoresEntity;
 import com.company.ProyectosEntity;
 import com.company.Utils.DataComboBox;
 import com.company.Utils.DataEntryUtils;
+import com.company.Utils.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 public class GestionGlobal {
@@ -61,6 +70,122 @@ public class GestionGlobal {
     public GestionGlobal() {
 
 
+        JButtonGestionGlobalInsertar.addActionListener(new ActionListener() {
+
+            //Inicio sesion
+            SessionFactory sesion = HibernateUtil.getSessionFactory();
+            Session session = sesion.openSession();
+            Transaction tx = session.beginTransaction();
+
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String valor = (TFGBCantidad.getText().trim());
+                if (esDouble(valor)) {
+
+                    GestionEntity pedido = getGestionFromForm();
+
+                    if (GestionController.validaciones(pedido, 0) == null) {
+                        //pido confirmacion antes de guardar
+                        if (DataEntryUtils.confirmDBSave(pedido.toString())) {
+                            session.save(pedido);
+                            JOptionPane.showMessageDialog(null, "Se ha INSERTADO correctamente un nuevo Pedido", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                            );
+                            limpiarJTextFields(JPGestioGlobalData);
+                            limpiarJCombos(JPGestioGlobalData);
+                            try {
+                                tx.commit();
+                            } catch (Exception e1) {
+                                System.out.println("ERROR NO CONTROLADO");
+                                System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                            }
+                            session.close();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Has declinado insertar un nuevo Pedido", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                            );
+                        }
+                    } else {
+                        //En este string guardamos todos los errores, y lo mostramos.
+                        String texto = GestionController.validaciones(pedido, 0);
+                        JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "La cantidad no puede quedar vacía y debe ser un valor numérico", "Error en tipo de dato", JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            }
+        });
+        JButtonGestionGlobalModificar.addActionListener(new ActionListener() {
+            //CUIDADO VERIFICAR SI EXISTE LA COMBINACION!!!
+            //Inicio sesion
+            SessionFactory sesion = HibernateUtil.getSessionFactory();
+            Session session = sesion.openSession();
+            Transaction tx = session.beginTransaction();
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String valor = (TFGBCantidad.getText().trim());
+                if (esDouble(valor)) {
+                    GestionEntity pedido = getGestionFromForm();
+                    if (GestionController.validaciones(pedido, 1) == null) {
+
+                        //pido confirmacion antes de MODIFICAR
+                        if (DataEntryUtils.confirmDBUpdate(pedido.toString())) {
+                            session.update(pedido);
+                            JOptionPane.showMessageDialog(null, "Se ha MODIFICADO correctamente el Pedido", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                            );
+                            limpiarJTextFields(JPGestioGlobalData);
+                            limpiarJCombos(JPGestioGlobalData);
+                            try {
+                                tx.commit();
+                            } catch (Exception e1) {
+                                System.out.println("ERROR NO CONTROLADO");
+                                System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                            }
+                            session.close();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Has declinado MODIFICAR  el Pedido", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                            );
+                        }
+
+                    } else {
+                        //En este string guardamos todos los errores, y lo mostramos.
+                        String texto = GestionController.validaciones(pedido, 1);
+                        JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "La cantidad no puede quedar vacía y debe ser un valor numérico", "Error en tipo de dato", JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            }
+        });
+        JButtonGestionGlobalEliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+
+            }
+        });
+        JButtonGestionGlobalListar.addActionListener(new ActionListener() {
+
+
+            //Inicio sesion
+            SessionFactory sesion = HibernateUtil.getSessionFactory();
+            Session session = sesion.openSession();
+            Transaction tx = session.beginTransaction();
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+
+            }
+        });
     }
 
     public JPanel getJPGeneral() {
@@ -106,13 +231,15 @@ public class GestionGlobal {
                 TFGBDataProveedorApellido.setText(prov.getApellidos());
 
             } else {
-                limpiarConsultaLabel();
+                TFGBDataProveedorNombre.setText("");
+                TFGBDataProveedorApellido.setText("");
             }
 
         });
 
         JPVacio.repaint();
     }
+
     public void intComboProyecto(List<ProyectosEntity> listaBuscados) {
         if (listaBuscados.size() == 0) {
             JOptionPane.showMessageDialog(null, "No se encuentran resultados para el desplegable de Proyectos", "Avisos", JOptionPane.INFORMATION_MESSAGE);
@@ -145,14 +272,16 @@ public class GestionGlobal {
                 TFGBDataProyectoCiudad.setText(proy.getCiudad());
 
             } else {
-                limpiarConsultaLabel();
+                TFGBDataProyectoNombre.setText("");
+                TFGBDataProyectoCiudad.setText("");
             }
 
         });
 
         JPVacio.repaint();
     }
-    public  void intComboPieza(List<PiezasEntity> listaBuscados) {
+
+    public void intComboPieza(List<PiezasEntity> listaBuscados) {
         if (listaBuscados.size() == 0) {
             JOptionPane.showMessageDialog(null, "No se encuentran resultados para el desplegable de Piezas", "Avisos", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -174,9 +303,9 @@ public class GestionGlobal {
         /* Item listener en el combo */
         CBGBPieza.addItemListener(e -> {
 
-            if ( CBGBPieza.getSelectedId() > 0) {
+            if (CBGBPieza.getSelectedId() > 0) {
 
-                int id =  CBGBPieza.getSelectedId();
+                int id = CBGBPieza.getSelectedId();
 
                 PiezasEntity pieza = PiezaController.selectPiezaById(id);
 
@@ -185,7 +314,8 @@ public class GestionGlobal {
 
 
             } else {
-                limpiarConsultaLabel();
+                TFGBDataPiezaNombre.setText("");
+                TFGBDataPiezaPrecio.setText("");
             }
 
         });
@@ -194,14 +324,71 @@ public class GestionGlobal {
     }
 
     private void limpiarConsultaLabel() {
-        TFGBDataProyectoNombre.setText("");
-        TFGBDataProyectoCiudad.setText("");
+        TFGBDataProveedorNombre.setText("");
+        TFGBDataProveedorApellido.setText("");
 
         TFGBDataProyectoNombre.setText("");
         TFGBDataProyectoCiudad.setText("");
 
         TFGBDataPiezaNombre.setText("");
         TFGBDataPiezaPrecio.setText("");
+
+    }
+
+
+    private GestionEntity getGestionFromForm() {
+
+        GestionEntity pedido = new GestionEntity();
+        pedido.setCodproveedor(CBGBProveedor.getSelectedId());
+        pedido.setCodproyecto(CBGBProyecto.getSelectedId());
+        pedido.setCodpieza(CBGBPieza.getSelectedId());
+        pedido.setCantidad(Double.parseDouble(TFGBCantidad.getText()));
+
+
+        return pedido;
+    }
+
+    private boolean esDouble(String precio) {
+
+        boolean numeric = true;
+
+        try {
+            Double num = Double.parseDouble(precio);
+        } catch (NumberFormatException e) {
+            numeric = false;
+        }
+
+        if (numeric) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    private void limpiarJTextFields(Container container) {
+
+        Component[] mycomponents = container.getComponents();
+
+        for (Component component : mycomponents) {
+            if (component instanceof JTextField) {
+                component.setEnabled(true);
+                ((JTextField) component).setText("");
+
+            } else if (component instanceof JPanel) {
+                Container mypanel = (Container) component;
+                limpiarJTextFields(mypanel);
+
+            }
+
+        }
+    }
+
+    private void limpiarJCombos(Container container) {
+
+        CBGBProveedor.setSelectedIndex(0);
+        CBGBPieza.setSelectedIndex(0);
+        CBGBProyecto.setSelectedIndex(0);
 
     }
 

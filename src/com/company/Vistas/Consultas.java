@@ -52,12 +52,9 @@ public class Consultas {
     private JLabel lbFechaFound;
 
     public Consultas() {
-
         JButtonConsultaBuscar.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 //Inicio sesion
                 SessionFactory sesion = HibernateUtil.getSessionFactory();
                 Session session = sesion.openSession();
@@ -69,7 +66,7 @@ public class Consultas {
                 switch (lbConsultaFixData1.getText().toUpperCase()) {
 
                     case "APELLIDO":
-
+                        //para estas consultas listo todos, no solo los activos, pues veré su estado y fecha de baja si la tiene
                         List<ProveedoresEntity> listaProv = ProveedorController.listaProveedoresAll();
                         // Obtenemos un Iterador y recorremos la lista en los cases
                         Iterator<ProveedoresEntity> iter = listaProv.iterator();
@@ -126,6 +123,7 @@ public class Consultas {
                         break;
 
                     case "CIUDAD":
+                        //para estas consultas listo todos, no solo los activos, pues veré su estado y fecha de baja si la tiene
                         List<ProyectosEntity> listaProy = ProyectoController.listaProyectosAll();
                         // Obtenemos un Iterador y recorremos la lista en los cases
                         Iterator<ProyectosEntity> iter2 = listaProy.iterator();
@@ -175,6 +173,7 @@ public class Consultas {
                         break;
 
                     case "PRECIO":
+                        //para estas consultas listo todos, no solo los activos, pues veré su estado y fecha de baja si la tiene
                         List<PiezasEntity> listaPiezas = PiezaController.listaPiezasAll();
                         // Obtenemos un Iterador y recorremos la lista en los cases
                         Iterator<PiezasEntity> iter3 = listaPiezas.iterator();
@@ -220,7 +219,6 @@ public class Consultas {
 
             }
         });
-
     }
 
 

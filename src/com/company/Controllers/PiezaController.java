@@ -145,6 +145,10 @@ public class PiezaController {
                 }
             }
 
+            if (Pieza.getPrecio() <0){
+                errores.put("PRECIO", "EL PRECIO DEBE SER MAYOR QUE CERO");
+            }
+
 
 
 
