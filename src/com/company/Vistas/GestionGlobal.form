@@ -107,7 +107,7 @@
                       <text value="Proveedor"/>
                     </properties>
                   </component>
-                  <component id="c530f" class="javax.swing.JComboBox" binding="CBGBProveedor">
+                  <component id="c530f" class="com.company.Utils.DataComboBox" binding="CBGBProveedor">
                     <constraints>
                       <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <minimum-size width="120" height="-1"/>
@@ -213,7 +213,7 @@
                       <text value="Pieza"/>
                     </properties>
                   </component>
-                  <component id="c62fd" class="javax.swing.JComboBox" binding="CBGBPieza">
+                  <component id="c62fd" class="com.company.Utils.DataComboBox" binding="CBGBPieza">
                     <constraints>
                       <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <minimum-size width="120" height="-1"/>
@@ -320,7 +320,7 @@
                       <text value="Proyecto"/>
                     </properties>
                   </component>
-                  <component id="e25a8" class="javax.swing.JComboBox" binding="CBGBProyecto">
+                  <component id="e25a8" class="com.company.Utils.DataComboBox" binding="CBGBProyecto">
                     <constraints>
                       <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <minimum-size width="120" height="-1"/>

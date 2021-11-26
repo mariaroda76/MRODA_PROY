@@ -43,11 +43,17 @@ public class Consultas {
     private JLabel lbConsultaResultNombre;
     private JLabel lbConsultaResultData1;
     private JTextPane lbConsultaResultDireccion;
+    private JPanel JPEstado;
+    private JPanel JPEstadoder;
+    private JPanel JPEstadoIzq;
+    private JLabel lbEstado;
+    private JLabel lbEstadoFound;
+    private JLabel lbFechaBaja;
+    private JLabel lbFechaFound;
 
     public Consultas() {
 
         JButtonConsultaBuscar.addActionListener(new ActionListener() {
-
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -355,6 +361,14 @@ public class Consultas {
                 lbConsultaResultNombre.setText(prov.getNombre());
                 lbConsultaResultData1.setText(prov.getApellidos());
                 lbConsultaResultDireccion.setText(prov.getDireccion());
+
+                if (prov.getBaja()){
+                lbEstadoFound.setText("Baja");
+                lbFechaFound.setText(prov.getFechabaja());}
+                else{
+                    lbEstadoFound.setText("Activo");
+                }
+
             } else {
                 limpiarConsultaLabel();
             }
@@ -394,6 +408,13 @@ public class Consultas {
                 lbConsultaResultCodigo.setText(proy.getCodigo());
                 lbConsultaResultNombre.setText(proy.getNombre());
                 lbConsultaResultData1.setText(proy.getCiudad());
+
+                if (proy.getBaja()){
+                    lbEstadoFound.setText("Baja");
+                    lbFechaFound.setText(proy.getFechabaja());}
+                else{
+                    lbEstadoFound.setText("Activo");
+                }
 
             } else {
                 limpiarConsultaLabel();
@@ -436,6 +457,13 @@ public class Consultas {
                 lbConsultaResultData1.setText(String.valueOf(pieza.getPrecio()));
                 lbConsultaResultDireccion.setText(pieza.getDescripcion());
 
+                if (pieza.getBaja()){
+                    lbEstadoFound.setText("Baja");
+                    lbFechaFound.setText(pieza.getFechabaja());}
+                else{
+                    lbEstadoFound.setText("Activo");
+                }
+
             } else {
                 limpiarConsultaLabel();
             }
@@ -450,6 +478,8 @@ public class Consultas {
         lbConsultaResultNombre.setText("");
         lbConsultaResultData1.setText("");
         lbConsultaResultDireccion.setText("");
+        lbFechaFound.setText("");
+        lbEstadoFound.setText("");
     }
 
 }

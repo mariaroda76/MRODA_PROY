@@ -1,6 +1,16 @@
 package com.company.Vistas;
 
+import com.company.Controllers.PiezaController;
+import com.company.Controllers.ProveedorController;
+import com.company.Controllers.ProyectoController;
+import com.company.PiezasEntity;
+import com.company.ProveedoresEntity;
+import com.company.ProyectosEntity;
+import com.company.Utils.DataComboBox;
+import com.company.Utils.DataEntryUtils;
+
 import javax.swing.*;
+import java.util.List;
 
 public class GestionGlobal {
     private JPanel JPGeneral;
@@ -9,9 +19,9 @@ public class GestionGlobal {
     private JButton JButtonGestionGlobalModificar;
     private JButton JButtonGestionGlobalEliminar;
     private JButton JButtonGestionGlobalListar;
-    private JComboBox CBGBProveedor;
-    private JComboBox CBGBPieza;
-    private JComboBox CBGBProyecto;
+    private DataComboBox CBGBProveedor;
+    private DataComboBox CBGBPieza;
+    private DataComboBox CBGBProyecto;
     private JTextField TFGBCantidad;
     private JTextField TFGBDataProveedorNombre;
     private JTextField TFGBDataProveedorApellido;
@@ -49,6 +59,8 @@ public class GestionGlobal {
 
 
     public GestionGlobal() {
+
+
     }
 
     public JPanel getJPGeneral() {
@@ -61,7 +73,137 @@ public class GestionGlobal {
 
     }
 
+    ///////////COMBOS
+    public void intComboProveedor(List<ProveedoresEntity> listaBuscados) {
+        if (listaBuscados.size() == 0) {
+            JOptionPane.showMessageDialog(null, "No se encuentran resultados para el desplegable Proveedores", "Avisos", JOptionPane.INFORMATION_MESSAGE);
+        }
 
+        try {
+            /* Category Combo */
+            CBGBProveedor.init();
+            //List<ProveedoresEntity> cl = DBUtils.readAll(ProveedoresEntity.class); para todos los prov
+            for (ProveedoresEntity c : listaBuscados) {
+                CBGBProveedor.addRow(new Object[]{c.getId(), c.getNombre() + " " + c.getApellidos()});
+            }
+            CBGBProveedor.repaint();
+
+
+        } catch (Exception e) {
+            DataEntryUtils.handleDBError(e);
+        }
+
+        /* Item listener en el combo */
+        CBGBProveedor.addItemListener(e -> {
+
+            if (CBGBProveedor.getSelectedId() > 0) {
+
+                int id = CBGBProveedor.getSelectedId();
+
+                ProveedoresEntity prov = ProveedorController.selectProveedorById(id);
+
+                TFGBDataProveedorNombre.setText(prov.getNombre());
+                TFGBDataProveedorApellido.setText(prov.getApellidos());
+
+            } else {
+                limpiarConsultaLabel();
+            }
+
+        });
+
+        JPVacio.repaint();
+    }
+    public void intComboProyecto(List<ProyectosEntity> listaBuscados) {
+        if (listaBuscados.size() == 0) {
+            JOptionPane.showMessageDialog(null, "No se encuentran resultados para el desplegable de Proyectos", "Avisos", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        try {
+            /* Category Combo */
+            CBGBProyecto.init();
+
+            for (ProyectosEntity c : listaBuscados) {
+                CBGBProyecto.addRow(new Object[]{c.getId(), c.getCodigo() + " " + c.getNombre()});
+            }
+            CBGBProyecto.repaint();
+
+
+        } catch (Exception e) {
+            DataEntryUtils.handleDBError(e);
+        }
+
+        /* Item listener en el combo */
+        CBGBProyecto.addItemListener(e -> {
+
+            if (CBGBProyecto.getSelectedId() > 0) {
+
+                int id = CBGBProyecto.getSelectedId();
+
+                ProyectosEntity proy = ProyectoController.selectproyectoById(id);
+
+                TFGBDataProyectoNombre.setText(proy.getNombre());
+                TFGBDataProyectoCiudad.setText(proy.getCiudad());
+
+            } else {
+                limpiarConsultaLabel();
+            }
+
+        });
+
+        JPVacio.repaint();
+    }
+    public  void intComboPieza(List<PiezasEntity> listaBuscados) {
+        if (listaBuscados.size() == 0) {
+            JOptionPane.showMessageDialog(null, "No se encuentran resultados para el desplegable de Piezas", "Avisos", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        try {
+            /* Category Combo */
+            CBGBPieza.init();
+
+            for (PiezasEntity c : listaBuscados) {
+                CBGBPieza.addRow(new Object[]{c.getId(), c.getCodigo() + " " + c.getNombre()});
+            }
+            CBGBPieza.repaint();
+
+
+        } catch (Exception e) {
+            DataEntryUtils.handleDBError(e);
+        }
+
+        /* Item listener en el combo */
+        CBGBPieza.addItemListener(e -> {
+
+            if ( CBGBPieza.getSelectedId() > 0) {
+
+                int id =  CBGBPieza.getSelectedId();
+
+                PiezasEntity pieza = PiezaController.selectPiezaById(id);
+
+                TFGBDataPiezaNombre.setText(pieza.getNombre());
+                TFGBDataPiezaPrecio.setText(String.valueOf(pieza.getPrecio()));
+
+
+            } else {
+                limpiarConsultaLabel();
+            }
+
+        });
+
+        JPVacio.repaint();
+    }
+
+    private void limpiarConsultaLabel() {
+        TFGBDataProyectoNombre.setText("");
+        TFGBDataProyectoCiudad.setText("");
+
+        TFGBDataProyectoNombre.setText("");
+        TFGBDataProyectoCiudad.setText("");
+
+        TFGBDataPiezaNombre.setText("");
+        TFGBDataPiezaPrecio.setText("");
+
+    }
 
 
 }
