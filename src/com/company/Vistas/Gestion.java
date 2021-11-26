@@ -24,6 +24,7 @@ import java.util.List;
 
 public class Gestion {
 
+    static List<PiezasEntity> listaPiezas = new ArrayList();
     static List<ProveedoresEntity> listaProvedores = new ArrayList();
     static List<ProyectosEntity> listaProyectos = new ArrayList();
     static int posicionActual = 0;
@@ -532,7 +533,7 @@ public class Gestion {
                                 );
                             }
 
-                            
+
 
                         } else {
                             JOptionPane.showMessageDialog(null, "El precio no puede quedar vacío y debe ser un valor numérico", "Error en tipo de dato", JOptionPane.ERROR_MESSAGE
@@ -607,8 +608,26 @@ public class Gestion {
                         break;
 
                     case "PRECIO":
-                        break;
 
+                        listaPiezas = PiezaController.listaPiezasState(false);
+                        int ultimopi = listaPiezas.size();
+
+                        if (listaPiezas.size() > 0){
+
+                            PiezasEntity piezaTemPrimeraVisualizacion = listaPiezas.get(posicionActual);
+
+                            TFListadoCodigo.setText(piezaTemPrimeraVisualizacion.getCodigo());
+                            TFListadoNombre.setText(piezaTemPrimeraVisualizacion.getNombre());
+                            TFListadoData1.setText(String.valueOf(piezaTemPrimeraVisualizacion.getPrecio()));
+                            TFListadoDireccion.setText(piezaTemPrimeraVisualizacion.getDescripcion());
+
+                            TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                            TFListadoRegSiguiente.setText(String.valueOf(ultimopi));
+
+                            habilitarFlechas();
+                            autorellenarGestionPieza(piezaTemPrimeraVisualizacion);
+                        }
+                        break;
 
                     default:
                         System.out.println("case no implementado aun");
@@ -654,11 +673,24 @@ public class Gestion {
                         TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
                         TFListadoRegSiguiente.setText(String.valueOf(ultimopr));
 
-
                         autorellenarGestionProyecto(proyTempPrimeroLista);
                         break;
 
                     case "PRECIO":
+                        listaPiezas = PiezaController.listaPiezasState(false);
+                        posicionActual = 0;
+                        int ultimopi = listaPiezas.size();
+                        PiezasEntity piezaTempPrimeroLista = listaPiezas.get(0);
+
+                        TFListadoCodigo.setText(piezaTempPrimeroLista.getCodigo());
+                        TFListadoNombre.setText(piezaTempPrimeroLista.getNombre());
+                        TFListadoData1.setText(String.valueOf(piezaTempPrimeroLista.getPrecio()));
+                        TFListadoDireccion.setText(piezaTempPrimeroLista.getDescripcion());
+
+                        TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                        TFListadoRegSiguiente.setText(String.valueOf(ultimopi));
+
+                        autorellenarGestionPieza(piezaTempPrimeroLista);
                         break;
 
                     default:
@@ -700,11 +732,21 @@ public class Gestion {
                         TFListadoNombre.setText(proyTempUltimo.getNombre());
                         TFListadoData1.setText(proyTempUltimo.getCiudad());
 
-
                         autorellenarGestionProyecto(proyTempUltimo);
                         break;
 
                     case "PRECIO":
+                        listaPiezas = PiezaController.listaPiezasState(false);
+                        int ultimopi = listaPiezas.size();
+                        posicionActual = ultimopi -1;
+                        PiezasEntity piezaTempUltimo = listaPiezas.get(ultimopi -1);
+
+                        TFListadoCodigo.setText(piezaTempUltimo.getCodigo());
+                        TFListadoNombre.setText(piezaTempUltimo.getNombre());
+                        TFListadoData1.setText(String.valueOf(piezaTempUltimo.getPrecio()));
+                        TFListadoDireccion.setText(piezaTempUltimo.getDescripcion());
+
+                        autorellenarGestionPieza(piezaTempUltimo);
                         break;
 
                     default:
@@ -764,6 +806,27 @@ public class Gestion {
                         break;
 
                     case "PRECIO":
+                        listaPiezas = PiezaController.listaPiezasState(false);
+                        int ultimopi = listaPiezas.size();
+
+                        if (posicionActual > 0) {
+
+                            posicionActual = posicionActual - 1;
+
+                            PiezasEntity piezaTemActual = listaPiezas.get(posicionActual);
+
+                            TFListadoCodigo.setText(piezaTemActual.getCodigo());
+                            TFListadoNombre.setText(piezaTemActual.getNombre());
+                            TFListadoData1.setText(String.valueOf(piezaTemActual.getPrecio()));
+                            TFListadoDireccion.setText(piezaTemActual.getDescripcion());
+
+
+                            TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                            TFListadoRegSiguiente.setText(String.valueOf(ultimopi));
+
+                            autorellenarGestionPieza(piezaTemActual);
+                        }
+
                         break;
 
                     default:
@@ -826,6 +889,27 @@ public class Gestion {
                         break;
 
                     case "PRECIO":
+
+                        listaPiezas = PiezaController.listaPiezasState(false);
+                        int ultimopi = listaPiezas.size();
+
+                        if (posicionActual < ultimopi - 1) {
+
+                            posicionActual = posicionActual + 1;
+
+                            PiezasEntity piezaTemActual = listaPiezas.get(posicionActual);
+
+                            TFListadoCodigo.setText(piezaTemActual.getCodigo());
+                            TFListadoNombre.setText(piezaTemActual.getNombre());
+                            TFListadoData1.setText(String.valueOf(piezaTemActual.getPrecio()));
+                            TFListadoDireccion.setText(piezaTemActual.getDescripcion());
+
+
+                            TFListadoRegAnterior.setText(String.valueOf(posicionActual + 1));
+                            TFListadoRegSiguiente.setText(String.valueOf(ultimopi));
+
+                            autorellenarGestionPieza(piezaTemActual);
+                        }
                         break;
 
                     default:
@@ -885,13 +969,11 @@ public class Gestion {
                         break;
 
                     case "CIUDAD":
-
-                        //selecciono el prov de la bdd
+                        //selecciono el proy de la bdd
                         ProyectosEntity proyBD = ProyectoController.selectproyectoByCode(TFListadoCodigo.getText());
 
                         //le doy de baja
                         proyBD.setBaja(true);
-
 
                         proyBD.setFechabaja(ahoradevolverAhora());
 
@@ -921,6 +1003,37 @@ public class Gestion {
                         break;
 
                     case "PRECIO":
+                        //selecciono el pieza de la bdd
+                        PiezasEntity piezaBD = PiezaController.selectPiezaByCode(TFListadoCodigo.getText());
+
+                        //le doy de baja
+                        piezaBD.setBaja(true);
+
+                        piezaBD.setFechabaja(ahoradevolverAhora());
+
+                        //pido confirmacion antes de dar de baja
+                        if (DataEntryUtils.confirmDBBaja(piezaBD.toStringBaja())) {
+                            session.update(piezaBD);
+                            JOptionPane.showMessageDialog(null, "Se ha DADO DE BAJA correctamente a la Pieza", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                            );
+                            posicionActual = 0;
+                            limpiarJTextFields(JPListado);
+                            bloquerFlechas();
+                            try {
+                                tx.commit();
+                            } catch (Exception e1) {
+                                System.out.println("ERROR NO CONTROLADO");
+                                System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                            }
+                            limpiarJTextFields(getJPGeneral());
+                            session.close();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Has declinado DAR DE BAJA la Pieza", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                            );
+                            posicionActual = 0;
+                            limpiarJTextFields(JPListado);
+                            bloquerFlechas();
+                        }
                         break;
 
 
@@ -1046,6 +1159,16 @@ public class Gestion {
         TFGestionCodigo.setText(proy.getCodigo());
         TFGestionNombre.setText(proy.getNombre());
         TFGestionData1.setText(proy.getCiudad());
+
+
+    }
+
+    private void autorellenarGestionPieza(PiezasEntity pieza) {
+
+        TFGestionCodigo.setText(pieza.getCodigo());
+        TFGestionNombre.setText(pieza.getNombre());
+        TFGestionData1.setText(String.valueOf(pieza.getPrecio()));
+        TFGestionDireccion.setText(pieza.getDescripcion());
 
 
     }

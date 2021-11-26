@@ -1,7 +1,9 @@
 package com.company.Vistas;
 
+import com.company.Controllers.PiezaController;
 import com.company.Controllers.ProveedorController;
 import com.company.Controllers.ProyectoController;
+import com.company.PiezasEntity;
 import com.company.ProveedoresEntity;
 import com.company.ProyectosEntity;
 import com.company.Utils.DataComboBox;
@@ -40,7 +42,7 @@ public class Consultas {
     private JLabel lbConsultaResultCodigo;
     private JLabel lbConsultaResultNombre;
     private JLabel lbConsultaResultData1;
-    private JLabel lbConsultaResultDireccion;
+    private JTextPane lbConsultaResultDireccion;
 
     public Consultas() {
 
@@ -118,7 +120,6 @@ public class Consultas {
                         break;
 
                     case "CIUDAD":
-
                         List<ProyectosEntity> listaProy = ProyectoController.listaProyectosAll();
                         // Obtenemos un Iterador y recorremos la lista en los cases
                         Iterator<ProyectosEntity> iter2 = listaProy.iterator();
@@ -126,7 +127,6 @@ public class Consultas {
                         List listaPor2 = new ArrayList();
 
                         switch (lbConsultaBusqueda.getText()) {
-
                             case "Escribe CODIGO o parte del mismo":
                                 //recorro el iterator
                                 while (iter2.hasNext()) {
@@ -137,10 +137,8 @@ public class Consultas {
                                     }
                                 }
                                 //ahora tengo que pasarle la lista de coincidencias al combo
-
                                 intComboProyecto(listaPor2);
                                 break;
-
                             case "Escribe NOMBRE o parte del mismo":
                                 //recorro el iterator
                                 while (iter2.hasNext()) {
@@ -153,7 +151,6 @@ public class Consultas {
                                 //ahora tengo que pasarle la lista de coincidencias al combo
                                 intComboProyecto(listaPor2);
                                 break;
-
                             case "Escribe CIUDAD o parte de la misma":
                                 //recorro el iterator
                                 while (iter2.hasNext()) {
@@ -166,12 +163,49 @@ public class Consultas {
                                 //ahora tengo que pasarle la lista de coincidencias al combo
                                 intComboProyecto(listaPor2);
                                 break;
+                            default:
+                                System.out.println("case no implementado aun");
+                        }
+                        break;
+
+                    case "PRECIO":
+                        List<PiezasEntity> listaPiezas = PiezaController.listaPiezasAll();
+                        // Obtenemos un Iterador y recorremos la lista en los cases
+                        Iterator<PiezasEntity> iter3 = listaPiezas.iterator();
+
+                        List listaPor3 = new ArrayList();
+
+                        switch (lbConsultaBusqueda.getText()) {
+                            case "Escribe CODIGO o parte del mismo":
+                                //recorro el iterator
+                                while (iter3.hasNext()) {
+                                    //extraer el objeto de coincidencias con busqueda
+                                    PiezasEntity pieza = (PiezasEntity) iter3.next();
+                                    if (pieza.getCodigo().toUpperCase().contains(buscado)) {
+                                        listaPor3.add(pieza);
+                                    }
+                                }
+                                //ahora tengo que pasarle la lista de coincidencias al combo
+                                intComboPieza(listaPor3);
+                                break;
+                            case "Escribe NOMBRE o parte del mismo":
+                                //recorro el iterator
+                                while (iter3.hasNext()) {
+                                    //extraer el objeto de coincidencias con busqueda
+                                    PiezasEntity pieza = (PiezasEntity) iter3.next();
+                                    if (pieza.getNombre().toUpperCase().contains(buscado)) {
+                                        listaPor3.add(pieza);
+                                    }
+                                }
+                                //ahora tengo que pasarle la lista de coincidencias al combo
+                                intComboPieza(listaPor3);
+                                break;
 
                             default:
                                 System.out.println("case no implementado aun");
-
                         }
                         break;
+
 
                     default:
                         System.out.println("case no implementado aun");
@@ -207,7 +241,6 @@ public class Consultas {
 
 
     ///////////POR PROVEEDOR
-
     public void ProveedorPorCodigo() {
 
         //SET LABEL
@@ -215,7 +248,6 @@ public class Consultas {
         this.lbConsultaFixData1.setText("APELLIDO");
 
     }
-
     public void ProveedorPorNombre() {
 
         //SET LABEL
@@ -224,7 +256,6 @@ public class Consultas {
 
 
     }
-
     public void ProveedorPorDireccion() {
 
         //SET LABEL
@@ -235,17 +266,16 @@ public class Consultas {
     }
 
     ///////////POR PIEZA
-
     public void PiezaPorCodigo() {
 
         //SET LABEL
         this.lbConsultaBusqueda.setText("Escribe CODIGO o parte del mismo");
         this.lbConsultaFixData1.setText("PRECIO");
         //SET VISIBLE
-        this.JPConsultaDireccion.setVisible(false);
+        this.JPConsultaDireccion.setVisible(true);
+        this.lbConsultaFixDireccion.setText("DESCRIPCION");
 
     }
-
     public void PiezaPorNombre() {
 
         //SET LABEL
@@ -253,13 +283,12 @@ public class Consultas {
         this.lbConsultaFixData1.setText("PRECIO");
 
         //SET VISIBLE
-        this.JPConsultaDireccion.setVisible(false);
-
+        this.JPConsultaDireccion.setVisible(true);
+        this.lbConsultaFixDireccion.setText("DESCRIPCION");
 
     }
 
     ///////////POR PROYECTO
-
     public void ProyectoPorCodigo() {
 
         //SET LABEL
@@ -270,7 +299,6 @@ public class Consultas {
         this.JPConsultaDireccion.setVisible(false);
 
     }
-
     public void ProyectoPorNombre() {
 
         //SET LABEL
@@ -282,7 +310,6 @@ public class Consultas {
 
 
     }
-
     public void ProyectoPorCiudad() {
 
         //SET LABEL
@@ -295,9 +322,9 @@ public class Consultas {
 
     }
 
-
+    ///////////COMBOS
     private void intComboProveedor(List<ProveedoresEntity> listaBuscados) {
-        if (listaBuscados.size()==0){
+        if (listaBuscados.size() == 0) {
             JOptionPane.showMessageDialog(null, "No se encuentran resultados para la búsqueda", "Avisos", JOptionPane.INFORMATION_MESSAGE);
         }
 
@@ -306,7 +333,7 @@ public class Consultas {
             JComboConsultaResultado.init();
             //List<ProveedoresEntity> cl = DBUtils.readAll(ProveedoresEntity.class); para todos los prov
             for (ProveedoresEntity c : listaBuscados) {
-                JComboConsultaResultado.addRow(new Object[]{c.getId(), c.getNombre()+ " " + c.getApellidos()});
+                JComboConsultaResultado.addRow(new Object[]{c.getId(), c.getNombre() + " " + c.getApellidos()});
             }
             JComboConsultaResultado.repaint();
 
@@ -336,18 +363,17 @@ public class Consultas {
 
         JPVacio.repaint();
     }
-
     private void intComboProyecto(List<ProyectosEntity> listaBuscados) {
-        if (listaBuscados.size()==0){
+        if (listaBuscados.size() == 0) {
             JOptionPane.showMessageDialog(null, "No se encuentran resultados para la búsqueda", "Avisos", JOptionPane.INFORMATION_MESSAGE);
         }
 
         try {
             /* Category Combo */
             JComboConsultaResultado.init();
-            //List<ProveedoresEntity> cl = DBUtils.readAll(ProveedoresEntity.class); para todos los prov
+
             for (ProyectosEntity c : listaBuscados) {
-                JComboConsultaResultado.addRow(new Object[]{c.getId(), c.getCodigo()+ " " + c.getNombre()});
+                JComboConsultaResultado.addRow(new Object[]{c.getId(), c.getCodigo() + " " + c.getNombre()});
             }
             JComboConsultaResultado.repaint();
 
@@ -377,10 +403,49 @@ public class Consultas {
 
         JPVacio.repaint();
     }
+    private void intComboPieza(List<PiezasEntity> listaBuscados) {
+        if (listaBuscados.size() == 0) {
+            JOptionPane.showMessageDialog(null, "No se encuentran resultados para la búsqueda", "Avisos", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        try {
+            /* Category Combo */
+            JComboConsultaResultado.init();
+
+            for (PiezasEntity c : listaBuscados) {
+                JComboConsultaResultado.addRow(new Object[]{c.getId(), c.getCodigo() + " " + c.getNombre()});
+            }
+            JComboConsultaResultado.repaint();
 
 
+        } catch (Exception e) {
+            DataEntryUtils.handleDBError(e);
+        }
 
-    private void limpiarConsultaLabel(){
+        /* Item listener en el combo */
+        JComboConsultaResultado.addItemListener(e -> {
+
+            if (JComboConsultaResultado.getSelectedId() > 0) {
+
+                int id = JComboConsultaResultado.getSelectedId();
+
+                PiezasEntity pieza = PiezaController.selectPiezaById(id);
+
+                lbConsultaResultCodigo.setText(pieza.getCodigo());
+                lbConsultaResultNombre.setText(pieza.getNombre());
+                lbConsultaResultData1.setText(String.valueOf(pieza.getPrecio()));
+                lbConsultaResultDireccion.setText(pieza.getDescripcion());
+
+            } else {
+                limpiarConsultaLabel();
+            }
+
+        });
+
+        JPVacio.repaint();
+    }
+
+    private void limpiarConsultaLabel() {
         lbConsultaResultCodigo.setText("");
         lbConsultaResultNombre.setText("");
         lbConsultaResultData1.setText("");
