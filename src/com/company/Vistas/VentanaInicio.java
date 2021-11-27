@@ -58,6 +58,8 @@ public class VentanaInicio {
         JMenuItem itemSuministrosPiezas = new JMenuItem("Suministros por Piezas");
         JMenuItem itemEstadisticas = new JMenuItem("Estadisticas");
 
+        JMenuItem itemAyuda = new JMenuItem("Ayuda");
+
 
         // Items comunes
         JMenuItem itemPiezaPorCodigo = new JMenuItem("Por Código");
@@ -90,6 +92,9 @@ public class VentanaInicio {
         MenuGestionGlobal.add(itemSuministrosPiezas);
         MenuGestionGlobal.add(itemSuministrosProveedor);
         MenuGestionGlobal.add(itemEstadisticas);
+
+
+        MenuAyuda.add(itemAyuda);
 
 
         // Añadir items a submenu
@@ -288,6 +293,51 @@ public class VentanaInicio {
                 nuevaGestionGlobalPPP.intComboProyecto(listaProy);
                 List<PiezasEntity> listaPieza = PiezaController.listaPiezasState(false);
                 nuevaGestionGlobalPPP.intComboPieza(listaPieza);
+
+            }
+        });
+
+        itemSuministrosPiezas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                JOptionPane.showMessageDialog(null, "Proximamente Disponible en V.02", "Suministros por Pieza", JOptionPane.INFORMATION_MESSAGE
+                );
+
+            }
+        });
+        itemSuministrosProveedor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                JOptionPane.showMessageDialog(null, "Proximamente Disponible en V.02", "Suministros por Proveedor", JOptionPane.INFORMATION_MESSAGE
+                );
+
+            }
+        });
+        itemEstadisticas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                JOptionPane.showMessageDialog(null, "Proximamente Disponible en V.02", "Estadisticas", JOptionPane.INFORMATION_MESSAGE
+                );
+
+            }
+        });
+
+        itemAyuda.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frameAyuda = new JFrame("Ayuda al Usuario");
+                Ayuda ayuda = new Ayuda();
+
+                frameAyuda.setContentPane(ayuda.getJPGeneral());
+
+                frameAyuda.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                frameAyuda.pack();
+                frameAyuda.setVisible(true);
+
 
             }
         });
