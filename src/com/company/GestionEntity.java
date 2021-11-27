@@ -23,6 +23,7 @@ public class GestionEntity implements Serializable {
     private PiezasEntity piezasByCodpieza;
     private ProyectosEntity proyectosByCodproyecto;
 
+
     public GestionEntity() {
     }
 
@@ -124,48 +125,54 @@ public class GestionEntity implements Serializable {
     }
 
 
+    public String CodproyectoERP() {
+        ProyectosEntity proy = ProyectoController.selectproyectoById(codproyecto);
+        return proy.getCodigo();
+    }
+
+    public String CodprovedorERP() {
+        ProveedoresEntity proveedor = ProveedorController.selectProveedorById(codproveedor);
+        return proveedor.getCodigo();
+    }
+
+    public String CodpiezaERP() {
+        PiezasEntity pieza = PiezaController.selectPiezaById(codpieza);
+        return pieza.getCodigo();
+    }
+
 
     @Override
     public String toString() {
 
-        ProveedoresEntity proveedor = ProveedorController.selectProveedorById(codproveedor);
-        ProyectosEntity proy = ProyectoController.selectproyectoById(codproyecto);
-        PiezasEntity pieza = PiezaController.selectPiezaById(codpieza);
 
         return "PEDIDO: \n" +
-                "\tCOD PROVEEDOR=" + proveedor.getCodigo() + "\n" +
-                "\tCOD PIEZA=" + pieza.getCodigo()+ "\n" +
-                "\tCOD PROYECTO=" + proy.getCodigo()+ "\n" +
+                "\tCOD PROVEEDOR=" + CodprovedorERP() + "\n" +
+                "\tCOD PIEZA=" + CodpiezaERP()+ "\n" +
+                "\tCOD PROYECTO=" + CodproyectoERP() + "\n" +
                 "\tCANTIDAD=" + cantidad+ "\n"
                 ;
     }
 
 
     public String toStringBaja() {
-        ProveedoresEntity proveedor = ProveedorController.selectProveedorById(codproveedor);
-        ProyectosEntity proy = ProyectoController.selectproyectoById(codproyecto);
-        PiezasEntity pieza = PiezaController.selectPiezaById(codpieza);
+
 
         return "PEDIDO: \n" +
-                "\tCOD PROVEEDOR=" + proveedor.getCodigo() + "\n" +
-                "\tCOD PIEZA=" + pieza.getCodigo()+ "\n" +
-                "\tCOD PROYECTO=" + proy.getCodigo()+ "\n" +
-                "\tCANTIDAD=" + cantidad+ "\n"+
+                "\tCOD PROVEEDOR=" + CodprovedorERP() + "\n" +
+                "\tCOD PIEZA=" + CodpiezaERP()+ "\n" +
+                "\tCOD PROYECTO=" + CodproyectoERP() + "\n" +
                 "SE ELIMINARÁ EL PEDIDO"
 
                 ;
     }
 
     public String toStringEliminar() {
-        ProveedoresEntity proveedor = ProveedorController.selectProveedorById(codproveedor);
-        ProyectosEntity proy = ProyectoController.selectproyectoById(codproyecto);
-        PiezasEntity pieza = PiezaController.selectPiezaById(codpieza);
+
 
         return "PEDIDO: \n" +
-                "\tCOD PROVEEDOR=" + proveedor.getCodigo() + "\n" +
-                "\tCOD PIEZA=" + pieza.getCodigo()+ "\n" +
-                "\tCOD PROYECTO=" + proy.getCodigo()+ "\n" +
-                "\tCANTIDAD=" + cantidad+ "\n"+
+                "\tCOD PROVEEDOR=" + CodprovedorERP() + "\n" +
+                "\tCOD PIEZA=" + CodpiezaERP()+ "\n" +
+                "\tCOD PROYECTO=" + CodproyectoERP() + "\n" +
                 "SE ELIMINARÁ EL PEDIDO"
                 ;
     }

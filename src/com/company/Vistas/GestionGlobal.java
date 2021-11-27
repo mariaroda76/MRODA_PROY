@@ -65,6 +65,7 @@ public class GestionGlobal {
     private JLabel lbGBDataPiezaPrecio;
     private JLabel lbGBDataProyectoNombre;
     private JLabel lbGBDataProyectoCiudad;
+    private JPanel lista;
 
 
     public GestionGlobal() {
@@ -164,15 +165,6 @@ public class GestionGlobal {
             }
         });
         JButtonGestionGlobalEliminar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-
-
-            }
-        });
-        JButtonGestionGlobalListar.addActionListener(new ActionListener() {
-
 
             //Inicio sesion
             SessionFactory sesion = HibernateUtil.getSessionFactory();
@@ -182,10 +174,79 @@ public class GestionGlobal {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                GestionEntity pedido = getGestionFromForm();
 
+                if (GestionController.validaciones(pedido, 2) == null) {
+
+                    CBGBPieza.setEnabled(false);
+                    CBGBProveedor.setEnabled(false);
+                    CBGBProyecto.setEnabled(false);
+
+                    //pido confirmacion antes de dar de baja
+                    if (DataEntryUtils.confirmDBDelete(pedido.toStringEliminar())) {
+                        session.delete(pedido);
+                        JOptionPane.showMessageDialog(null, "Se ha ELIMINADO correctamente el Pedido", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                        );
+                        limpiarJTextFields(JPGestioGlobalData);
+                        limpiarJCombos(JPGestioGlobalData);
+                        try {
+                            tx.commit();
+                        } catch (Exception e1) {
+                            System.out.println("ERROR NO CONTROLADO");
+                            System.out.printf("MENSAJE:%s%n", e1.getMessage());
+                        }
+                        limpiarJTextFields(JPGestioGlobalData);
+                        limpiarJCombos(JPGestioGlobalData);
+                        session.close();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Has declinado ELIMINAR al Pedido", "Mensaje: ", JOptionPane.INFORMATION_MESSAGE
+                        );
+                        limpiarJTextFields(JPGestioGlobalData);
+                        limpiarJCombos(JPGestioGlobalData);
+                    }
+
+
+                } else {
+                    //En este string guardamos todos los errores, y lo mostramos.
+                    String texto = GestionController.validaciones(pedido, 2);
+                    JOptionPane.showMessageDialog(null, texto, "Resultado", JOptionPane.ERROR_MESSAGE
+                    );
+                }
 
             }
         });
+        JButtonGestionGlobalListar.addActionListener(new ActionListener() {
+
+            //Inicio sesion
+            SessionFactory sesion = HibernateUtil.getSessionFactory();
+            Session session = sesion.openSession();
+            Transaction tx = session.beginTransaction();
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                JFrame frameListaPedidos = new JFrame("Listado: Pedidos");
+                Listado listado = new Listado();
+
+                frameListaPedidos.setContentPane(listado.getJPGestionesTodas());
+                frameListaPedidos.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                listado.getJPGestionesTodas().repaint();
+
+                frameListaPedidos.pack();
+                frameListaPedidos.setVisible(true);
+
+            }
+        });
+    }
+
+    public void mostrarPanel(JPanel panel) {
+
+        JPVacio.removeAll();
+        JPVacio.add(panel);
+        JPVacio.repaint();
+        JPVacio.revalidate();
+
     }
 
     public JPanel getJPGeneral() {
@@ -342,8 +403,11 @@ public class GestionGlobal {
         pedido.setCodproveedor(CBGBProveedor.getSelectedId());
         pedido.setCodproyecto(CBGBProyecto.getSelectedId());
         pedido.setCodpieza(CBGBPieza.getSelectedId());
-        pedido.setCantidad(Double.parseDouble(TFGBCantidad.getText()));
-
+        if (!TFGBCantidad.getText().trim().equals("")) {
+            pedido.setCantidad(Double.parseDouble(TFGBCantidad.getText()));
+        } else {
+            pedido.setCantidad(0.0);
+        }
 
         return pedido;
     }
@@ -389,6 +453,10 @@ public class GestionGlobal {
         CBGBProveedor.setSelectedIndex(0);
         CBGBPieza.setSelectedIndex(0);
         CBGBProyecto.setSelectedIndex(0);
+
+        CBGBPieza.setEnabled(true);
+        CBGBProveedor.setEnabled(true);
+        CBGBProyecto.setEnabled(true);
 
     }
 
