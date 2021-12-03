@@ -355,6 +355,8 @@ public class Consultas {
 
                 ProveedoresEntity prov = ProveedorController.selectProveedorById(id);
 
+                limpiarConsultaLabel();
+
                 lbConsultaResultCodigo.setText(prov.getCodigo());
                 lbConsultaResultNombre.setText(prov.getNombre());
                 lbConsultaResultData1.setText(prov.getApellidos());
@@ -403,6 +405,8 @@ public class Consultas {
 
                 ProyectosEntity proy = ProyectoController.selectproyectoById(id);
 
+                limpiarConsultaLabel();
+
                 lbConsultaResultCodigo.setText(proy.getCodigo());
                 lbConsultaResultNombre.setText(proy.getNombre());
                 lbConsultaResultData1.setText(proy.getCiudad());
@@ -449,6 +453,8 @@ public class Consultas {
                 int id = JComboConsultaResultado.getSelectedId();
 
                 PiezasEntity pieza = PiezaController.selectPiezaById(id);
+
+                limpiarConsultaLabel();
 
                 lbConsultaResultCodigo.setText(pieza.getCodigo());
                 lbConsultaResultNombre.setText(pieza.getNombre());

@@ -26,11 +26,9 @@ public class GestionEntity implements Serializable {
 
     public GestionEntity() {
     }
-
     public GestionEntity(int codproveedor) {
         this.codproveedor = codproveedor;
     }
-
     public GestionEntity(int codproveedor, int codpieza, int codproyecto, Double cantidad, ProveedoresEntity proveedoresByCodproveedor, PiezasEntity piezasByCodpieza, ProyectosEntity proyectosByCodproyecto) {
         this.codproveedor = codproveedor;
         this.codpieza = codpieza;
@@ -46,7 +44,6 @@ public class GestionEntity implements Serializable {
     public int getCodproveedor() {
         return codproveedor;
     }
-
     public void setCodproveedor(int codproveedor) {
         this.codproveedor = codproveedor;
     }
@@ -56,7 +53,6 @@ public class GestionEntity implements Serializable {
     public int getCodpieza() {
         return codpieza;
     }
-
     public void setCodpieza(int codpieza) {
         this.codpieza = codpieza;
     }
@@ -66,7 +62,6 @@ public class GestionEntity implements Serializable {
     public int getCodproyecto() {
         return codproyecto;
     }
-
     public void setCodproyecto(int codproyecto) {
         this.codproyecto = codproyecto;
     }
@@ -76,7 +71,6 @@ public class GestionEntity implements Serializable {
     public Double getCantidad() {
         return cantidad;
     }
-
     public void setCantidad(Double cantidad) {
         this.cantidad = cantidad;
     }
@@ -99,7 +93,6 @@ public class GestionEntity implements Serializable {
     public ProveedoresEntity getProveedoresByCodproveedor() {
         return proveedoresByCodproveedor;
     }
-
     public void setProveedoresByCodproveedor(ProveedoresEntity proveedoresByCodproveedor) {
         this.proveedoresByCodproveedor = proveedoresByCodproveedor;
     }
@@ -109,7 +102,6 @@ public class GestionEntity implements Serializable {
     public PiezasEntity getPiezasByCodpieza() {
         return piezasByCodpieza;
     }
-
     public void setPiezasByCodpieza(PiezasEntity piezasByCodpieza) {
         this.piezasByCodpieza = piezasByCodpieza;
     }
@@ -119,7 +111,6 @@ public class GestionEntity implements Serializable {
     public ProyectosEntity getProyectosByCodproyecto() {
         return proyectosByCodproyecto;
     }
-
     public void setProyectosByCodproyecto(ProyectosEntity proyectosByCodproyecto) {
         this.proyectosByCodproyecto = proyectosByCodproyecto;
     }
@@ -129,12 +120,10 @@ public class GestionEntity implements Serializable {
         ProyectosEntity proy = ProyectoController.selectproyectoById(codproyecto);
         return proy.getCodigo();
     }
-
     public String CodprovedorERP() {
         ProveedoresEntity proveedor = ProveedorController.selectProveedorById(codproveedor);
         return proveedor.getCodigo();
     }
-
     public String CodpiezaERP() {
         PiezasEntity pieza = PiezaController.selectPiezaById(codpieza);
         return pieza.getCodigo();
@@ -152,8 +141,6 @@ public class GestionEntity implements Serializable {
                 "\tCANTIDAD=" + cantidad+ "\n"
                 ;
     }
-
-
     public String toStringBaja() {
 
 
@@ -165,7 +152,6 @@ public class GestionEntity implements Serializable {
 
                 ;
     }
-
     public String toStringEliminar() {
 
 
@@ -176,6 +162,5 @@ public class GestionEntity implements Serializable {
                 "SE ELIMINARÁ EL PEDIDO"
                 ;
     }
-
 
 }
