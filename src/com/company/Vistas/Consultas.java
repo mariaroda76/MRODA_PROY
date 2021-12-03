@@ -115,6 +115,19 @@ public class Consultas {
                                 intComboProveedor(listaPor);
                                 break;
 
+                            case "Selecciona: CODIGO del Proovedor o parte del mismo":
+                                //recorro el iterator
+                                while (iter.hasNext()) {
+                                    //extraer el objeto de coincidencias con busqueda
+                                    ProveedoresEntity prov = (ProveedoresEntity) iter.next();
+                                    if (prov.getCodigo().toUpperCase().contains(buscado)) {
+                                        listaPor.add(prov);
+                                    }
+                                } //ahora tengo que pasarle la lista de coincidencias al combo
+
+                                intComboProveedor(listaPor);
+                                break;
+
 
                             default:
                                 System.out.println("case no implementado aun");
@@ -246,22 +259,25 @@ public class Consultas {
 
     ///////////POR PROVEEDOR
     public void ProveedorPorCodigo() {
-
+        JPConsultasData.setVisible(true);
         //SET LABEL
         this.lbConsultaBusqueda.setText("Escribe CODIGO o parte del mismo");
         this.lbConsultaFixData1.setText("APELLIDO");
 
-    }
-    public void ProveedorPorNombre() {
 
+    }
+
+    public void ProveedorPorNombre() {
+        JPConsultasData.setVisible(true);
         //SET LABEL
         this.lbConsultaBusqueda.setText("Escribe NOMBRE o parte del mismo");
         this.lbConsultaFixData1.setText("APELLIDO");
 
 
     }
-    public void ProveedorPorDireccion() {
 
+    public void ProveedorPorDireccion() {
+        JPConsultasData.setVisible(true);
         //SET LABEL
         this.lbConsultaBusqueda.setText("Escribe DIRECCION o parte de la misma");
         this.lbConsultaFixData1.setText("APELLIDO");
@@ -269,9 +285,17 @@ public class Consultas {
 
     }
 
+    public void Suministro_ProveedorPorCodigo() {
+        JPConsultasData.setVisible(false);
+        //SET LABEL
+        this.lbConsultaBusqueda.setText("Selecciona: CODIGO del Proovedor o parte del mismo");
+        this.lbConsultaFixData1.setText("APELLIDO");
+
+    }
+
     ///////////POR PIEZA
     public void PiezaPorCodigo() {
-
+        JPConsultasData.setVisible(true);
         //SET LABEL
         this.lbConsultaBusqueda.setText("Escribe CODIGO o parte del mismo");
         this.lbConsultaFixData1.setText("PRECIO");
@@ -279,9 +303,11 @@ public class Consultas {
         this.JPConsultaDireccion.setVisible(true);
         this.lbConsultaFixDireccion.setText("DESCRIPCION");
 
-    }
-    public void PiezaPorNombre() {
 
+    }
+
+    public void PiezaPorNombre() {
+        JPConsultasData.setVisible(true);
         //SET LABEL
         this.lbConsultaBusqueda.setText("Escribe NOMBRE o parte del mismo");
         this.lbConsultaFixData1.setText("PRECIO");
@@ -294,7 +320,7 @@ public class Consultas {
 
     ///////////POR PROYECTO
     public void ProyectoPorCodigo() {
-
+        JPConsultasData.setVisible(true);
         //SET LABEL
         this.lbConsultaBusqueda.setText("Escribe CODIGO o parte del mismo");
         this.lbConsultaFixData1.setText("CIUDAD");
@@ -303,8 +329,9 @@ public class Consultas {
         this.JPConsultaDireccion.setVisible(false);
 
     }
-    public void ProyectoPorNombre() {
 
+    public void ProyectoPorNombre() {
+        JPConsultasData.setVisible(true);
         //SET LABEL
         this.lbConsultaBusqueda.setText("Escribe NOMBRE o parte del mismo");
         this.lbConsultaFixData1.setText("CIUDAD");
@@ -314,8 +341,9 @@ public class Consultas {
 
 
     }
-    public void ProyectoPorCiudad() {
 
+    public void ProyectoPorCiudad() {
+        JPConsultasData.setVisible(true);
         //SET LABEL
         this.lbConsultaBusqueda.setText("Escribe CIUDAD o parte de la misma");
         this.lbConsultaFixData1.setText("CIUDAD");
@@ -328,6 +356,7 @@ public class Consultas {
 
     ///////////COMBOS
     private void intComboProveedor(List<ProveedoresEntity> listaBuscados) {
+
         if (listaBuscados.size() == 0) {
             JOptionPane.showMessageDialog(null, "No se encuentran resultados para la búsqueda", "Avisos", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -347,7 +376,8 @@ public class Consultas {
         }
 
         /* Item listener en el combo */
-        JComboConsultaResultado.addItemListener(e -> {
+        //JComboConsultaResultado.addItemListener(e -> {
+            JComboConsultaResultado.addActionListener(e -> {
 
             if (JComboConsultaResultado.getSelectedId() > 0) {
 
@@ -355,18 +385,41 @@ public class Consultas {
 
                 ProveedoresEntity prov = ProveedorController.selectProveedorById(id);
 
-                limpiarConsultaLabel();
+                if (lbConsultaBusqueda.getText().equalsIgnoreCase("Selecciona: CODIGO del Proovedor o parte del mismo")) {
 
-                lbConsultaResultCodigo.setText(prov.getCodigo());
-                lbConsultaResultNombre.setText(prov.getNombre());
-                lbConsultaResultData1.setText(prov.getApellidos());
-                lbConsultaResultDireccion.setText(prov.getDireccion());
+                    //Inicio sesion
+                    SessionFactory sesion = HibernateUtil.getSessionFactory();
+                    Session session = sesion.openSession();
+                    Transaction tx = session.beginTransaction();
 
-                if (prov.getBaja()){
-                lbEstadoFound.setText("Baja");
-                lbFechaFound.setText(prov.getFechabaja());}
-                else{
-                    lbEstadoFound.setText("Activo");
+
+                    JFrame frameListaPedidos = new JFrame("Suministros por Proveedor");
+                    Listado listado = new Listado(2, id);
+
+                    frameListaPedidos.setContentPane(listado.getJPGestionesTodas());
+                    frameListaPedidos.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                    listado.getJPGestionesTodas().repaint();
+
+                    frameListaPedidos.pack();
+                    frameListaPedidos.setVisible(true);
+
+
+                } else {
+
+                    limpiarConsultaLabel();
+
+                    lbConsultaResultCodigo.setText(prov.getCodigo());
+                    lbConsultaResultNombre.setText(prov.getNombre());
+                    lbConsultaResultData1.setText(prov.getApellidos());
+                    lbConsultaResultDireccion.setText(prov.getDireccion());
+
+                    if (prov.getBaja()) {
+                        lbEstadoFound.setText("Baja");
+                        lbFechaFound.setText(prov.getFechabaja());
+                    } else {
+                        lbEstadoFound.setText("Activo");
+                    }
                 }
 
             } else {
@@ -377,6 +430,7 @@ public class Consultas {
 
         JPVacio.repaint();
     }
+
     private void intComboProyecto(List<ProyectosEntity> listaBuscados) {
         if (listaBuscados.size() == 0) {
             JOptionPane.showMessageDialog(null, "No se encuentran resultados para la búsqueda", "Avisos", JOptionPane.INFORMATION_MESSAGE);
@@ -411,10 +465,10 @@ public class Consultas {
                 lbConsultaResultNombre.setText(proy.getNombre());
                 lbConsultaResultData1.setText(proy.getCiudad());
 
-                if (proy.getBaja()){
+                if (proy.getBaja()) {
                     lbEstadoFound.setText("Baja");
-                    lbFechaFound.setText(proy.getFechabaja());}
-                else{
+                    lbFechaFound.setText(proy.getFechabaja());
+                } else {
                     lbEstadoFound.setText("Activo");
                 }
 
@@ -426,6 +480,7 @@ public class Consultas {
 
         JPVacio.repaint();
     }
+
     private void intComboPieza(List<PiezasEntity> listaBuscados) {
         if (listaBuscados.size() == 0) {
             JOptionPane.showMessageDialog(null, "No se encuentran resultados para la búsqueda", "Avisos", JOptionPane.INFORMATION_MESSAGE);
@@ -461,10 +516,10 @@ public class Consultas {
                 lbConsultaResultData1.setText(String.valueOf(pieza.getPrecio()));
                 lbConsultaResultDireccion.setText(pieza.getDescripcion());
 
-                if (pieza.getBaja()){
+                if (pieza.getBaja()) {
                     lbEstadoFound.setText("Baja");
-                    lbFechaFound.setText(pieza.getFechabaja());}
-                else{
+                    lbFechaFound.setText(pieza.getFechabaja());
+                } else {
                     lbEstadoFound.setText("Activo");
                 }
 

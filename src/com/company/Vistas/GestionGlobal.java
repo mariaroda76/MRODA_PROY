@@ -226,7 +226,7 @@ public class GestionGlobal {
             public void actionPerformed(ActionEvent e) {
 
                 JFrame frameListaPedidos = new JFrame("Listado: Pedidos");
-                Listado listado = new Listado();
+                Listado listado = new Listado(1,0);
 
                 frameListaPedidos.setContentPane(listado.getJPGestionesTodas());
                 frameListaPedidos.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

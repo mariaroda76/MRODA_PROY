@@ -7,6 +7,10 @@ import com.company.Controllers.ProyectoController;
 import com.company.PiezasEntity;
 import com.company.ProveedoresEntity;
 import com.company.ProyectosEntity;
+import com.company.Utils.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -307,11 +311,20 @@ public class VentanaInicio {
             }
         });
         itemSuministrosProveedor.addActionListener(new ActionListener() {
+
+            //Inicio sesion
+            SessionFactory sesion = HibernateUtil.getSessionFactory();
+            Session session = sesion.openSession();
+            Transaction tx = session.beginTransaction();
+
+
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                JOptionPane.showMessageDialog(null, "Proximamente Disponible en V.02", "Suministros por Proveedor", JOptionPane.INFORMATION_MESSAGE
-                );
+                consultas("Suministro_Proveedor", "Codigo");
+
+/*                JOptionPane.showMessageDialog(null, "Proximamente Disponible en V.02", "Suministros por Proveedor", JOptionPane.INFORMATION_MESSAGE
+                );*/
 
             }
         });
@@ -436,7 +449,6 @@ public class VentanaInicio {
                 }
                 break;
             case "Pieza":
-
                 switch (como) {
                     case "Codigo":
                         nuevaConsulta.PiezaPorCodigo();
@@ -444,8 +456,16 @@ public class VentanaInicio {
                     default:
                         nuevaConsulta.PiezaPorNombre();
                 }
-
                 break;
+            case "Suministro_Proveedor":
+                switch (como) {
+                    case "Codigo":
+                        nuevaConsulta.Suministro_ProveedorPorCodigo();
+                        break;
+                    default:
+                        nuevaConsulta.Suministro_ProveedorPorCodigo();
+                }break;
+
             default:
                 switch (como) {
 

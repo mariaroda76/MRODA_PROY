@@ -2,6 +2,7 @@ package com.company.Vistas;
 
 import com.company.Controllers.GestionController;
 import com.company.Utils.TablaPedidos;
+import com.company.Utils.TablaSuministrosProveedor;
 
 import javax.swing.*;
 
@@ -11,11 +12,17 @@ public class Listado {
     private JTable tablaPedidios;
 
 
-    public Listado() {
+    public Listado(int opcion,int id) {
 
         tablaPedidios = new JTable();
         JPSPedidos.setViewportView(tablaPedidios);
-        tablaPedidios.setModel(new TablaPedidos(GestionController.listaGestionesAll()));
+        if (opcion==1) {
+            tablaPedidios.setModel(new TablaPedidos(GestionController.listaGestionesAll()));
+        }else if(opcion == 2){
+            tablaPedidios.setModel(new TablaSuministrosProveedor(GestionController.listaSuministroProveedor(id)));
+        }
+
+
 
     }
 
