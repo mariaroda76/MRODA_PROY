@@ -219,6 +219,19 @@ public class Consultas {
                                 intComboPieza(listaPor3);
                                 break;
 
+                            case "Selecciona: CODIGO de la Pieza o parte del mismo":
+                                //recorro el iterator
+                                while (iter3.hasNext()) {
+                                    //extraer el objeto de coincidencias con busqueda
+                                    PiezasEntity pieza = (PiezasEntity) iter3.next();
+                                    if (pieza.getCodigo().toUpperCase().contains(buscado)) {
+                                        listaPor3.add(pieza);
+                                    }
+                                }
+                                //ahora tengo que pasarle la lista de coincidencias al combo
+                                intComboPieza(listaPor3);
+                                break;
+
                             default:
                                 System.out.println("case no implementado aun");
                         }
@@ -318,6 +331,18 @@ public class Consultas {
 
     }
 
+    public void Suministro_PiezaPorCodigo() {
+        JPConsultasData.setVisible(false);
+        //SET LABEL
+        this.lbConsultaBusqueda.setText("Selecciona: CODIGO de la Pieza o parte del mismo");
+        this.lbConsultaFixData1.setText("PRECIO");
+        //SET VISIBLE
+        this.JPConsultaDireccion.setVisible(true);
+        this.lbConsultaFixDireccion.setText("DESCRIPCION");
+
+
+    }
+
     ///////////POR PROYECTO
     public void ProyectoPorCodigo() {
         JPConsultasData.setVisible(true);
@@ -377,7 +402,7 @@ public class Consultas {
 
         /* Item listener en el combo */
         //JComboConsultaResultado.addItemListener(e -> {
-            JComboConsultaResultado.addActionListener(e -> {
+        JComboConsultaResultado.addActionListener(e -> {
 
             if (JComboConsultaResultado.getSelectedId() > 0) {
 
@@ -393,7 +418,7 @@ public class Consultas {
                     Transaction tx = session.beginTransaction();
 
 
-                    JFrame frameListaPedidos = new JFrame("Suministros por Proveedor");
+                    JFrame frameListaPedidos = new JFrame("Suministros por Proveedor: " + prov.getCodigo());
                     Listado listado = new Listado(2, id);
 
                     frameListaPedidos.setContentPane(listado.getJPGestionesTodas());
@@ -501,27 +526,50 @@ public class Consultas {
         }
 
         /* Item listener en el combo */
-        JComboConsultaResultado.addItemListener(e -> {
+        JComboConsultaResultado.addActionListener(e ->{
 
-            if (JComboConsultaResultado.getSelectedId() > 0) {
+        if (JComboConsultaResultado.getSelectedId() > 0) {
 
                 int id = JComboConsultaResultado.getSelectedId();
 
                 PiezasEntity pieza = PiezaController.selectPiezaById(id);
 
-                limpiarConsultaLabel();
+                if (lbConsultaBusqueda.getText().equalsIgnoreCase("Selecciona: CODIGO de la Pieza o parte del mismo")) {
 
-                lbConsultaResultCodigo.setText(pieza.getCodigo());
-                lbConsultaResultNombre.setText(pieza.getNombre());
-                lbConsultaResultData1.setText(String.valueOf(pieza.getPrecio()));
-                lbConsultaResultDireccion.setText(pieza.getDescripcion());
+                    //Inicio sesion
+                    SessionFactory sesion = HibernateUtil.getSessionFactory();
+                    Session session = sesion.openSession();
+                    Transaction tx = session.beginTransaction();
 
-                if (pieza.getBaja()) {
-                    lbEstadoFound.setText("Baja");
-                    lbFechaFound.setText(pieza.getFechabaja());
+
+                    JFrame frameListaPedidos = new JFrame("Suministros por Pieza: " + pieza.getCodigo());
+                    Listado listado = new Listado(3, id);
+
+                    frameListaPedidos.setContentPane(listado.getJPGestionesTodas());
+                    frameListaPedidos.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                    listado.getJPGestionesTodas().repaint();
+
+                    frameListaPedidos.pack();
+                    frameListaPedidos.setVisible(true);
+
+
                 } else {
-                    lbEstadoFound.setText("Activo");
+                    limpiarConsultaLabel();
+
+                    lbConsultaResultCodigo.setText(pieza.getCodigo());
+                    lbConsultaResultNombre.setText(pieza.getNombre());
+                    lbConsultaResultData1.setText(String.valueOf(pieza.getPrecio()));
+                    lbConsultaResultDireccion.setText(pieza.getDescripcion());
+
+                    if (pieza.getBaja()) {
+                        lbEstadoFound.setText("Baja");
+                        lbFechaFound.setText(pieza.getFechabaja());
+                    } else {
+                        lbEstadoFound.setText("Activo");
+                    }
                 }
+
 
             } else {
                 limpiarConsultaLabel();

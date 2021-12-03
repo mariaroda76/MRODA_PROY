@@ -64,6 +64,32 @@ public class GestionController {
         return listaGestiones;
     }
 
+    public static List<GestionEntity> listaSuministroPieza(int id) {
+
+        List<GestionEntity> listaGestiones = new ArrayList();
+
+        SessionFactory sesion = HibernateUtil.getSessionFactory();
+        Session session = sesion.openSession();
+        Transaction tx = session.beginTransaction();
+
+        Query q = session.createQuery("from GestionEntity where codpieza = " + id);
+        List<GestionEntity> lista = q.list();
+
+        // Obtenemos un Iterador y recorremos la lista
+        Iterator<GestionEntity> iter = lista.iterator();
+
+        while (iter.hasNext()) {
+            //extraer el objeto
+            GestionEntity gest = (GestionEntity) iter.next();
+            System.out.println("proveedor: " + gest.toString());
+            listaGestiones.add(gest);
+        }
+        session.close();
+
+
+        return listaGestiones;
+    }
+
     public static List<GestionEntity> selectGestionesByProvId(int id) {
 
         List<GestionEntity> listaPorProv = new ArrayList<>();

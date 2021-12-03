@@ -2,6 +2,7 @@ package com.company.Vistas;
 
 import com.company.Controllers.GestionController;
 import com.company.Utils.TablaPedidos;
+import com.company.Utils.TablaSuministrosPieza;
 import com.company.Utils.TablaSuministrosProveedor;
 
 import javax.swing.*;
@@ -21,8 +22,9 @@ public class Listado {
         }else if(opcion == 2){
             tablaPedidios.setModel(new TablaSuministrosProveedor(GestionController.listaSuministroProveedor(id)));
         }
-
-
+        else if(opcion == 3){
+            tablaPedidios.setModel(new TablaSuministrosPieza(GestionController.listaSuministroPieza(id)));
+        }
 
     }
 
