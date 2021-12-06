@@ -20,7 +20,6 @@ public class TablaSuministrosPieza extends AbstractTableModel {
 
     }
 
-
     @Override
     public int getRowCount() {
         return gestionT.size();

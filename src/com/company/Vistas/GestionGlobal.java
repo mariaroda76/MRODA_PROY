@@ -73,14 +73,13 @@ public class GestionGlobal {
 
         JButtonGestionGlobalInsertar.addActionListener(new ActionListener() {
 
-            //Inicio sesion
-            SessionFactory sesion = HibernateUtil.getSessionFactory();
-            Session session = sesion.openSession();
-            Transaction tx = session.beginTransaction();
-
-
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                //Inicio sesion
+                SessionFactory sesion = HibernateUtil.getSessionFactory();
+                Session session = sesion.openSession();
+                Transaction tx = session.beginTransaction();
 
                 String valor = (TFGBCantidad.getText().trim());
                 if (esDouble(valor)) {
@@ -121,12 +120,13 @@ public class GestionGlobal {
         JButtonGestionGlobalModificar.addActionListener(new ActionListener() {
             //CUIDADO VERIFICAR SI EXISTE LA COMBINACION!!!
             //Inicio sesion
-            SessionFactory sesion = HibernateUtil.getSessionFactory();
-            Session session = sesion.openSession();
-            Transaction tx = session.beginTransaction();
 
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                SessionFactory sesion = HibernateUtil.getSessionFactory();
+                Session session = sesion.openSession();
+                Transaction tx = session.beginTransaction();
 
                 String valor = (TFGBCantidad.getText().trim());
                 if (esDouble(valor)) {
@@ -166,13 +166,12 @@ public class GestionGlobal {
         });
         JButtonGestionGlobalEliminar.addActionListener(new ActionListener() {
 
-            //Inicio sesion
-            SessionFactory sesion = HibernateUtil.getSessionFactory();
-            Session session = sesion.openSession();
-            Transaction tx = session.beginTransaction();
-
             @Override
             public void actionPerformed(ActionEvent e) {
+                //Inicio sesion
+                SessionFactory sesion = HibernateUtil.getSessionFactory();
+                Session session = sesion.openSession();
+                Transaction tx = session.beginTransaction();
 
                 GestionEntity pedido = getGestionFromForm();
 
@@ -217,13 +216,13 @@ public class GestionGlobal {
         });
         JButtonGestionGlobalListar.addActionListener(new ActionListener() {
 
-            //Inicio sesion
-            SessionFactory sesion = HibernateUtil.getSessionFactory();
-            Session session = sesion.openSession();
-            Transaction tx = session.beginTransaction();
-
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                //Inicio sesion
+                SessionFactory sesion = HibernateUtil.getSessionFactory();
+                Session session = sesion.openSession();
+                Transaction tx = session.beginTransaction();
 
                 JFrame frameListaPedidos = new JFrame("Listado: Pedidos");
                 Listado listado = new Listado(1,0);
@@ -270,7 +269,7 @@ public class GestionGlobal {
             CBGBProveedor.init();
             //List<ProveedoresEntity> cl = DBUtils.readAll(ProveedoresEntity.class); para todos los prov
             for (ProveedoresEntity c : listaBuscados) {
-                CBGBProveedor.addRow(new Object[]{c.getId(), c.getNombre() + " " + c.getApellidos()});
+                CBGBProveedor.addRow(new Object[]{c.getId(), c.getCodigo() + " " + c.getApellidos()});
             }
             CBGBProveedor.repaint();
 

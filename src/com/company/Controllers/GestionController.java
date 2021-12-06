@@ -4,7 +4,6 @@ import com.company.GestionEntity;
 import com.company.Utils.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import java.util.*;
@@ -18,7 +17,7 @@ public class GestionController {
 
         SessionFactory sesion = HibernateUtil.getSessionFactory();
         Session session = sesion.openSession();
-        Transaction tx = session.beginTransaction();
+
 
         Query q = session.createQuery("from GestionEntity ");
         List<GestionEntity> lista = q.list();
@@ -44,7 +43,7 @@ public class GestionController {
 
         SessionFactory sesion = HibernateUtil.getSessionFactory();
         Session session = sesion.openSession();
-        Transaction tx = session.beginTransaction();
+
 
         Query q = session.createQuery("from GestionEntity where codproveedor = " + id);
         List<GestionEntity> lista = q.list();
@@ -70,7 +69,7 @@ public class GestionController {
 
         SessionFactory sesion = HibernateUtil.getSessionFactory();
         Session session = sesion.openSession();
-        Transaction tx = session.beginTransaction();
+
 
         Query q = session.createQuery("from GestionEntity where codpieza = " + id);
         List<GestionEntity> lista = q.list();
@@ -139,6 +138,136 @@ public class GestionController {
             }
         }
         return listaPorPieza;
+    }
+
+    public static long cantidadProyectosdeProveedor(int id) {
+
+        long totalProy=0;
+        SessionFactory sesion = HibernateUtil.getSessionFactory();
+        Session session = sesion.openSession();
+
+
+        String hql = "select count(DISTINCT g.codproyecto) from GestionEntity g where codproveedor = " + id;
+        Query cons = session.createQuery(hql);
+
+        Object o = (Object)cons.uniqueResult();
+        if (o != null) {
+            totalProy= (long) cons.uniqueResult();
+        }else{
+            totalProy=0;
+        }
+
+        session.close();
+
+        return totalProy;
+    }
+
+    public static long cantidadtipoPiezasdeProveedor(int id) {
+
+        long totalProy=0;
+        SessionFactory sesion = HibernateUtil.getSessionFactory();
+        Session session = sesion.openSession();
+
+        String hql = "select count(DISTINCT g.codpieza) from GestionEntity g where codproveedor = " + id;
+        Query cons = session.createQuery(hql);
+
+        Object o = (Object)cons.uniqueResult();
+        if (o != null) {
+            totalProy= (long) cons.uniqueResult();
+        }else{
+            totalProy=0;
+        }
+
+
+
+        session.close();
+
+        return totalProy;
+    }
+
+    public static double cantidadTotalSuministrosdeProveedor(int id) {
+
+        double totalProy=0;
+        SessionFactory sesion = HibernateUtil.getSessionFactory();
+        Session session = sesion.openSession();
+
+        String hql = "select sum(g.cantidad) from GestionEntity g where codproveedor = " + id;
+        Query cons = session.createQuery(hql);
+
+        Object o = (Object)cons.uniqueResult();
+        if (o != null) {
+            totalProy = (double) o;
+        }else{
+            totalProy=0.0;
+        }
+
+        session.close();
+
+        return totalProy;
+    }
+
+    public static long cantidadProyectosdePieza(int id) {
+
+        long totalProy=0;
+        SessionFactory sesion = HibernateUtil.getSessionFactory();
+        Session session = sesion.openSession();
+
+
+        String hql = "select count(DISTINCT g.codproyecto) from GestionEntity g where codpieza = " + id;
+        Query cons = session.createQuery(hql);
+
+        Object o = (Object)cons.uniqueResult();
+        if (o != null) {
+            totalProy= (long) cons.uniqueResult();
+        }else{
+            totalProy=0;
+        }
+
+        session.close();
+
+        return totalProy;
+    }
+    public static long cantidadProveedoresdePieza(int id) {
+
+        long totalProy=0;
+        SessionFactory sesion = HibernateUtil.getSessionFactory();
+        Session session = sesion.openSession();
+
+        String hql = "select count(DISTINCT g.codproveedor) from GestionEntity g where codpieza= " + id;
+        Query cons = session.createQuery(hql);
+
+        Object o = (Object)cons.uniqueResult();
+        if (o != null) {
+            totalProy= (long) cons.uniqueResult();
+        }else{
+            totalProy=0;
+        }
+
+
+
+        session.close();
+
+        return totalProy;
+    }
+    public static double cantidadTotalSuministrosdePieza(int id) {
+
+        double totalProy=0;
+        SessionFactory sesion = HibernateUtil.getSessionFactory();
+        Session session = sesion.openSession();
+
+        String hql = "select sum(g.cantidad) from GestionEntity g where codpieza = " + id;
+        Query cons = session.createQuery(hql);
+
+        Object o = (Object)cons.uniqueResult();
+        if (o != null) {
+            totalProy = (double) o;
+        }else{
+            totalProy=0.0;
+        }
+
+        session.close();
+
+        return totalProy;
     }
 
 
