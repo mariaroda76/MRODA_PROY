@@ -22,7 +22,6 @@ public class ProveedorController {
         Query q = session.createQuery("from ProveedoresEntity ");
         List<ProveedoresEntity> lista = q.list();
 
-
         session.close();
 
 

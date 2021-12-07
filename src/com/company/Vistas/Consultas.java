@@ -87,6 +87,7 @@ public class Consultas {
                                 //ahora tengo que pasarle la lista de coincidencias al combo
 
                                 intComboProveedor(listaPor);
+                                session.close();
                                 break;
 
                             case "Escribe NOMBRE o parte del mismo":
@@ -100,6 +101,7 @@ public class Consultas {
                                 }
                                 //ahora tengo que pasarle la lista de coincidencias al combo
                                 intComboProveedor(listaPor);
+                                session.close();
                                 break;
 
                             case "Escribe DIRECCION o parte de la misma":
@@ -113,6 +115,7 @@ public class Consultas {
                                 }
                                 //ahora tengo que pasarle la lista de coincidencias al combo
                                 intComboProveedor(listaPor);
+                                session.close();
                                 break;
 
                             case "Selecciona: CODIGO del Proovedor o parte del mismo":
@@ -124,10 +127,9 @@ public class Consultas {
                                         listaPor.add(prov);
                                     }
                                 } //ahora tengo que pasarle la lista de coincidencias al combo
-
                                 intComboProveedor(listaPor);
+                                session.close();
                                 break;
-
 
                             default:
                                 System.out.println("case no implementado aun");
@@ -155,6 +157,7 @@ public class Consultas {
                                 }
                                 //ahora tengo que pasarle la lista de coincidencias al combo
                                 intComboProyecto(listaPor2);
+                                session.close();
                                 break;
                             case "Escribe NOMBRE o parte del mismo":
                                 //recorro el iterator
@@ -167,6 +170,7 @@ public class Consultas {
                                 }
                                 //ahora tengo que pasarle la lista de coincidencias al combo
                                 intComboProyecto(listaPor2);
+                                session.close();
                                 break;
                             case "Escribe CIUDAD o parte de la misma":
                                 //recorro el iterator
@@ -179,6 +183,7 @@ public class Consultas {
                                 }
                                 //ahora tengo que pasarle la lista de coincidencias al combo
                                 intComboProyecto(listaPor2);
+                                session.close();
                                 break;
                             default:
                                 System.out.println("case no implementado aun");
@@ -205,6 +210,7 @@ public class Consultas {
                                 }
                                 //ahora tengo que pasarle la lista de coincidencias al combo
                                 intComboPieza(listaPor3);
+                                session.close();
                                 break;
                             case "Escribe NOMBRE o parte del mismo":
                                 //recorro el iterator
@@ -217,6 +223,7 @@ public class Consultas {
                                 }
                                 //ahora tengo que pasarle la lista de coincidencias al combo
                                 intComboPieza(listaPor3);
+                                session.close();
                                 break;
 
                             case "Selecciona: CODIGO de la Pieza o parte del mismo":
@@ -230,6 +237,7 @@ public class Consultas {
                                 }
                                 //ahora tengo que pasarle la lista de coincidencias al combo
                                 intComboPieza(listaPor3);
+                                session.close();
                                 break;
 
                             default:
@@ -429,6 +437,7 @@ public class Consultas {
                     frameListaPedidos.pack();
                     frameListaPedidos.setVisible(true);
 
+                    session.close();
 
                 } else {
 
@@ -445,11 +454,14 @@ public class Consultas {
                     } else {
                         lbEstadoFound.setText("Activo");
                     }
+
+
                 }
 
             } else {
                 limpiarConsultaLabel();
             }
+
 
         });
 
